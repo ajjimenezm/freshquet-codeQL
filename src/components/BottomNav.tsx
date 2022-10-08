@@ -6,19 +6,13 @@ import MapIcon from "@mui/icons-material/Map";
 import ProfileIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
 import styles from "../styles/BottomNav.module.css";
-import { useRouter } from "next/router";
 
 interface BottomNavProps {
-    value: number;
+    navigateFunction: (value: string) => void;
 }
 
 function BottomNav(props: BottomNavProps) {
-    const [value, setValue] = useState(props.value);
-    const router = useRouter();
-
-    const onLink = (href: string) => {
-        router.push(href);
-    };
+    const [value, setValue] = useState(0);
 
     return (
         <Paper
@@ -35,28 +29,37 @@ function BottomNav(props: BottomNavProps) {
                 <BottomNavigationAction
                     label="Home"
                     icon={<HomeIcon />}
-                    onClick={() => onLink("/home")}
+                    onClick={() => {
+                        props.navigateFunction("home");
+                    }}
                 />
-
                 <BottomNavigationAction
                     label="Search"
                     icon={<SearchIcon />}
-                    onClick={() => onLink("/search")}
+                    onClick={() => {
+                        props.navigateFunction("search");
+                    }}
                 />
                 <BottomNavigationAction
                     label="Map"
                     icon={<MapIcon />}
-                    onClick={() => onLink("/map")}
+                    onClick={() => {
+                        props.navigateFunction("map");
+                    }}
                 />
                 <BottomNavigationAction
                     label="Chat"
                     icon={<ChatIcon />}
-                    onClick={() => onLink("/chat")}
+                    onClick={() => {
+                        props.navigateFunction("chat");
+                    }}
                 />
                 <BottomNavigationAction
                     label="Profile"
                     icon={<ProfileIcon />}
-                    onClick={() => onLink("/profile")}
+                    onClick={() => {
+                        props.navigateFunction("profile");
+                    }}
                 />
             </BottomNavigation>
         </Paper>
