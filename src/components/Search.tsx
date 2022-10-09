@@ -4,10 +4,17 @@ import React from "react";
 import { IconButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTheme } from "@mui/material/styles";
+import { useSearchParams } from "react-router-dom";
 
 function Search() {
     const [search, setSearch] = React.useState("");
+    let [searchParams, setSearchParams] = useSearchParams();
     const theme = useTheme();
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+        setSearchParams({ search: event.target.value });
+    };
 
     return (
         <div>
@@ -33,7 +40,7 @@ function Search() {
                     fullWidth
                     id="searchField"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={handleSearch}
                 ></TextField>
             </div>
         </div>
