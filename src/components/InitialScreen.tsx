@@ -6,7 +6,7 @@ function InitialScreen() {
     const navigate = useNavigate();
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Freshquet</h1>
+            <h1 className={styles.title}>freshquet</h1>
             <Button variant="contained" onClick={() => navigate("/home")}>
                 Start
             </Button>
