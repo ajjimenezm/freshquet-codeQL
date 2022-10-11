@@ -27,21 +27,21 @@ function BottomNav(props: BottomNavProps) {
                 }}
             >
                 <BottomNavigationAction
-                    label="Home"
+                    label="Inicio"
                     icon={<HomeIcon />}
                     onClick={() => {
                         props.navigateFunction("home");
                     }}
                 />
                 <BottomNavigationAction
-                    label="Search"
+                    label="Buscar"
                     icon={<SearchIcon />}
                     onClick={() => {
                         props.navigateFunction("search");
                     }}
                 />
                 <BottomNavigationAction
-                    label="Map"
+                    label="Mapa"
                     icon={<MapIcon />}
                     onClick={() => {
                         props.navigateFunction("map");
@@ -55,7 +55,7 @@ function BottomNav(props: BottomNavProps) {
                     }}
                 />
                 <BottomNavigationAction
-                    label="Profile"
+                    label="Perfil"
                     icon={<ProfileIcon />}
                     onClick={() => {
                         props.navigateFunction("profile");
