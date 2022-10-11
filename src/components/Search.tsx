@@ -23,6 +23,10 @@ function Search() {
                 fontWeight="bold"
                 color={theme.palette.primary.dark}
                 fontSize="25px"
+                marginTop="20px"
+                marginBottom="10px"
+                marginRight="20px"
+                marginLeft="20px"
             >
                 Buscar productos...
             </Typography>
