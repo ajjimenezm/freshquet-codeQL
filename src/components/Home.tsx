@@ -19,6 +19,8 @@ function Home() {
 import Advertisement from '../types/Advertisement';
 import { Category } from '../types/Category';
 import AdvertisementCard from './AdvertisementCard';
+import Heading from './Heading';
+import SubHeading from './SubHeading';
 
 //#region types
 
@@ -37,9 +39,6 @@ const AdsList = (props: IAdsListProps) => {
 
   return (
     <div>
-      <h2>Lo más fresco para tí</h2>
-      <h4>Creemos que estos productos pueden interesarte</h4>
-
       <div>
         {ads.map((ad) => {
           return (
@@ -101,7 +100,8 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Home</h1>
+      <Heading text="Lo más fresco para tí" />
+      <SubHeading text="Creemos que estos productos pueden interesarte" />
 
       <AdsList adsData={data} />
     </div>

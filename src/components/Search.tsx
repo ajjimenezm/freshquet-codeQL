@@ -3,15 +3,14 @@ import TextField from '@mui/material/TextField';
 import React from 'react';
 import { IconButton, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useTheme } from '@mui/material/styles';
 import { useSearchParams } from 'react-router-dom';
 import AdvertisementCard from './AdvertisementCard';
+import Heading from './Heading';
 import { Category } from '../types/Category';
 
 function Search() {
   const [search, setSearch] = React.useState('');
   const [searchParams, setSearchParams] = useSearchParams();
-  const theme = useTheme();
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -20,18 +19,7 @@ function Search() {
 
   return (
     <div>
-      <Typography
-        className={styles.headText}
-        fontWeight="bold"
-        color={theme.palette.primary.dark}
-        fontSize="25px"
-        marginTop="20px"
-        marginBottom="10px"
-        marginRight="20px"
-        marginLeft="20px"
-      >
-        Buscar productos...
-      </Typography>
+      <Heading text="Buscar productos" />
       <div className={styles.searchFieldArea}>
         <TextField
           InputProps={{
