@@ -16,27 +16,18 @@ function Home() {
     );
 */
 
-//#region types
+import Advertisement from '../types/Advertisement';
+import { Category } from '../types/Category';
+import AdvertisementCard from './AdvertisementCard';
 
-enum Category {
-  Fresh = 'freshh',
-  Miscellaneous = 'miscellaneous',
-}
+//#region types
 
 interface IAdsListProps {
   adsData: AdsDataType;
 }
 
 type AdsDataType = {
-  ads: AdsType[];
-};
-
-type AdsType = {
-  id: number;
-  name: String;
-  pricePerKilogram: number;
-  category: Category;
-  averageReviewScore: number;
+  ads: Advertisement[];
 };
 
 //#endregion
@@ -52,7 +43,13 @@ const AdsList = (props: IAdsListProps) => {
       <div>
         {ads.map((ad) => {
           return (
-            <div
+            <AdvertisementCard
+              advertisement={ad}
+              onClickFunction={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+            />
+            /**<div
               key={ad.id}
               style={{ display: 'flex', justifyContent: 'space-between' }}
             >
@@ -61,7 +58,7 @@ const AdsList = (props: IAdsListProps) => {
               <div>
                 {ad.pricePerKilogram} - {ad.category}
               </div>
-            </div>
+            </div>**/
           );
         })}
       </div>
@@ -73,25 +70,31 @@ const Home = () => {
   const data: AdsDataType = {
     ads: [
       {
-        id: 0,
+        id: 'a',
         name: 'tomaticos',
-        pricePerKilogram: 1.25,
+        description: 'descripción',
+        price: 1.25,
         category: Category.Fresh,
         averageReviewScore: 0,
+        image: 'https://i.blogs.es/e44dc0/manzana/450_1000.webp',
       },
       {
-        id: 1,
+        id: 'b',
         name: 'tomaticos mejores',
-        pricePerKilogram: 2,
+        description: 'descripción',
+        price: 2,
         category: Category.Fresh,
         averageReviewScore: 0,
+        image: 'https://i.blogs.es/e44dc0/manzana/450_1000.webp',
       },
       {
-        id: 2,
+        id: 'c',
         name: 'platanicos',
-        pricePerKilogram: 3.1,
+        description: 'descripción',
+        price: 3.1,
         category: Category.Fresh,
         averageReviewScore: 0,
+        image: 'https://i.blogs.es/e44dc0/manzana/450_1000.webp',
       },
     ],
   };
