@@ -1,5 +1,5 @@
-import TextField from "@mui/material/TextField";
 import styles from "../styles/Search.module.css";
+import TextField from "@mui/material/TextField";
 import React from "react";
 import { IconButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 
 function Search() {
     const [search, setSearch] = React.useState("");
-    let [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const theme = useTheme();
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +20,9 @@ function Search() {
         <div>
             <Typography
                 className={styles.headText}
+                fontWeight="bold"
                 color={theme.palette.primary.dark}
+                fontSize="25px"
             >
                 Buscar productos...
             </Typography>
