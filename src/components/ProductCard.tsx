@@ -1,9 +1,9 @@
 import { Button } from "@mui/material";
 import styles from "../styles/ProductCard.module.css";
-import Product from "../types/Product";
+import Advertisement from "../types/Advertisement";
 
 interface ProductCardProps {
-    product: Product;
+    product: Advertisement;
     onClickFunction: () => void;
 }
 function ProductCard(props: ProductCardProps) {

@@ -1,4 +1,4 @@
-type Product = {
+type Advertisement = {
     id: string;
     image: string;
     name: string;
@@ -7,4 +7,4 @@ type Product = {
     averageScore: number;
 };
 
-export default Product;
+export default Advertisement;
