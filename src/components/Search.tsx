@@ -1,7 +1,7 @@
 import styles from "../styles/Search.module.css";
 import TextField from "@mui/material/TextField";
 import React from "react";
-import { IconButton, Typography } from "@mui/material";
+import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useSearchParams } from "react-router-dom";
 import AdvertisementCard from "./AdvertisementCard";
