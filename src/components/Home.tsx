@@ -1,7 +1,7 @@
 //#region types
 
 enum Category {
-  Fresh = 'fresh',
+  Fresh = 'freshh',
   Miscellaneous = 'miscellaneous',
 }
 
