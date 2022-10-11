@@ -5,7 +5,7 @@ import { IconButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTheme } from "@mui/material/styles";
 import { useSearchParams } from "react-router-dom";
-import ProductCard from "./ProductCard";
+import AdvertisementCard from "./AdvertisementCard";
 
 function Search() {
     const [search, setSearch] = React.useState("");
@@ -51,8 +51,8 @@ function Search() {
                 ></TextField>
             </div>
             <div className={styles.productList}>
-                <ProductCard
-                    product={{
+                <AdvertisementCard
+                    advertisement={{
                         id: "1",
                         name: "Manzana",
                         description: "Manzana de la variedad Golden",
@@ -62,8 +62,8 @@ function Search() {
                     }}
                     onClickFunction={() => {}}
                 />
-                <ProductCard
-                    product={{
+                <AdvertisementCard
+                    advertisement={{
                         id: "1",
                         name: "Manzana",
                         description: "Manzana de la variedad Golden",
@@ -73,8 +73,8 @@ function Search() {
                     }}
                     onClickFunction={() => {}}
                 />
-                <ProductCard
-                    product={{
+                <AdvertisementCard
+                    advertisement={{
                         id: "1",
                         name: "Manzana",
                         description: "Manzana de la variedad Golden",
