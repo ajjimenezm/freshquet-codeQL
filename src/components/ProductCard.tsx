@@ -4,6 +4,7 @@ import Product from "../types/Product";
 
 interface ProductCardProps {
     product: Product;
+    onClickFunction: () => void;
 }
 function ProductCard(props: ProductCardProps) {
     return (
@@ -25,6 +26,7 @@ function ProductCard(props: ProductCardProps) {
                     variant="outlined"
                     color="primary"
                     className={styles.buyButton}
+                    onClick={props.onClickFunction}
                 >
                     Comprar
                 </Button>

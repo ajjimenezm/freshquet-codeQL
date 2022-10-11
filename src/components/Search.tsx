@@ -60,6 +60,7 @@ function Search() {
                         image: "https://i.blogs.es/e44dc0/manzana/450_1000.webp",
                         averageScore: 4.5,
                     }}
+                    onClickFunction={() => {}}
                 />
                 <ProductCard
                     product={{
@@ -70,6 +71,7 @@ function Search() {
                         image: "https://i.blogs.es/e44dc0/manzana/450_1000.webp",
                         averageScore: 4.5,
                     }}
+                    onClickFunction={() => {}}
                 />
                 <ProductCard
                     product={{
@@ -80,6 +82,7 @@ function Search() {
                         image: "https://i.blogs.es/e44dc0/manzana/450_1000.webp",
                         averageScore: 4.5,
                     }}
+                    onClickFunction={() => {}}
                 />
             </div>
         </div>
