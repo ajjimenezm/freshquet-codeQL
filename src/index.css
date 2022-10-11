@@ -14,24 +14,21 @@ html,
 body {
     height: 100%;
     margin: 0;
-    display: flex;
 }
 
-.products{
+.products {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 40px;
 }
 
-.individual-card{
+.individual-card {
     padding: 10px 15px;
     margin: 10px 10px;
     width: 250px;
     box-shadow: 20px 15px 7.4564px rgba(0, 0, 0, 0.1);
 }
-
-
 
 .product-card {
     width: 200px;
