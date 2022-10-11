@@ -1,26 +1,28 @@
 import { Button } from "@mui/material";
-import styles from "../styles/ProductCard.module.css";
+import styles from "../styles/AdvertisementCard.module.css";
 import Advertisement from "../types/Advertisement";
 
-interface ProductCardProps {
-    product: Advertisement;
+interface AdvertisementCardProps {
+    advertisement: Advertisement;
     onClickFunction: () => void;
 }
-function ProductCard(props: ProductCardProps) {
+function AdvertisementCard(props: AdvertisementCardProps) {
     return (
         <div className={styles.productCard}>
             <img
-                src={props.product.image}
-                alt={props.product.name}
+                src={props.advertisement.image}
+                alt={props.advertisement.name}
                 className={styles.productImage}
             />
             <div className={styles.productInfo}>
-                <div className={styles.productName}>{props.product.name}</div>
+                <div className={styles.productName}>
+                    {props.advertisement.name}
+                </div>
                 <div className={styles.productDescription}>
-                    {props.product.description}
+                    {props.advertisement.description}
                 </div>
                 <div className={styles.productPrice}>
-                    {`${props.product.price} €/kg`}
+                    {`${props.advertisement.price} €/kg`}
                 </div>
                 <Button
                     variant="outlined"
@@ -34,4 +36,4 @@ function ProductCard(props: ProductCardProps) {
         </div>
     );
 }
-export default ProductCard;
+export default AdvertisementCard;
