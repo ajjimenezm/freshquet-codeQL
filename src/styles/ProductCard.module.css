@@ -39,9 +39,6 @@
     font-weight: 300;
 }
 
-.buyButton {
-}
-
 .productCard + .productCard {
     margin-top: 10px;
     padding-top: 10px;
