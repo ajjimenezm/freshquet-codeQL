@@ -43,6 +43,7 @@ const AdsList = (props: IAdsListProps) => {
         {ads.map((ad) => {
           return (
             <AdvertisementCard
+              key={ad.id}
               advertisement={ad}
               onClickFunction={function (): void {
                 throw new Error('Function not implemented.');
