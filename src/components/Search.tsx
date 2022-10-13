@@ -38,41 +38,7 @@ function Search() {
                     onChange={handleSearch}
                 ></TextField>
             </div>
-            <div className={styles.productList}>
-                <AdvertisementCard
-                    advertisement={{
-                        id: "1",
-                        name: "Manzana",
-                        description: "Manzana de la variedad Golden",
-                        price: 1.5,
-                        image: "https://i.blogs.es/e44dc0/manzana/450_1000.webp",
-                        averageScore: 4.5,
-                    }}
-                    onClickFunction={() => {}}
-                />
-                <AdvertisementCard
-                    advertisement={{
-                        id: "1",
-                        name: "Manzana",
-                        description: "Manzana de la variedad Golden",
-                        price: 1.5,
-                        image: "https://i.blogs.es/e44dc0/manzana/450_1000.webp",
-                        averageScore: 4.5,
-                    }}
-                    onClickFunction={() => {}}
-                />
-                <AdvertisementCard
-                    advertisement={{
-                        id: "1",
-                        name: "Manzana",
-                        description: "Manzana de la variedad Golden",
-                        price: 1.5,
-                        image: "https://i.blogs.es/e44dc0/manzana/450_1000.webp",
-                        averageScore: 4.5,
-                    }}
-                    onClickFunction={() => {}}
-                />
-            </div>
+            <div className={styles.productList}></div>
         </div>
     );
 }
