@@ -16,11 +16,20 @@ function App() {
             },
         },
     });
+
+    const setRole = (roleName: string) => {
+        localStorage.clear();
+        localStorage.setItem("role", roleName);
+    };
+
     return (
         <div className="App">
             <ThemeProvider theme={theme}>
                 <Routes>
-                    <Route path="/" element={<InitialScreen />} />
+                    <Route
+                        path="/"
+                        element={<InitialScreen setRole={setRole} />}
+                    />
                     <Route path="*" element={<MainApp />} />
                 </Routes>
             </ThemeProvider>
