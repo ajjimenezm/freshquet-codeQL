@@ -10,6 +10,8 @@ const Register = () => {
         username: "",
         password: "",
         userType: "",
+        direction: "Default direction",
+        biography: "New to freshquet :)"
     });
     const navigate = useNavigate();
 

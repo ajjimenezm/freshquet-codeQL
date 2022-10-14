@@ -32,6 +32,7 @@ const Login = () => {
                 if (res.status == 201) {
                     navigate("/profile");
                     localStorage.setItem('userToken', res.data.access_token);
+                    localStorage.setItem('username', state.username);
                 }
             })
             .catch((res) => {
