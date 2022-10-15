@@ -5,7 +5,7 @@ import Home from "./Home";
 import Map from "./Map";
 import Search from "./Search";
 import Chat from "./Chat";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 
 function MainApp() {
     const navigate = useNavigate();
