@@ -7,6 +7,7 @@ import Search from "./Search";
 import Chat from "./Chat";
 import Profile from "./Profile";
 import Login from "./Users/Login";
+import Register from "./Users/Register";
 
 function MainApp() {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ function MainApp() {
                 <Route path="chat" element={<Chat />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
             </Routes>
 
             <BottomNav navigateFunction={navigate} />

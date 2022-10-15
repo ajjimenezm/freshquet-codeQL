@@ -17,6 +17,10 @@ const Login = () => {
         });
     };
 
+    const navigateRegister = () => {
+        navigate('/register');
+    }
+
     const sendLogin = () => {
         console.log(process.env.REACT_APP_BACKEND_DEFAULT_ROUTE)
         axios
@@ -58,10 +62,16 @@ const Login = () => {
                         className="w-full p-2 mr-4 rounded-md mb-4"
                     />
                     <button
-                        className="px-8 py-3 hover:bg-transparent hover:text-white rounded-md text-white text-2xl"
+                        className="px-8 py-3 hover:bg-transparent hover:text-3xl rounded-md text-white text-2xl"
                         onClick={sendLogin}
                     >
                         Iniciar Sesión
+                    </button>
+                    <button
+                        className="px-8 py-3 hover:bg-transparent rounded-md text-white text-xl"
+                        onClick={navigateRegister}
+                    >
+                        O Registrate
                     </button>
                 </div>
             </div>
