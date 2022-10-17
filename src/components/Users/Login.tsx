@@ -30,8 +30,8 @@ const Login = () => {
             .then((res) => {
                 console.log(res);
                 if (res.status == 201) {
-                    navigate("/profile");
                     localStorage.setItem('userToken', res.data.access_token);
+                    navigate("/profile");
                 }
             })
             .catch((res) => {

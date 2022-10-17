@@ -32,9 +32,9 @@ const Register = () => {
                 ...state,
             })
             .then((res) => {
-                console.log(res);
                 if (res.status == 201) {
-                    //navigate("/app");
+                    localStorage.setItem('userToken', res.data.access_token);
+                    navigate("/profile");
                 }
             })
             .catch(() => {
