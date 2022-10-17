@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import styles from "../styles/AdvertisementCard.module.css";
 import Advertisement from "../types/Advertisement";
 
