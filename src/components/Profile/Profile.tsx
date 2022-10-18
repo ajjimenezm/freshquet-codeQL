@@ -1,100 +1,65 @@
 import ReadProfile from "./ReadProfile";
 import EditProfile from "./EditProfile";
-import { useEffect } from "react";
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import axios from "axios";
-import React, { useState } from "react";
-import DataUser from "./dataUser";
+import React from "react";
 
 interface IProps {
-    user?: string;
 }
 
 interface IState {
     editProfile?: boolean;
-    dataUser?: any;
 }
 
-class ProfileNav extends React.Component<IProps, IState> {
+class Profile extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
         this.state = {
-            editProfile: false,
-            dataUser: {
-                name:"Cargando Nombre",
-                username:"cargando",
-                phone_number:"123456789",
-                email:"cargando@emial.com",
-                biography: "Cargando...",
-                direction: "Cargando..."
-            }
+            editProfile: false
         }
         this.handler = this.handler.bind(this)
-        this.fetchData = this.fetchData.bind(this)
     }
     
     handler() {
+        console.log(process.env.REACT_APP_BACKEND_DEFAULT_ROUTE)
         this.setState({
             editProfile: !this.state.editProfile
         })
-        this.fetchData()
-    }
-
-    fetchData() {
-        axios.get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/username/${localStorage.getItem('username')}`, {})
-        .then((res) => {
-            this.setState({ 
-                dataUser: {
-                    name: res.data[0].name,
-                    username:res.data[0].username,
-                    phone_number:res.data[0].phone_number,
-                    email:res.data[0].email,
-                    direction: res.data[0].direction,
-                    biography: res.data[0].biography
-                }
-            })
-        })
     }
     
-    render() {   
+    render() {
+
+        const username = "ManoloGarcia";
+        const name = "Manolo Garcia Moreno";
+        const phone_number = "652227577";
+        const email = "mgamo@inf.upv.es"
+        const biography = "Esta es la biografia de Manolo";
+        const direction = "Camí de Vera, S/N Edificio 1H, 46022 València";
 
         return (
             <div>
-                <Observer update={this.fetchData} />
-                { this.state.editProfile
+                {this.state.editProfile
                     ? <EditProfile 
-                        dataUser={this.state.dataUser}
+                        name={name}
+                        username={username} 
+                        phone_number={phone_number}
+                        biography={biography} 
+                        direction={direction} 
+                        email={email}
                         editHandler={this.handler}/>
                     : <ReadProfile 
-                        dataUser={this.state.dataUser}
+                        name={name}
+                        username={username} 
+                        phone_number={phone_number}
+                        biography={biography} 
+                        direction={direction} 
+                        email={email}
                         editHandler={this.handler}/>
-                 }
+                }
             </div>
         );
     }
     
-}
-
-function Observer (props: {update: any})
-{
-    useEffect(() => {
-      props.update()
-    }, [])
-    return null
-}
-
-function Profile() {
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        let user = localStorage.getItem('userToken');
-        if (!user) {
-            navigate('/login')
-        }
-    }, [])
-
-    return <ProfileNav />
 }
 
 export default Profile;
