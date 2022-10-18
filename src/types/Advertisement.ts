@@ -1,7 +1,7 @@
 import { Category } from './Category';
 
 type Advertisement = {
-  id: string;
+  _id: string;
   image: string;
   name: string;
   price: number;

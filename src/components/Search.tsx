@@ -61,20 +61,6 @@ function Search() {
         ) : (
           <>
             <AdvertisementCardSkeleton />
-            <AdvertisementCard
-              advertisement={{
-                id: '1',
-                name: 'Manzanas',
-                description: 'Manzanas de la huerta',
-                price: 1.5,
-                image: 'https://picsum.photos/200',
-                averageReviewScore: 4,
-                category: Category.Fresh,
-              }}
-              onClickFunction={() => {
-                console.log('buy');
-              }}
-            />
             <AdvertisementCardSkeleton />
             <AdvertisementCardSkeleton />
             <AdvertisementCardSkeleton />
