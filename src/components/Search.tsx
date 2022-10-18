@@ -13,7 +13,6 @@ function Search() {
     const [dataLoaded, setDataLoaded] = React.useState(false);
     const [dataRequested, setDataRequested] = React.useState(false);
     const [minimumTimeElapsed, setMinimumTimeElapsed] = React.useState(false);
-    const [search, setSearch] = React.useState("");
     const [searchParams, setSearchParams] = useSearchParams();
     const [advertisementsToShow, setAdvertisementsToShow] =
         React.useState<JSX.Element[]>();
@@ -23,8 +22,8 @@ function Search() {
     const waitingTimeSkeletonLoader = 500;
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(event.target.value);
         setSearchParams({ search: event.target.value });
+        setMinimumTimeElapsed(false);
         getAds();
         setTimeout(() => {
             setMinimumTimeElapsed(true);
@@ -32,8 +31,8 @@ function Search() {
     };
     React.useEffect(() => {
         if (searchParams.get("search")) {
-            setSearch(searchParams.get("search") || "");
             getAds();
+
             setTimeout(() => {
                 setMinimumTimeElapsed(true);
             }, waitingTimeSkeletonLoader);
