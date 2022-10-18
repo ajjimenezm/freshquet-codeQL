@@ -4,6 +4,7 @@ import InitialScreen from "./components/InitialScreen";
 import MainApp from "./components/MainApp";
 import "./styles/App.css";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Login from "./components/Users/Login";
 
 function App() {
     const theme = createTheme({
@@ -32,6 +33,7 @@ function App() {
                     />
                     <Route path="*" element={<MainApp />} />
                 </Routes>
+
             </ThemeProvider>
         </div>
     );
