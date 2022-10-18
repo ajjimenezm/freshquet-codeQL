@@ -1,5 +1,4 @@
 import Advertisement from '../types/Advertisement';
-import { Category } from '../types/Category';
 import AdvertisementCard from './AdvertisementCard';
 import Heading from './Heading';
 import SubHeading from './SubHeading';

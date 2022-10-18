@@ -3,11 +3,9 @@ import React from 'react';
 import { IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useSearchParams } from 'react-router-dom';
-import AdvertisementCard from './AdvertisementCard';
 import AdvertisementCardSkeleton from './AdvertisementCardSkeleton';
 import Heading from './Heading';
 import axios from 'axios';
-import { Category } from '../types/Category';
 
 function Search() {
   const [dataLoaded, setDataLoaded] = React.useState(false);
