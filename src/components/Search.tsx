@@ -73,7 +73,9 @@ function Search() {
                                 image: "https://picsum.photos/200",
                                 averageScore: 4,
                             }}
-                            onClickFunction={() => {}}
+                            onClickFunction={() => {
+                                console.log("buy");
+                            }}
                         />
                         <AdvertisementCardSkeleton />
                         <AdvertisementCardSkeleton />
