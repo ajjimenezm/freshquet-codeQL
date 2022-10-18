@@ -2,14 +2,14 @@ import { Skeleton } from "@mui/material";
 
 function AdvertisementCardSkeleton() {
     return (
-        <div className="flex flex-row h-25 items-center mt-3 mb-3">
+        <div className="h-25 mt-3 mb-3 flex flex-row items-center">
             <Skeleton
-                className="max-h-28 max-w-28 object-contain"
+                className="max-w-28 max-h-28 object-contain"
                 variant="rectangular"
                 animation="wave"
                 sx={{ width: 112, height: 112 }}
             />
-            <div className="pt-5 pb-5 h-36 ml-5 flex flex-col justify-evenly items-start">
+            <div className="ml-5 flex h-36 flex-col items-start justify-evenly pt-5 pb-5">
                 <Skeleton
                     className="text-lg font-normal"
                     variant="text"
