@@ -5,61 +5,73 @@ import ChatIcon from "@mui/icons-material/Chat";
 import MapIcon from "@mui/icons-material/Map";
 import ProfileIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
-import styles from "../styles/BottomNav.module.css";
+import useReactPath from "../hooks/useReactPath";
+
+import React from "react";
 
 interface BottomNavProps {
     navigateFunction: (value: string) => void;
 }
 
 function BottomNav(props: BottomNavProps) {
-    const [value, setValue] = useState(0);
+    const isBuyer = localStorage.getItem("role") === "buyer";
+    const pathname = window.location.pathname; // in case user visits the path directly. The BottomNavBar is able to follow suit.
+    const path = useReactPath();
+
+    React.useEffect(() => {
+        setValue(window.location.pathname);
+    }, [path]);
+
+    const [value, setValue] = useState(pathname);
+
+    const handleChange = (
+        event: React.SyntheticEvent<Element, Event>,
+        value: any
+    ) => {
+        setValue(value);
+    };
 
     return (
         <Paper
             sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
             elevation={3}
         >
-            <BottomNavigation
-                showLabels
-                value={value}
-                onChange={(event, newValue) => {
-                    setValue(newValue);
-                }}
-            >
+            <BottomNavigation showLabels value={value} onChange={handleChange}>
                 <BottomNavigationAction
-                    label="Home"
+                    label="Inicio"
                     icon={<HomeIcon />}
-                    onClick={() => {
-                        props.navigateFunction("home");
-                    }}
+                    value="/home"
+                    onClick={() => props.navigateFunction("/home")}
                 />
-                <BottomNavigationAction
-                    label="Search"
-                    icon={<SearchIcon />}
-                    onClick={() => {
-                        props.navigateFunction("search");
-                    }}
-                />
-                <BottomNavigationAction
-                    label="Map"
-                    icon={<MapIcon />}
-                    onClick={() => {
-                        props.navigateFunction("map");
-                    }}
-                />
+                {isBuyer && (
+                    <BottomNavigationAction
+                        label="Buscar"
+                        icon={<SearchIcon />}
+                        value="/search"
+                        onClick={() => props.navigateFunction("/search")}
+                    />
+                )}
+                {isBuyer && (
+                    <BottomNavigationAction
+                        label="Mapa"
+                        icon={<MapIcon />}
+                        value="/map"
+                        onClick={() => props.navigateFunction("/map")}
+                    />
+                )}
                 <BottomNavigationAction
                     label="Chat"
                     icon={<ChatIcon />}
-                    onClick={() => {
-                        props.navigateFunction("chat");
-                    }}
+                    value="/chat"
+                    onClick={() => props.navigateFunction("chat")}
                 />
                 <BottomNavigationAction
-                    label="Profile"
+                    label="Perfil"
                     icon={<ProfileIcon />}
                     onClick={() => {
                         props.navigateFunction("profile");
                     }}
+                    value="/profile"
                 />
             </BottomNavigation>
         </Paper>

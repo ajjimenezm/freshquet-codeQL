@@ -40,7 +40,7 @@ const AdsList = (props: IAdsListProps) => {
 };
 
 const Home = () => {
-  var data: AdsDataType = {
+  const data: AdsDataType = {
     ads: [
       {
         id: 'a',
@@ -84,7 +84,7 @@ const Home = () => {
 
 function getAds(): AdsDataType {
   axios
-    .get('https://localhost:3001/api/advertisements/all')
+    .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all`)
     .then((response) => {
       if (response.status === 200) {
         console.log(response.data);
