@@ -30,6 +30,15 @@ function Search() {
             setMinimumTimeElapsed(true);
         }, waitingTimeSkeletonLoader);
     };
+    React.useEffect(() => {
+        if (searchParams.get("search")) {
+            setSearch(searchParams.get("search") || "");
+            getAds();
+            setTimeout(() => {
+                setMinimumTimeElapsed(true);
+            }, waitingTimeSkeletonLoader);
+        }
+    }, []);
 
     React.useEffect(() => {
         const filteredAds = advertisements.filter((advertisement) => {
@@ -89,7 +98,7 @@ function Search() {
                     }}
                     fullWidth
                     id="searchField"
-                    value={search}
+                    value={searchParams.get("search") || ""}
                     onChange={handleSearch}
                 ></TextField>
             </div>
