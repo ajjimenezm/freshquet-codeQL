@@ -12,6 +12,7 @@ import Advertisement from "../types/Advertisement";
 function Search() {
     const [dataLoaded, setDataLoaded] = React.useState(false);
     const [dataRequested, setDataRequested] = React.useState(false);
+    const [minimumTimeElapsed, setMinimumTimeElapsed] = React.useState(false);
     const [search, setSearch] = React.useState("");
     const [searchParams, setSearchParams] = useSearchParams();
     const [advertisementsToShow, setAdvertisementsToShow] =
@@ -19,11 +20,15 @@ function Search() {
     const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
         []
     );
+    const waitingTimeSkeletonLoader = 500;
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
         setSearchParams({ search: event.target.value });
-        getProducts();
+        getAds();
+        setTimeout(() => {
+            setMinimumTimeElapsed(true);
+        }, waitingTimeSkeletonLoader);
     };
 
     React.useEffect(() => {
@@ -49,7 +54,7 @@ function Search() {
         );
     }, [advertisements]);
 
-    const getProducts = () => {
+    const getAds = () => {
         setDataRequested(true);
         axios
             .get(
@@ -91,7 +96,7 @@ function Search() {
             <div className="mt-3 ml-5 mr-5 divide-y-2 pb-20">
                 {dataLoaded ? (
                     advertisementsToShow
-                ) : dataRequested ? (
+                ) : dataRequested && minimumTimeElapsed ? (
                     <>
                         <AdvertisementCardSkeleton />
                         <AdvertisementCardSkeleton />
