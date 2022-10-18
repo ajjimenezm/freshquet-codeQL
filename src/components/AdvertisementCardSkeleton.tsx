@@ -1,36 +1,34 @@
 import { Skeleton } from "@mui/material";
-import styles from "../styles/AdvertisementCard.module.css";
 
 function AdvertisementCard() {
     return (
-        <div className={styles.productCard}>
+        <div className="flex flex-row h-25 items-center mt-3 mb-3">
             <Skeleton
-                className={styles.productImage}
+                className="max-h-28 max-w-28 object-contain"
                 variant="rectangular"
                 animation="wave"
-                sx={{ width: 200, height: 200 }}
+                sx={{ width: 112, height: 112 }}
             />
-            <div className={styles.productInfo}>
+            <div className="pt-5 pb-5 h-36 ml-5 flex flex-col justify-evenly items-start">
                 <Skeleton
-                    className={styles.productName}
+                    className="text-lg font-normal"
                     variant="text"
                     animation="wave"
                     sx={{ width: 100, height: 40 }}
                 />
                 <Skeleton
-                    className={styles.productDescription}
+                    className="text-sm"
                     variant="text"
                     animation="wave"
                     sx={{ width: 200, height: 20 }}
                 />
                 <Skeleton
-                    className={styles.productPrice}
+                    className="font-light"
                     variant="text"
                     animation="wave"
                     sx={{ width: 75, height: 30 }}
                 />
                 <Skeleton
-                    className={styles.buyButton}
                     variant="rectangular"
                     animation="wave"
                     sx={{ width: 100, height: 30 }}

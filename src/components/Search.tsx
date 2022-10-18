@@ -1,4 +1,3 @@
-import styles from "../styles/Search.module.css";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import { Button, IconButton } from "@mui/material";
@@ -40,7 +39,7 @@ function Search() {
     return (
         <div>
             <Heading text="Buscar productos" />
-            <div className={styles.searchFieldArea}>
+            <div className="ml-5 mr-5">
                 <TextField
                     InputProps={{
                         startAdornment: (
@@ -59,7 +58,7 @@ function Search() {
                     onChange={handleSearch}
                 ></TextField>
             </div>
-            <div className={styles.productList}>
+            <div className="divide-y-2 mt-3 ml-5 mr-5 pb-20">
                 {dataLoaded ? (
                     <AdvertisementCardSkeleton />
                 ) : (
