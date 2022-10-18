@@ -2,14 +2,10 @@ import { Button, Avatar, Divider} from "@mui/material";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
+import DataUser from './dataUser';
   
 interface ProfileProps {
-    username: string;
-    name: string;
-    phone_number: string;
-    email: string;
-    biography: string;
-    direction: string;
+    dataUser: DataUser;
     editHandler: () => void;
 }
 
@@ -26,10 +22,10 @@ function ReadProfile(props: ProfileProps) {
     return (
         <div className="m-4 space-y-4">
             <div className="flex py-4 space-x-4"> 
-            <Avatar {...stringAvatar(props.name)} />
+            <Avatar {...stringAvatar(props.dataUser.name)} />
                 <div className=" flex-col space-y-4">
-                    <h1 className="text-4xl">{props.name}</h1>
-                    <p className=" text-lg opacity-50">{props.username}</p>
+                    <h1 className="text-4xl">{props.dataUser.name}</h1>
+                    <p className=" text-lg opacity-50">{props.dataUser.username}</p>
                     <Button 
                         variant="outlined" 
                         onClick={() => props.editHandler()}>
@@ -38,18 +34,18 @@ function ReadProfile(props: ProfileProps) {
                 </div>     
             </div>
             <Divider />
-            <p className=" text-lg">{props.biography}</p>
+            <p className=" text-lg">{props.dataUser.biography}</p>
             <div className="flex text-sm space-x-2">
                 <LocationOnIcon fontSize="small"/>
-                <p>{props.direction}</p>
+                <p>{props.dataUser.direction}</p>
             </div>
             <div className="flex text-sm space-x-2">
                 <CallIcon fontSize="small"/>
-                <p>{props.phone_number}</p>
+                <p>{props.dataUser.phone_number}</p>
             </div>
             <div className="flex text-sm space-x-2">
                 <EmailIcon fontSize="small"/>
-                <p>{props.email}</p>
+                <p>{props.dataUser.email}</p>
             </div>
 
             <Divider />
