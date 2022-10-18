@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField";
 import React from "react";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useSearchParams } from "react-router-dom";
 import AdvertisementCard from "./AdvertisementCard";

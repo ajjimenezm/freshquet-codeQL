@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material";
 
-function AdvertisementCard() {
+function AdvertisementCardSkeleton() {
     return (
         <div className="flex flex-row h-25 items-center mt-3 mb-3">
             <Skeleton
@@ -37,4 +37,4 @@ function AdvertisementCard() {
         </div>
     );
 }
-export default AdvertisementCard;
+export default AdvertisementCardSkeleton;
