@@ -10,6 +10,7 @@ const Register = () => {
         username: "",
         password: "",
         userType: "",
+        repeat_password: ""
     });
     const navigate = useNavigate();
 
@@ -27,6 +28,10 @@ const Register = () => {
     };
 
     const sendRegister = () => {
+        if (state.password !== state.repeat_password) {
+            alert('Las contraseñas no coinciden');
+            return;
+        }
         axios
             .post(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/register`, {
                 ...state,
@@ -85,6 +90,14 @@ const Register = () => {
                         value={state.password}
                         onChange={handleChange}
                         placeholder="Contraseña"
+                        className="w-full p-2 mr-4 rounded-md mb-4"
+                    />
+                    <input
+                        type="password"
+                        name="repeat_password"
+                        value={state.repeat_password}
+                        onChange={handleChange}
+                        placeholder="Repite la Contraseña"
                         className="w-full p-2 mr-4 rounded-md mb-4"
                     />
                     <div onChange={selectRole} className="grid grid-cols-2">
