@@ -8,6 +8,7 @@ import AdvertisementCardSkeleton from "./AdvertisementCardSkeleton";
 import Heading from "./Heading";
 import axios from "axios";
 import Advertisement from "../types/Advertisement";
+import SearchHistoryElement from "./SearchHistoryElement";
 
 function Search() {
     const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -19,25 +20,58 @@ function Search() {
     const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
         []
     );
+    const [saveToHistory, setSaveToHistory] = React.useState(false);
     const waitingTimeSkeletonLoader = 500;
+    const [searchHistoryElements, setSearchHistoryElements] =
+        React.useState<JSX.Element[]>();
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchParams({ search: event.target.value });
-        setMinimumTimeElapsed(false);
-        getAds();
-        setTimeout(() => {
-            setMinimumTimeElapsed(true);
-        }, waitingTimeSkeletonLoader);
-    };
-    React.useEffect(() => {
-        if (searchParams.get("search")) {
-            getAds();
 
+        if (event.target.value.length > 0) {
+            setMinimumTimeElapsed(false);
+            getAds();
             setTimeout(() => {
                 setMinimumTimeElapsed(true);
             }, waitingTimeSkeletonLoader);
+
+            setTimeout(() => {
+                setSaveToHistory(true);
+            }, 3000);
+        }
+    };
+    React.useEffect(() => {
+        if (searchParams.get("search")) {
+            setTimeout(() => {
+                setMinimumTimeElapsed(true);
+            }, waitingTimeSkeletonLoader);
+
+            getAds();
         }
     }, []);
+
+    React.useEffect(() => {
+        if (localStorage.getItem("searchHistory") === null) {
+            localStorage.setItem("searchHistory", JSON.stringify([]));
+        }
+        if (saveToHistory) {
+            const searchHistory = JSON.parse(
+                localStorage.getItem("searchHistory") || "[]"
+            );
+            if (
+                !searchHistory.includes(searchParams.get("search")) &&
+                searchParams.get("search") !== ""
+            ) {
+                searchHistory.push(searchParams.get("search"));
+                localStorage.setItem(
+                    "searchHistory",
+                    JSON.stringify(searchHistory)
+                );
+            }
+        }
+        saveToHistory && setSaveToHistory(false);
+        setSearchHistoryElements(loadSearchHistory());
+    }, [saveToHistory]);
 
     React.useEffect(() => {
         const filteredAds = advertisements.filter((advertisement) => {
@@ -79,6 +113,21 @@ function Search() {
             });
     };
 
+    const loadSearchHistory = () => {
+        const searchHistory = JSON.parse(
+            localStorage.getItem("searchHistory") || "[]"
+        );
+        return searchHistory.map((historyString: string) => (
+            <SearchHistoryElement
+                key={historyString}
+                historyString={historyString}
+                onHistoryClick={(historyString: string) => {
+                    setSearchParams({ search: historyString });
+                }}
+            />
+        ));
+    };
+
     return (
         <div>
             <Heading text="Buscar productos" />
@@ -102,7 +151,10 @@ function Search() {
                 ></TextField>
             </div>
             <div className="mt-3 ml-5 mr-5 divide-y-2 pb-20">
-                {dataLoaded ? (
+                {!searchParams.get("search") ||
+                searchParams.get("search")?.length == 0 ? (
+                    searchHistoryElements
+                ) : dataLoaded ? (
                     advertisementsToShow
                 ) : dataRequested && minimumTimeElapsed ? (
                     <>
