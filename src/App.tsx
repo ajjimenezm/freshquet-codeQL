@@ -4,6 +4,7 @@ import InitialScreen from './components/InitialScreen';
 import MainApp from './components/MainApp';
 import './styles/App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import NewProduct from './components/Products_To_Sell/NewProduct';
 
 function App() {
   const theme = createTheme({
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<InitialScreen setRole={setRole} />} />
           <Route path="*" element={<MainApp />} />
+          <Route path="newproduct" element={<NewProduct />} />
         </Routes>
       </ThemeProvider>
     </div>

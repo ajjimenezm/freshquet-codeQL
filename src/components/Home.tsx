@@ -5,6 +5,7 @@ import SubHeading from './SubHeading';
 import axios from 'axios';
 import React from 'react';
 import AdvertisementCardSkeleton from './AdvertisementCardSkeleton';
+import AddProduct from './Products_To_Sell/AddProduct';
 
 const Home = () => {
   const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -52,6 +53,7 @@ const Home = () => {
     <div>
       <Heading text="Lo más fresco para tí" />
       <SubHeading text="Creemos que estos productos pueden interesarte" />
+      <AddProduct />
 
       <div className="ml-5 mr-5">
         {dataLoaded ? (
