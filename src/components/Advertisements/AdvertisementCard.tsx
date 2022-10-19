@@ -14,14 +14,9 @@ function AdvertisementCard(props: AdvertisementCardProps) {
   };
   return (
     <div className={styles.productCard}>
-      {/* <img
+      <img
         src={props.advertisement.image}
         alt={props.advertisement.name}
-        className={styles.productImage}
-      /> */}
-      <img
-        src="https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600"
-        alt="Patata"
         className={styles.productImage}
       />
       <div className={styles.productInfo}>
@@ -32,24 +27,22 @@ function AdvertisementCard(props: AdvertisementCardProps) {
         <div className={styles.productPrice}>
           {`${props.advertisement.pricePerKilogram} €/kg`}
         </div>
-        <div className="flex justify-between w-full">
-          <Button
-            variant="outlined"
-            color="primary"
-            className={styles.buyButton}
-            onClick={props.onClickFunction}
-          >
-            Comprar
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            className={styles.buyButton}
-            onClick={() => gotoDetail(props.advertisement._id)}
-          >
-            Ver Más
-          </Button>
-        </div>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={styles.buyButton}
+          onClick={props.onClickFunction}
+        >
+          Comprar
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={styles.buyButton}
+          onClick={() => gotoDetail(props.advertisement._id)}
+        >
+          Ver Más
+        </Button>
       </div>
     </div>
   );

@@ -1,18 +1,9 @@
-<<<<<<< HEAD
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import InitialScreen from './components/InitialScreen';
 import MainApp from './components/MainApp';
 import './styles/App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-=======
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import InitialScreen from "./components/InitialScreen";
-import MainApp from "./components/MainApp";
-import "./styles/App.css";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
->>>>>>> cbce894 (product detail)
 
 function App() {
   const theme = createTheme({
