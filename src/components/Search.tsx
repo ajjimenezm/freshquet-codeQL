@@ -20,7 +20,6 @@ function Search() {
     const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
         []
     );
-    const [saveToHistory, setSaveToHistory] = React.useState(false);
     const waitingTimeSkeletonLoader = 500;
     const [searchHistoryElements, setSearchHistoryElements] =
         React.useState<JSX.Element[]>();
@@ -34,27 +33,14 @@ function Search() {
             setTimeout(() => {
                 setMinimumTimeElapsed(true);
             }, waitingTimeSkeletonLoader);
-
-            setTimeout(() => {
-                setSaveToHistory(true);
-            }, 3000);
         }
     };
-    React.useEffect(() => {
-        if (searchParams.get("search")) {
-            setTimeout(() => {
-                setMinimumTimeElapsed(true);
-            }, waitingTimeSkeletonLoader);
-
-            getAds();
-        }
-    }, []);
 
     React.useEffect(() => {
-        if (localStorage.getItem("searchHistory") === null) {
-            localStorage.setItem("searchHistory", JSON.stringify([]));
-        }
-        if (saveToHistory) {
+        const timer = setTimeout(() => {
+            if (localStorage.getItem("searchHistory") === null) {
+                localStorage.setItem("searchHistory", JSON.stringify([]));
+            }
             const searchHistory = JSON.parse(
                 localStorage.getItem("searchHistory") || "[]"
             );
@@ -68,10 +54,20 @@ function Search() {
                     JSON.stringify(searchHistory)
                 );
             }
+            setSearchHistoryElements(loadSearchHistory());
+        }, 3500);
+        return () => clearTimeout(timer);
+    }, [advertisementsToShow]);
+
+    React.useEffect(() => {
+        if (searchParams.get("search")) {
+            setTimeout(() => {
+                setMinimumTimeElapsed(true);
+            }, waitingTimeSkeletonLoader);
+
+            getAds();
         }
-        saveToHistory && setSaveToHistory(false);
-        setSearchHistoryElements(loadSearchHistory());
-    }, [saveToHistory]);
+    }, []);
 
     React.useEffect(() => {
         const filteredAds = advertisements.filter((advertisement) => {
