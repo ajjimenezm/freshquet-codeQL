@@ -8,46 +8,53 @@ import AdvertisementCardSkeleton from './AdvertisementCardSkeleton';
 import AddProduct from './Products_To_Sell/AddProduct';
 
 const Home = () => {
-  const [dataLoaded, setDataLoaded] = React.useState(false);
-  const [advertisementsToShow, setAdvertisementsToShow] =
-    React.useState<JSX.Element[]>();
-  const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
-    []
-  );
-
-  React.useEffect(() => {
-    getAdvertisements();
-  }, []);
-
-  React.useEffect(() => {
-    setAdvertisementsToShow(
-      advertisements.map((ad) => {
-        return (
-          <AdvertisementCard
-            key={ad._id}
-            advertisement={ad}
-            onClickFunction={function (): void {
-              throw new Error('Function not implemented.');
-            }}
-          />
-        );
-      })
+    const [dataLoaded, setDataLoaded] = React.useState(false);
+    const [advertisementsToShow, setAdvertisementsToShow] =
+        React.useState<JSX.Element[]>();
+    const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
+        []
     );
-  }, [dataLoaded]);
+    const [minimumTimeElapsed, setMinimumTimeElapsed] = React.useState(false);
+    const waitingTimeSkeletonLoader = 500;
 
-  const getAdvertisements = () => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all`)
-      .then((response) => {
-        if (response.status === 200) {
-          setAdvertisements(response.data);
-          setDataLoaded(true);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+    React.useEffect(() => {
+        setTimeout(() => {
+            setMinimumTimeElapsed(true);
+        }, waitingTimeSkeletonLoader);
+        getAdvertisements();
+    }, []);
+
+    React.useEffect(() => {
+        setAdvertisementsToShow(
+            advertisements.map((ad) => {
+                return (
+                    <AdvertisementCard
+                        key={ad._id}
+                        advertisement={ad}
+                        onClickFunction={function (): void {
+                            throw new Error("Function not implemented.");
+                        }}
+                    />
+                );
+            })
+        );
+    }, [dataLoaded]);
+
+    const getAdvertisements = () => {
+        axios
+            .get(
+                `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all`
+            )
+            .then((response) => {
+                if (response.status === 200) {
+                    setAdvertisements(response.data);
+                    setDataLoaded(true);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
   return (
     <div>
@@ -55,21 +62,23 @@ const Home = () => {
       <SubHeading text="Creemos que estos productos pueden interesarte" />
       <AddProduct />
 
-      <div className="ml-5 mr-5">
-        {dataLoaded ? (
-          advertisementsToShow
-        ) : (
-          <>
-            <AdvertisementCardSkeleton />
-            <AdvertisementCardSkeleton />
-            <AdvertisementCardSkeleton />
-            <AdvertisementCardSkeleton />
-            <AdvertisementCardSkeleton />
-          </>
-        )}
-      </div>
-    </div>
-  );
+            <div className="ml-5 mr-5">
+                {dataLoaded ? (
+                    advertisementsToShow
+                ) : minimumTimeElapsed ? (
+                    <>
+                        <AdvertisementCardSkeleton />
+                        <AdvertisementCardSkeleton />
+                        <AdvertisementCardSkeleton />
+                        <AdvertisementCardSkeleton />
+                        <AdvertisementCardSkeleton />
+                    </>
+                ) : (
+                    <div></div>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default Home;
