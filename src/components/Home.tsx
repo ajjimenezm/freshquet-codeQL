@@ -1,10 +1,11 @@
-import Advertisement from "../types/Advertisement";
-import AdvertisementCard from "./AdvertisementCard";
-import Heading from "./Heading";
-import SubHeading from "./SubHeading";
-import axios from "axios";
-import React from "react";
-import AdvertisementCardSkeleton from "./AdvertisementCardSkeleton";
+import Advertisement from '../types/Advertisement';
+import AdvertisementCard from './AdvertisementCard';
+import Heading from './Heading';
+import SubHeading from './SubHeading';
+import axios from 'axios';
+import React from 'react';
+import AdvertisementCardSkeleton from './AdvertisementCardSkeleton';
+import AddProduct from './advertisements/AddProduct';
 
 const Home = () => {
     const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -55,10 +56,11 @@ const Home = () => {
             });
     };
 
-    return (
-        <div>
-            <Heading text="Lo más fresco para tí" />
-            <SubHeading text="Creemos que estos productos pueden interesarte" />
+  return (
+    <div>
+      <Heading text="Lo más fresco para tí" />
+      <SubHeading text="Creemos que estos productos pueden interesarte" />
+      <AddProduct />
 
             <div className="ml-5 mr-5">
                 {dataLoaded ? (
