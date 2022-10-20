@@ -9,6 +9,7 @@ import React, { useState } from "react";
 
 interface ProfileProps {
   dataUser: DataUser;
+  userRole: string;
   editHandler: () => void;
 }
 
@@ -18,21 +19,20 @@ function stringAvatar(name: string) {
       bgcolor: "#63d4a1",
       width: 100,
       height: 100,
+      fontSize: 45,
+      fontWeight: "bold",
     },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children: `${name.split(" ")[0][0]}`,
   };
 }
 
-function updateData(dataUser: DataUser, afterFunction: Function) {
+function updateData(dataUser: DataUser, afterFunction: () => void) {
   axios
-    .put(
-      `${
-        process.env.REACT_APP_BACKEND_DEFAULT_ROUTE
-      }users/username/${localStorage.getItem("username")}`,
-      {
-        dataUser,
-      }
-    )
+    .put(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/edit`, dataUser, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+      },
+    })
     .then((res) => {
       afterFunction();
     });
@@ -57,7 +57,7 @@ const EditProfile = (props: ProfileProps) => {
 
   return (
     <div className="m-4 space-y-4">
-      <div className="flex py-4 space-x-4">
+      <div className="flex space-x-4 py-4">
         <Avatar {...stringAvatar(props.dataUser.name)} />
         <div className=" flex-col space-y-4 text-4xl">
           <TextField
@@ -83,6 +83,9 @@ const EditProfile = (props: ProfileProps) => {
         defaultValue={props.dataUser.biography}
         multiline
       />
+      <p className=" text-lg  text-emerald-700">
+        {props.userRole.toUpperCase()}
+      </p>
       <TextField
         fullWidth
         multiline
