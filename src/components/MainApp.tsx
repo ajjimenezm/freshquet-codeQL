@@ -5,30 +5,30 @@ import Home from "./Home";
 import Map from "./Map";
 import Search from "./Search";
 import Chat from "./Chat";
-import Profile from "./Profile";
 import Login from "./users/Login";
 import Register from "./users/Register";
 import AdDetail from "./advertisements/AdDetail";
+import Profile from "./Profile/Profile";
 
 function MainApp() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    return (
-        <>
-            <Routes>
-                <Route path="home" element={<Home />} />
-                <Route path="map" element={<Map />} />
-                <Route path="search" element={<Search />} />
-                <Route path="chat" element={<Chat />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="login" element={<Login />} />
-                <Route path="register" element={<Register />} />
-                <Route path="products/detail/:id" element={<AdDetail />} />
-            </Routes>
+  return (
+    <>
+      <Routes>
+        <Route path="home" element={<Home />} />
+        <Route path="map" element={<Map />} />
+        <Route path="search" element={<Search />} />
+        <Route path="chat" element={<Chat />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="products/detail/:id" element={<AdDetail />} />
+      </Routes>
 
-            <BottomNav navigateFunction={navigate} />
-        </>
-    );
+      <BottomNav navigateFunction={navigate} />
+    </>
+  );
 }
 
 export default MainApp;
