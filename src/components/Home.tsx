@@ -5,7 +5,7 @@ import SubHeading from './SubHeading';
 import axios from 'axios';
 import React from 'react';
 import AdvertisementCardSkeleton from './AdvertisementCardSkeleton';
-import AddProduct from './Products_To_Sell/AddProduct';
+import AddProduct from './advertisements/AddProduct';
 
 const Home = () => {
     const [dataLoaded, setDataLoaded] = React.useState(false);
