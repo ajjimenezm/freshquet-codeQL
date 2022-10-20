@@ -3,7 +3,7 @@ import { Skeleton } from "@mui/material";
 
 function SearchHistoryElementSkeleton() {
     return (
-        <div className="flex w-full cursor-default flex-row justify-between pb-2 pt-2 hover:bg-gray-100 active:bg-gray-400">
+        <div className="flex w-full cursor-default flex-row justify-between pb-2 pt-2">
             <Skeleton
                 variant="rectangular"
                 className="ml-2"
