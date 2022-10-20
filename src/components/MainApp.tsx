@@ -6,8 +6,8 @@ import Map from "./Map";
 import Search from "./Search";
 import Chat from "./Chat";
 import Profile from "./Profile";
-import Login from "./Users/Login";
-import Register from "./Users/Register";
+import Login from "./users/Login";
+import Register from "./users/Register";
 import AdDetail from "./advertisements/AdDetail";
 
 function MainApp() {
