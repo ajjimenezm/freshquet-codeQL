@@ -19,7 +19,7 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                 </div>
                 <div className="text-sm">{props.advertisement.description}</div>
                 <div className="font-light">
-                    {`${props.advertisement.price} €/kg`}
+                    {`${props.advertisement.pricePerKilogram} €/kg`}
                 </div>
                 <Button
                     variant="outlined"

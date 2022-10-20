@@ -29,7 +29,7 @@ function AdDetail() {
       {advertisement && (
         <div>
           <h1>{advertisement.name}</h1>
-          <h2>{advertisement.price}</h2>
+          <h2>{advertisement.pricePerKilogram}</h2>
           <h3>{advertisement.description}</h3>
         </div>
       )}

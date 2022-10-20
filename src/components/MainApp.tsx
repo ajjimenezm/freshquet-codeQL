@@ -8,7 +8,7 @@ import Chat from "./Chat";
 import Profile from "./Profile";
 import Login from "./Users/Login";
 import Register from "./Users/Register";
-import AdDetail from "./Advertisements/AdDetail";
+import AdDetail from "./advertisements/AdDetail";
 
 function MainApp() {
   const navigate = useNavigate();
