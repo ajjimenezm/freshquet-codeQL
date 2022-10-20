@@ -1,4 +1,3 @@
-import HistoryIcon from "@mui/icons-material/History";
 import { Skeleton } from "@mui/material";
 
 function SearchHistoryElementSkeleton() {
