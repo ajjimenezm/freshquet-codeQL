@@ -80,26 +80,32 @@ function Search() {
     }, []);
 
     React.useEffect(() => {
-        const filteredAds = advertisements.filter((advertisement) => {
-            if (
-                advertisement.name
-                    .toLowerCase()
-                    .includes(searchParams.get("search")?.toLowerCase() || "")
-            ) {
-                return advertisement;
-            }
-        });
-        setAdvertisementsToShow(
-            filteredAds.map((advertisement) => (
-                <AdvertisementCard
-                    key={advertisement._id}
-                    advertisement={advertisement}
-                    onClickFunction={() => {
-                        console.log("Clicked");
-                    }}
-                />
-            ))
-        );
+        if (!dataRequested) {
+            getAds();
+        } else {
+            const filteredAds = advertisements.filter((advertisement) => {
+                if (
+                    advertisement.name
+                        .toLowerCase()
+                        .includes(
+                            searchParams.get("search")?.toLowerCase() || ""
+                        )
+                ) {
+                    return advertisement;
+                }
+            });
+            setAdvertisementsToShow(
+                filteredAds.map((advertisement) => (
+                    <AdvertisementCard
+                        key={advertisement._id}
+                        advertisement={advertisement}
+                        onClickFunction={() => {
+                            console.log("Clicked");
+                        }}
+                    />
+                ))
+            );
+        }
     }, [advertisements, searchParams]);
 
     const getAds = () => {
