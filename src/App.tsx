@@ -4,7 +4,7 @@ import InitialScreen from './components/InitialScreen';
 import MainApp from './components/MainApp';
 import './styles/App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import NewProduct from './components/Products_To_Sell/NewProduct';
+import NewProduct from './components/advertisements/NewProduct';
 
 function App() {
   const theme = createTheme({
