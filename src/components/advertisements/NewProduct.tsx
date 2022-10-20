@@ -5,8 +5,16 @@ import { useNavigate } from "react-router-dom";
 import {Category} from "../../types/Category"
 import Heading from "../Heading";
 
+interface NewProductsState {
+    name: string;
+    description: string;
+    pricePerKilogram: number;
+    category: Category;
+    averageReviewScore: number;
+}
+
 export default function NewProducts() {
-    const [state, setState] = useState({
+    const [state, setState] = useState<NewProductsState>({
 //        selectedFile: File,
         name: "",
         description: "",
@@ -16,6 +24,8 @@ export default function NewProducts() {
     });
 
     const navigate = useNavigate();
+
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setState({
@@ -42,10 +52,10 @@ export default function NewProducts() {
 
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
-        console.log(state.category);
         if (state.name === ""){
             alert("Add a valid name to the product")
-        }else if (state.pricePerKilogram === 0){
+        }else if (state.pricePerKilogram <= 0
+                || state.pricePerKilogram.toString().length === 0){
             alert("Add a valid price for the product")
         } else if(state.description === ""){
             alert("Add a valid description to the product")
@@ -61,13 +71,11 @@ export default function NewProducts() {
                 }
             })
             .catch((res) => {
-                console.log(res)
+//                console.log(res)
                 if(res.message == "Network Error")
                     alert("Network Error");
             });
-
         }
-
     };
 
 
@@ -91,7 +99,7 @@ export default function NewProducts() {
                 <br />
                 <input
                     name="pricePerKilogram"
-                    type="text"
+                    type="number"
                     value={state.pricePerKilogram}
                     onChange={handleChange}
                     className="w-full p-2 mr-4 rounded-md mb-4"
