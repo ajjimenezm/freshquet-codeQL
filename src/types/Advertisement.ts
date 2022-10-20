@@ -1,10 +1,15 @@
+import { Category } from './Category';
+
 type Advertisement = {
-    id: string;
+
+    _id: string;
     image: string;
     name: string;
-    price: number;
+    pricePerKilogram: number;
     description: string;
-    averageScore: number;
+    averageReviewScore: number;
+    category: Category;
+
 };
 
 export default Advertisement;

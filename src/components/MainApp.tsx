@@ -6,6 +6,9 @@ import Map from "./Map";
 import Search from "./Search";
 import Chat from "./Chat";
 import Profile from "./Profile";
+import Login from "./users/Login";
+import Register from "./users/Register";
+import AdDetail from "./advertisements/AdDetail";
 
 function MainApp() {
     const navigate = useNavigate();
@@ -18,6 +21,9 @@ function MainApp() {
                 <Route path="search" element={<Search />} />
                 <Route path="chat" element={<Chat />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+                <Route path="products/detail/:id" element={<AdDetail />} />
             </Routes>
 
             <BottomNav navigateFunction={navigate} />

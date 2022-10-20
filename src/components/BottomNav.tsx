@@ -4,7 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ChatIcon from "@mui/icons-material/Chat";
 import MapIcon from "@mui/icons-material/Map";
 import ProfileIcon from "@mui/icons-material/AccountCircle";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import useReactPath from "../hooks/useReactPath";
 
 import React from "react";
@@ -26,7 +26,7 @@ function BottomNav(props: BottomNavProps) {
 
     const handleChange = (
         event: React.SyntheticEvent<Element, Event>,
-        value: any
+        value: SetStateAction<string>
     ) => {
         setValue(value);
     };
