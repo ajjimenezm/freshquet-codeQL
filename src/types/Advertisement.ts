@@ -4,7 +4,7 @@ type Advertisement = {
     _id: string;
     image: string;
     name: string;
-    price: number;
+    pricePerKilogram: number;
     description: string;
     averageReviewScore: number;
     category: Category;

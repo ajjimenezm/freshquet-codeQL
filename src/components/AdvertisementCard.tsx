@@ -1,11 +1,15 @@
 import { Button } from "@mui/material";
+import { userInfo } from "os";
+import { useEffect } from "react";
 import Advertisement from "../types/Advertisement";
+import EditProduct from "./Products_To_Sell/EditProduct";
 
 interface AdvertisementCardProps {
     advertisement: Advertisement;
     onClickFunction: () => void;
 }
 function AdvertisementCard(props: AdvertisementCardProps) {
+
     return (
         <div className="h-25 mt-3 mb-3 flex flex-row items-center">
             <img
@@ -19,7 +23,7 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                 </div>
                 <div className="text-sm">{props.advertisement.description}</div>
                 <div className="font-light">
-                    {`${props.advertisement.price} €/kg`}
+                    {`${props.advertisement.pricePerKilogram} €/kg`}
                 </div>
                 <Button
                     variant="outlined"
