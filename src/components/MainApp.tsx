@@ -11,24 +11,24 @@ import Register from "./Users/Register";
 import AdDetail from "./advertisements/AdDetail";
 
 function MainApp() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  return (
-    <>
-      <Routes>
-        <Route path="home" element={<Home />} />
-        <Route path="map" element={<Map />} />
-        <Route path="search" element={<Search />} />
-        <Route path="chat" element={<Chat />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="products/detail/:id" element={<AdDetail />} />
-      </Routes>
+    return (
+        <>
+            <Routes>
+                <Route path="home" element={<Home />} />
+                <Route path="map" element={<Map />} />
+                <Route path="search" element={<Search />} />
+                <Route path="chat" element={<Chat />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+                <Route path="products/detail/:id" element={<AdDetail />} />
+            </Routes>
 
-      <BottomNav navigateFunction={navigate} />
-    </>
-  );
+            <BottomNav navigateFunction={navigate} />
+        </>
+    );
 }
 
 export default MainApp;
