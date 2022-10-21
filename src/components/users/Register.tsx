@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [state, setState] = useState({
-    name: "",
-    phone_number: "",
-    email: "",
-    username: "",
-    password: "",
-    userType: "",
-    repeat_password: "",
-    direction: "Default direction",
-    biography: "New to freshquet :)",
+    name: '',
+    phone_number: '',
+    email: '',
+    username: '',
+    password: '',
+    userType: '',
+    repeat_password: '',
+    direction: 'Default direction',
+    biography: 'New to freshquet :)',
   });
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const Register = () => {
 
   const sendRegister = () => {
     if (state.password !== state.repeat_password) {
-      alert("Las contraseñas no coinciden");
+      alert('Las contraseñas no coinciden');
       return;
     }
     axios
@@ -40,12 +40,12 @@ const Register = () => {
       })
       .then((res) => {
         if (res.status == 201) {
-          localStorage.setItem("userToken", res.data.access_token);
-          navigate("/profile");
+          localStorage.setItem('userToken', res.data.access_token);
+          navigate('/home');
         }
       })
       .catch(() => {
-        alert("Error creando el usuario");
+        alert('Error creando el usuario');
       });
   };
 
