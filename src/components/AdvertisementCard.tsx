@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import { userInfo } from "os";
 import { useEffect } from "react";
 import Advertisement from "../types/Advertisement";
-import EditProduct from "./Products_To_Sell/EditProduct";
+import EditProduct from "./advertisements/EditProduct";
 import {useNavigate } from 'react-router-dom';
 
 interface AdvertisementCardProps {
@@ -46,6 +46,7 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                 >
                     Ver Más
                 </Button>
+                <EditProduct />
             </div>
         </div>
     );
