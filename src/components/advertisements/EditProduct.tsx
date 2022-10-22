@@ -1,7 +1,7 @@
 function EditProduct(){
     return(
         <div>
-            HOLA
+            HOLA caracola
         </div>
     )
 }

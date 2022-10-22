@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -37,6 +38,19 @@ function AdDetail() {
   const navigateToSeller = (id: string) => {
     navigate(`/seller/${id}`);
   };
+
+  let edit: any;
+  console.log(id + " id\n" + sellerId + " sellerId");
+  (id === sellerId) ? (
+    edit = <Button
+    className="center-2"
+    variant="outlined"
+    color="primary"
+//                      onClick={navigateFunction.bind(null, props.advertisement._id)}
+    >
+      Editar
+    </Button>
+  ) : (edit = <></>)
 
   return (
     <>
@@ -81,6 +95,7 @@ function AdDetail() {
               Visita su tienda
             </Button>
           </div>
+          {edit}
         </div>
       )}
     </>

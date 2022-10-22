@@ -40,9 +40,11 @@ const Register = () => {
       })
       .then((res) => {
         if (res.status == 201) {
-          localStorage.setItem('userToken', res.data.access_token);
-          navigate('/home');
-        }
+          if (res.status == 201) {
+            localStorage.setItem('userToken', res.data.access_token);
+            localStorage.setItem('userId', res.data.userId);
+            navigate('/home');
+  }        }
       })
       .catch(() => {
         alert('Error creando el usuario');

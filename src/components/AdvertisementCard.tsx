@@ -46,7 +46,6 @@ function AdvertisementCard(props: AdvertisementCardProps) {
             Ver Más
           </Button>
         </span>
-        <EditProduct />
       </div>
     </div>
   );
