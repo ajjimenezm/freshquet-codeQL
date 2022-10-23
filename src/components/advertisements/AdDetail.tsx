@@ -20,14 +20,12 @@ function AdDetail() {
           )
           .then((res) => {
             setProduct(res.data);
+            setSellerId(res.data.sellerId._id);
           });
       } catch (err) {
         setError(true);
         alert(err);
       }
-    };
-    const getSellerId = async () => {
-      return;
     };
     getProduct();
   }, [id]);
@@ -40,17 +38,19 @@ function AdDetail() {
   };
 
   let edit: any;
-  console.log(id + " id\n" + sellerId + " sellerId");
-  (id === sellerId) ? (
-    edit = <Button
-    className="center-2"
-    variant="outlined"
-    color="primary"
-//                      onClick={navigateFunction.bind(null, props.advertisement._id)}
-    >
-      Editar
-    </Button>
-  ) : (edit = <></>)
+  console.log(id + ' id\n' + sellerId + ' sellerId\n');
+  id === sellerId
+    ? (edit = (
+        <Button
+          className="center-2"
+          variant="outlined"
+          color="primary"
+          //                      onClick={navigateFunction.bind(null, props.advertisement._id)}
+        >
+          Editar
+        </Button>
+      ))
+    : (edit = <></>);
 
   return (
     <>
@@ -90,7 +90,7 @@ function AdDetail() {
               className="left-2"
               variant="outlined"
               color="primary"
-              onClick={navigateToSeller.bind(null, advertisement.sellerId.id)}
+              onClick={navigateToSeller.bind(null, sellerId as string)}
             >
               Visita su tienda
             </Button>

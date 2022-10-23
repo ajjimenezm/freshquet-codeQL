@@ -21,7 +21,7 @@ function MainApp() {
     const user = localStorage.getItem('userToken');
     if (!user) {
       navigate('/login');
-    }
+    } else navigate('/home');
   }, []);
 
   return (

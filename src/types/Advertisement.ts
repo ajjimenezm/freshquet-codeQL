@@ -9,7 +9,7 @@ type Advertisement = {
   averageReviewScore: number;
   category: Category;
   sellerId: {
-    id: string;
+    _id: string;
     name: string;
   };
 };

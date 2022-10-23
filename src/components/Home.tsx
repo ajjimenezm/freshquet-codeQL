@@ -8,6 +8,7 @@ import AdvertisementCardSkeleton from './AdvertisementCardSkeleton';
 import AddProduct from './advertisements/AddProduct';
 import AddIcon from '@mui/icons-material/Add';
 import { Divider, Fab } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -19,11 +20,24 @@ const Home = () => {
   const [minimumTimeElapsed, setMinimumTimeElapsed] = React.useState(false);
   const waitingTimeSkeletonLoader = 500;
 
+  const navigate = useNavigate();
+
   React.useEffect(() => {
+    const user = localStorage.getItem('userToken');
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
+  const intervalGetProducts = setInterval(() => {
+    getAdvertisements();
+  }, 3000);
+
+  React.useEffect(() => {
+    intervalGetProducts;
     setTimeout(() => {
       setMinimumTimeElapsed(true);
     }, waitingTimeSkeletonLoader);
-    getAdvertisements();
   }, []);
 
   React.useEffect(() => {
@@ -52,6 +66,7 @@ const Home = () => {
         if (response.status === 200) {
           setAdvertisements(response.data);
           setDataLoaded(true);
+          clearInterval(intervalGetProducts);
         }
       })
       .catch((error) => {

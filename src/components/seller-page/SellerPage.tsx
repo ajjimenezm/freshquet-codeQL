@@ -1,47 +1,43 @@
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, Divider, Rating } from '@mui/material';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import CallIcon from '@mui/icons-material/Call';
+import EmailIcon from '@mui/icons-material/Email';
 import axios from 'axios';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import DataUser from '../Profile/dataUser';
+import SubHeading from '../SubHeading';
+import Advertisement from '../../types/Advertisement';
+import AdvertisementCard from '../AdvertisementCard';
+import AdvertisementCardSkeleton from '../AdvertisementCardSkeleton';
 
-interface SellerPageState {
-  dataUser: DataUser;
+interface ISellerData {
+  name: string;
+  username: string;
+  phone_number: string;
+  email: string;
+  biography: string;
+  direction: string;
 }
 
 function SellerPage() {
   const { id } = useParams<{ id: string }>();
 
-  const [state, setState] = React.useState<SellerPageState>({
-    dataUser: {
-      name: 'Cargando Nombre',
-      username: 'cargando',
-      phone_number: '123456789',
-      email: '',
-      biography: 'Cargando...',
-      direction: 'Cargando...',
-    },
+  const [seller, setSeller] = React.useState<ISellerData>({
+    name: '',
+    username: '',
+    phone_number: '',
+    email: '',
+    biography: '',
+    direction: '',
   });
-
-  const fetchSellerData = async () => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-        },
-      })
-      .then((res) => {
-        setState({
-          dataUser: {
-            name: res.data[0].name,
-            username: res.data[0].username,
-            phone_number: res.data[0].phone_number,
-            email: res.data[0].email,
-            direction: res.data[0].direction,
-            biography: res.data[0].biography,
-          },
-        });
-      });
-  };
+  const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
+    []
+  );
+  const [dataLoaded, setDataLoaded] = React.useState(false);
+  const [advertisementsToShow, setAdvertisementsToShow] =
+    React.useState<JSX.Element[]>();
+  const [minimumTimeElapsed, setMinimumTimeElapsed] = React.useState(false);
+  const waitingTimeSkeletonLoader = 500;
 
   const stringAvatar = (name: string) => {
     return {
@@ -56,14 +52,123 @@ function SellerPage() {
     };
   };
 
+  const fetchSellerData = async () => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        },
+      })
+      .then((res) => {
+        setSeller({
+          name: res.data[0].name,
+          username: res.data[0].username,
+          phone_number: res.data[0].phone_number,
+          email: res.data[0].email,
+          direction: res.data[0].direction,
+          biography: res.data[0].biography,
+        });
+      });
+  };
+
+  const fetchSellerProductsData = async () => {
+    axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+          },
+        }
+      )
+      .then((res) => {
+        setAdvertisements(res.data);
+        setDataLoaded(true);
+        //clearInterval(intervalFetchSellerProducts);
+      });
+  };
+
+  //  const intervalFetchSellerProducts = setInterval(() => {
+  //    fetchSellerProductsData();
+  //  }, 3000);
+
+  fetchSellerData();
+  fetchSellerProductsData();
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setMinimumTimeElapsed(true);
+    }, waitingTimeSkeletonLoader);
+    //intervalFetchSellerProducts;
+  }, []);
+
+  React.useEffect(() => {
+    setAdvertisementsToShow(
+      advertisements.map((ad) => {
+        return (
+          <>
+            <AdvertisementCard
+              key={ad._id}
+              advertisement={ad}
+              onClickFunction={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+            />
+            <Divider key={ad._id} className="" orientation="horizontal" />
+          </>
+        );
+      })
+    );
+  }, [dataLoaded]);
+
   return (
     <div className="m-4 space-y-4">
       <div className="flex space-x-4 py-4">
-        <Avatar {...stringAvatar(state.dataUser.name)} />
+        <Avatar {...stringAvatar(seller.name)} />
         <div className=" flex-col space-y-4">
-          <h1 className="text-4xl">{state.dataUser.name}</h1>
-          <p className=" text-lg opacity-50">{state.dataUser.username}</p>
+          <h1 className="text-4xl">{seller.name}</h1>
+          <p className=" text-lg opacity-50">{seller.username}</p>
         </div>
+      </div>
+      <p className=" text-lg">{seller.biography}</p>
+      <Divider />
+      <div className="flex space-x-2 text-sm">
+        <LocationOnIcon fontSize="small" />
+        <p>{seller.direction}</p>
+      </div>
+      <div className="flex space-x-2 text-sm">
+        <CallIcon fontSize="small" />
+        <p>{seller.phone_number}</p>
+      </div>
+      <div className="flex space-x-2 text-sm">
+        <EmailIcon fontSize="small" />
+        <p>{seller.email}</p>
+      </div>
+      <div className="justify-start">
+        <p>Puntuación: </p>
+        <Rating
+          name="half-rating-read"
+          defaultValue={0}
+          precision={0.5}
+          readOnly
+        />
+      </div>
+      <Divider />
+      <div>
+        <SubHeading text={'Productos vendidos por ' + seller.name} />
+        {dataLoaded ? (
+          advertisementsToShow
+        ) : minimumTimeElapsed ? (
+          <>
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+          </>
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );
