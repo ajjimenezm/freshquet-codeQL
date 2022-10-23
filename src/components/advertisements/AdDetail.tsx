@@ -8,6 +8,8 @@ import { Button, Rating } from '@mui/material';
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
   const [advertisement, setProduct] = useState<Advertisement>();
+  const [userId, setUserId] = useState<string>();
+  const [userCategory, setUserCategory] = useState<string>();
   const [sellerId, setSellerId] = useState<string>();
   const [error, setError] = useState(false);
 
@@ -36,16 +38,18 @@ function AdDetail() {
   const navigateToSeller = (id: string) => {
     navigate(`/seller/${id}`);
   };
+  const navigateToEdit = (id: string) => {
+    navigate(`/products/edit/${id}`);
+  };
 
   let edit: any;
-  console.log(id + ' id\n' + sellerId + ' sellerId\n');
-  id === sellerId
+  advertisement && userCategory === 'seller' && sellerId === userId
     ? (edit = (
         <Button
           className="center-2"
           variant="outlined"
           color="primary"
-          //                      onClick={navigateFunction.bind(null, props.advertisement._id)}
+          onClick={navigateToEdit.bind(null, advertisement._id)}
         >
           Editar
         </Button>
