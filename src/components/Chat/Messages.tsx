@@ -4,7 +4,19 @@ import OwnMessage from "./OwnMessage";
 
 function Messages() {
     return (
-        <div className="messages bg-slate-200 h-[calc(100%-theme(space.14))] overflow-scroll">
+        <div className="messages bg-slate-200  h-[calc(100vh-205px)] overflow-auto">
+            <Message/>
+            <OwnMessage/>
+            <Message/>
+            <OwnMessage/>
+            <Message/>
+            <OwnMessage/>
+            <Message/>
+            <OwnMessage/>
+            <Message/>
+            <OwnMessage/>
+            <Message/>
+            <OwnMessage/>
             <Message/>
             <OwnMessage/>
             <Message/>
