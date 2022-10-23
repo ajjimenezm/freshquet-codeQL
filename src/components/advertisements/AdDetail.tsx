@@ -8,6 +8,8 @@ import { Button, Rating } from '@mui/material';
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
   const [advertisement, setProduct] = useState<Advertisement>();
+  const [userId, setUserId] = useState<string>();
+  const [userCategory, setUserCategory] = useState<string>();
   const [sellerId, setSellerId] = useState<string>();
   const [error, setError] = useState(false);
 
@@ -20,11 +22,24 @@ function AdDetail() {
           )
           .then((res) => {
             setProduct(res.data);
+            setSellerId(res.data.sellerId._id);
           });
       } catch (err) {
         setError(true);
         alert(err);
       }
+
+      axios
+      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setUserCategory(res.data.userRole);
+        setUserId(res.data.userId);
+      });
     };
     const getSellerId = async () => {
       return;
@@ -32,21 +47,24 @@ function AdDetail() {
     getProduct();
   }, [id]);
 
+
   if (error) return <h1>Product not found</h1>;
 
   const navigate = useNavigate();
   const navigateToSeller = (id: string) => {
     navigate(`/seller/${id}`);
   };
+  const navigateToEdit = (id: string) => {
+    navigate(`/products/edit/${id}`)
+  }
 
   let edit: any;
-  console.log(id + " id\n" + sellerId + " sellerId");
-  (id === sellerId) ? (
+  (advertisement && userCategory === "seller" && sellerId === userId) ? (
     edit = <Button
     className="center-2"
     variant="outlined"
     color="primary"
-//                      onClick={navigateFunction.bind(null, props.advertisement._id)}
+    onClick={navigateToEdit.bind(null, advertisement._id)}
     >
       Editar
     </Button>

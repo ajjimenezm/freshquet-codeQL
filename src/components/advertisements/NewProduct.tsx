@@ -6,6 +6,7 @@ import { Category } from '../../types/Category';
 import Heading from '../Heading';
 
 interface NewProductsState {
+  id: string;
   name: string;
   description: string;
   pricePerKilogram: number;
@@ -25,6 +26,7 @@ export default function NewProducts() {
   }, []);
 
   const [state, setState] = useState<NewProductsState>({
+    id: '',
     name: '',
     description: '',
     pricePerKilogram: 0,

@@ -10,6 +10,7 @@ import Register from './users/Register';
 import AdDetail from './advertisements/AdDetail';
 import Profile from './Profile/Profile';
 import SellerPage from './seller-page/SellerPage';
+import EditAdDetail from './advertisements/EditAdDetail';
 import { useEffect } from 'react';
 
 function MainApp() {
@@ -36,7 +37,8 @@ function MainApp() {
         <Route path="register" element={<Register />} />
         <Route path="products/detail/:id" element={<AdDetail />} />
         <Route path="seller/:id" element={<SellerPage />} />
-      </Routes>
+        <Route path="products/edit/:id" element={<EditAdDetail />} />
+       </Routes>
 
       <BottomNav navigateFunction={navigate} />
     </>

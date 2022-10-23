@@ -17,7 +17,7 @@ export default function ComboBox(props: ComboBoxProps) {
         options={categories}
         onChange={props.onChangeHandler}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Category" />}
+        renderInput={(params) => <TextField {...params} label="Categoría" />}
       />
     );
 }
