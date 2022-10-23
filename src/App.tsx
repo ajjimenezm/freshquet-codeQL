@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import InitialScreen from './components/InitialScreen';
 import MainApp from './components/MainApp';
 import './styles/App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import NewProduct from './components/advertisements/NewProduct';
+import { AuthContext } from './chatContext/AuthContext';
 
 function App() {
+  
+  const {currentUser} = useContext(AuthContext);
+ 
   const theme = createTheme({
     palette: {
       primary: {
