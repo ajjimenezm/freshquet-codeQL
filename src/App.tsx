@@ -9,7 +9,7 @@ import { AuthContext } from './chatContext/AuthContext';
 
 function App() {
   
-  const {currentUser} = useContext(AuthContext);
+  //const {currentUser} = useContext(AuthContext);
  
   const theme = createTheme({
     palette: {

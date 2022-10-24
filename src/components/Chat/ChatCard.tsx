@@ -1,9 +1,11 @@
 import React from 'react';
 import Photo from "./jorgemoreno.png";
+import { useNavigate } from "react-router-dom";
 
 function ChatCard() {
+    const navigate = useNavigate();
     return (
-        <div className="flex flex-row h-21 items-center border-b-2 border-b-slate-100 hover:bg-slate-100">
+        <div className="flex flex-row h-21 items-center border-b-2 border-b-slate-100 hover:bg-slate-100" onClick={() =>navigate("/chat")}>
             <img
                 src={Photo}
                 alt="Photo"
@@ -13,7 +15,7 @@ function ChatCard() {
                 <div className="text-xl font-bold mt-4">
                     Jorge Moreno Latorre
                 </div>
-                <div className="text-sm mb-4">{"Pasa foto de tus pies"}</div>
+                <div className="text-sm mb-4">{"Buenos días quiero tomates y patatas"}</div>
             </div>
         </div>
     );
