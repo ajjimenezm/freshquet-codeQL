@@ -32,6 +32,19 @@ function AdDetail() {
     getProduct();
   }, [id]);
 
+
+  axios
+      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setUserCategory(res.data.userRole);
+        setUserId(res.data.userId);
+      });
+
   if (error) return <h1>Product not found</h1>;
 
   const navigate = useNavigate();
