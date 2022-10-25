@@ -20,6 +20,8 @@ const Home = () => {
   const [minimumTimeElapsed, setMinimumTimeElapsed] = React.useState(false);
   const waitingTimeSkeletonLoader = 500;
 
+  const [userRole, setUserRole] = React.useState<string>();
+
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -28,6 +30,18 @@ const Home = () => {
       navigate('/login');
     }
   }, []);
+
+  React.useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        },
+      })
+      .then((res) => {
+        setUserRole(res.data.userRole);
+      });
+  });
 
   const intervalGetProducts = setInterval(() => {
     getAdvertisements();
@@ -78,7 +92,7 @@ const Home = () => {
     <div>
       <Heading text="Lo más fresco para tí" />
       <SubHeading text="Creemos que estos productos pueden interesarte" />
-      <AddProduct />
+      {userRole == 'seller' ? <AddProduct /> : <></>}
 
       <div className="mb-16 ml-5 mr-5">
         {dataLoaded ? (
