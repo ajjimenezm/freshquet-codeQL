@@ -1,6 +1,4 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
-import InitialScreen from "./components/InitialScreen";
 import MainApp from "./components/MainApp";
 import "./styles/App.css";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -9,6 +7,8 @@ import Login from "./components/users/Login";
 import Register from "./components/users/Register";
 
 function App() {
+    //const {currentUser} = useContext(AuthContext);
+
     const theme = createTheme({
         palette: {
             primary: {

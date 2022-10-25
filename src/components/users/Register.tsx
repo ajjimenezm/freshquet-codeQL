@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import {auth} from "../../firebase";
+import { doc, setDoc } from "firebase/firestore";
+import {db} from "../../firebase";
 
 const Register = () => {
   const [state, setState] = useState({
@@ -50,6 +54,28 @@ const Register = () => {
         alert('Error creando el usuario');
       });
   };
+
+    const registerChat = async () => {
+        const email = state.email;
+        const password = state.password;
+        const name = state.username;
+        const res = await createUserWithEmailAndPassword(auth, email, password)
+        const username = await updateProfile(res.user, {
+            displayName: name
+        })
+
+        await setDoc(doc(db, "users", res.user.uid), {
+            name,
+            email
+        });
+
+        await setDoc(doc(db, "userChats", res.user.uid), {});
+    };
+
+    const registerProcess = () => {
+        sendRegister();
+        registerChat();
+    }
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-zinc-200">
@@ -116,7 +142,7 @@ const Register = () => {
           </div>
           <button
             className="rounded-md px-8 py-3 text-2xl text-white hover:bg-transparent"
-            onClick={sendRegister}
+            onClick={registerProcess}
           >
             Registrarse
           </button>

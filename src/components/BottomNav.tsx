@@ -51,51 +51,51 @@ function BottomNav(props: BottomNavProps) {
         setValue(value);
     };
 
-    return (
-        <Paper
-            sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-            elevation={3}
-        >
-            <BottomNavigation showLabels value={value} onChange={handleChange}>
-                <BottomNavigationAction
-                    label="Inicio"
-                    icon={<HomeIcon />}
-                    value="/home"
-                    onClick={() => props.navigateFunction("/home")}
-                />
-                {isBuyer && (
-                    <BottomNavigationAction
-                        label="Buscar"
-                        icon={<SearchIcon />}
-                        value="/search"
-                        onClick={() => props.navigateFunction("/search")}
-                    />
-                )}
-                {isBuyer && (
-                    <BottomNavigationAction
-                        label="Mapa"
-                        icon={<MapIcon />}
-                        value="/map"
-                        onClick={() => props.navigateFunction("/map")}
-                    />
-                )}
-                <BottomNavigationAction
-                    label="Chat"
-                    icon={<ChatIcon />}
-                    value="/chat"
-                    onClick={() => props.navigateFunction("chat")}
-                />
-                <BottomNavigationAction
-                    label="Perfil"
-                    icon={<ProfileIcon />}
-                    onClick={() => {
-                        props.navigateFunction("profile");
-                    }}
-                    value="/profile"
-                />
-            </BottomNavigation>
-        </Paper>
-    );
+  return (
+    <Paper
+      sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
+      elevation={3}
+    >
+      <BottomNavigation showLabels value={value} onChange={handleChange}>
+        <BottomNavigationAction
+          label="Inicio"
+          icon={<HomeIcon />}
+          value="/home"
+          onClick={() => props.navigateFunction('/home')}
+        />
+        {isBuyer && (
+          <BottomNavigationAction
+            label="Buscar"
+            icon={<SearchIcon />}
+            value="/search"
+            onClick={() => props.navigateFunction('/search')}
+          />
+        )}
+        {isBuyer && (
+          <BottomNavigationAction
+            label="Mapa"
+            icon={<MapIcon />}
+            value="/map"
+            onClick={() => props.navigateFunction('/map')}
+          />
+        )}
+        <BottomNavigationAction
+          label="Chat"
+          icon={<ChatIcon />}
+          value="/chatmenu"
+          onClick={() => props.navigateFunction('/chatmenu')}
+        />
+        <BottomNavigationAction
+          label="Perfil"
+          icon={<ProfileIcon />}
+          onClick={() => {
+            props.navigateFunction('profile');
+          }}
+          value="/profile"
+        />
+      </BottomNavigation>
+    </Paper>
+  );
 }
 
 export default BottomNav;
