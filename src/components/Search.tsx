@@ -2,7 +2,7 @@ import TextField from "@mui/material/TextField";
 import React from "react";
 import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AdvertisementCard from "./AdvertisementCard";
 import AdvertisementCardSkeleton from "./AdvertisementCardSkeleton";
 import Heading from "./Heading";
@@ -25,6 +25,8 @@ function Search() {
     const waitingTimeSkeletonLoader = 500;
     const [searchHistoryElements, setSearchHistoryElements] =
         React.useState<JSX.Element[]>();
+
+    const navigate = useNavigate();
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchParams({ search: event.target.value });
@@ -65,6 +67,10 @@ function Search() {
     }, [advertisementsToShow]);
 
     React.useEffect(() => {
+        const user = localStorage.getItem("userToken");
+        if (!user) {
+            navigate("/login");
+        }
         setTimeout(() => {
             setLocalStorageLoaded(true);
         }, 2000);
