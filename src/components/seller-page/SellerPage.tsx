@@ -54,19 +54,19 @@ function SellerPage() {
 
   const fetchSellerData = async () => {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`, {
+      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${id}/profile`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('userToken')}`,
         },
       })
       .then((res) => {
         setSeller({
-          name: res.data[0].name,
-          username: res.data[0].username,
-          phone_number: res.data[0].phone_number,
-          email: res.data[0].email,
-          direction: res.data[0].direction,
-          biography: res.data[0].biography,
+          name: res.data.name,
+          username: res.data.username,
+          phone_number: res.data.phone_number,
+          email: res.data.email,
+          direction: res.data.direction,
+          biography: res.data.biography,
         });
       });
   };
