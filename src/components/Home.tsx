@@ -58,16 +58,13 @@ const Home = () => {
     setAdvertisementsToShow(
       advertisements.map((ad) => {
         return (
-          <>
-            <Divider key={ad._id} className="" orientation="horizontal" />
-            <AdvertisementCard
-              key={ad._id}
-              advertisement={ad}
-              onClickFunction={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-            />
-          </>
+          <AdvertisementCard
+            key={ad._id}
+            advertisement={ad}
+            onClickFunction={function (): void {
+              throw new Error('Function not implemented.');
+            }}
+          />
         );
       })
     );
@@ -94,7 +91,7 @@ const Home = () => {
       <SubHeading text="Creemos que estos productos pueden interesarte" />
       {userRole == 'seller' ? <AddProduct /> : <></>}
 
-      <div className="mb-16 ml-5 mr-5">
+      <div className="mb-16 ml-5 mr-5 divide-y-2">
         {dataLoaded ? (
           advertisementsToShow
         ) : minimumTimeElapsed ? (
@@ -109,7 +106,7 @@ const Home = () => {
           <div></div>
         )}
       </div>
-      <Fab
+      {/* <Fab
         color="primary"
         aria-label="add product"
         sx={{
@@ -119,7 +116,7 @@ const Home = () => {
         }}
       >
         <AddIcon />
-      </Fab>
+      </Fab> */}
     </div>
   );
 };
