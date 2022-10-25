@@ -25,7 +25,7 @@ function App() {
             <ThemeProvider theme={theme}>
                 <Routes>
                     {/* <Route path="/" element={<InitialScreen setRole={setRole} />} /> */}
-                    <Route path="/" element={<MainApp />} />
+                    <Route path="/" element={<MainApp />} />                
                     <Route path="*" element={<MainApp />} />
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />

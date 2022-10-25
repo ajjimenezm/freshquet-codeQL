@@ -8,13 +8,33 @@ import { SetStateAction, useState } from "react";
 import useReactPath from "../hooks/useReactPath";
 
 import React from "react";
+import axios from "axios";
 
 interface BottomNavProps {
     navigateFunction: (value: string) => void;
 }
 
 function BottomNav(props: BottomNavProps) {
-    const isBuyer = localStorage.getItem("role") === "buyer";
+    const [isBuyer, setIsBuyer] = useState<boolean>(false);
+
+    React.useEffect(() => {
+        getUserType();
+    }, [isBuyer]);
+
+    const getUserType = () => {
+        axios
+            .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "userToken"
+                    )}`,
+                },
+            })
+            .then((res) => {
+                setIsBuyer(res.data.userRole.toLowerCase() === "buyer");
+            });
+    };
+
     const pathname = window.location.pathname; // in case user visits the path directly. The BottomNavBar is able to follow suit.
     const path = useReactPath();
 
