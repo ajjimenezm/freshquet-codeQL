@@ -6,6 +6,7 @@ import './styles/App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import NewProduct from './components/advertisements/NewProduct';
 import { AuthContext } from './chatContext/AuthContext';
+import Login from './components/users/Login';
 
 function App() {
   
@@ -31,7 +32,8 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
         <Routes>
-          <Route path="/" element={<InitialScreen setRole={setRole} />} />
+          {/* <Route path="/" element={<InitialScreen setRole={setRole} />} /> */}
+          <Route path="/" element={<MainApp />} />
           <Route path="*" element={<MainApp />} />
           <Route path="newproduct" element={<NewProduct />} />
         </Routes>

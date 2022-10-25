@@ -8,7 +8,8 @@ import AdvertisementCardSkeleton from "./AdvertisementCardSkeleton";
 import Heading from "./Heading";
 import axios from "axios";
 import Advertisement from "../types/Advertisement";
-import SearchHistoryElement from "./SearchHistoryElement";
+import SearchHistoryElement from "./search/SearchHistoryElement";
+import SearchHistoryElementSkeleton from "./search/SearchHistoryElementSkeleton";
 
 function Search() {
     const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -20,6 +21,7 @@ function Search() {
     const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
         []
     );
+    const [localStorageLoaded, setLocalStorageLoaded] = React.useState(false);
     const waitingTimeSkeletonLoader = 500;
     const [searchHistoryElements, setSearchHistoryElements] =
         React.useState<JSX.Element[]>();
@@ -29,7 +31,9 @@ function Search() {
 
         if (event.target.value.length > 0) {
             setMinimumTimeElapsed(false);
-            getAds();
+            if (!dataLoaded) {
+                getAds();
+            }
             setTimeout(() => {
                 setMinimumTimeElapsed(true);
             }, waitingTimeSkeletonLoader);
@@ -46,7 +50,8 @@ function Search() {
             );
             if (
                 !searchHistory.includes(searchParams.get("search")) &&
-                searchParams.get("search") !== ""
+                searchParams.get("search") !== "" &&
+                searchParams.get("search") !== null
             ) {
                 searchHistory.push(searchParams.get("search"));
                 localStorage.setItem(
@@ -55,12 +60,17 @@ function Search() {
                 );
             }
             setSearchHistoryElements(loadSearchHistory());
-        }, 3500);
+        }, 2000);
         return () => clearTimeout(timer);
     }, [advertisementsToShow]);
 
     React.useEffect(() => {
-        if (searchParams.get("search")) {
+        setTimeout(() => {
+            setLocalStorageLoaded(true);
+        }, 2000);
+        loadSearchHistory();
+
+        if (searchParams.get("search") && searchParams.get("search") !== "") {
             setTimeout(() => {
                 setMinimumTimeElapsed(true);
             }, waitingTimeSkeletonLoader);
@@ -70,27 +80,33 @@ function Search() {
     }, []);
 
     React.useEffect(() => {
-        const filteredAds = advertisements.filter((advertisement) => {
-            if (
-                advertisement.name
-                    .toLowerCase()
-                    .includes(searchParams.get("search")?.toLowerCase() || "")
-            ) {
-                return advertisement;
-            }
-        });
-        setAdvertisementsToShow(
-            filteredAds.map((advertisement) => (
-                <AdvertisementCard
-                    key={advertisement._id}
-                    advertisement={advertisement}
-                    onClickFunction={() => {
-                        console.log("Clicked");
-                    }}
-                />
-            ))
-        );
-    }, [advertisements]);
+        if (!dataRequested) {
+            getAds();
+        } else {
+            const filteredAds = advertisements.filter((advertisement) => {
+                if (
+                    advertisement.name
+                        .toLowerCase()
+                        .includes(
+                            searchParams.get("search")?.toLowerCase() || ""
+                        )
+                ) {
+                    return advertisement;
+                }
+            });
+            setAdvertisementsToShow(
+                filteredAds.map((advertisement) => (
+                    <AdvertisementCard
+                        key={advertisement._id}
+                        advertisement={advertisement}
+                        onClickFunction={() => {
+                            console.log("Clicked");
+                        }}
+                    />
+                ))
+            );
+        }
+    }, [advertisements, searchParams]);
 
     const getAds = () => {
         setDataRequested(true);
@@ -147,8 +163,15 @@ function Search() {
                 ></TextField>
             </div>
             <div className="mt-3 ml-5 mr-5 divide-y-2 pb-20">
-                {!searchParams.get("search") ||
-                searchParams.get("search")?.length == 0 ? (
+                {!localStorageLoaded ? (
+                    <>
+                        <SearchHistoryElementSkeleton />
+                        <SearchHistoryElementSkeleton />
+                        <SearchHistoryElementSkeleton />
+                        <SearchHistoryElementSkeleton />
+                    </>
+                ) : !searchParams.get("search") ||
+                  searchParams.get("search")?.length == 0 ? (
                     searchHistoryElements
                 ) : dataLoaded ? (
                     advertisementsToShow
@@ -160,7 +183,7 @@ function Search() {
                         <AdvertisementCardSkeleton />
                     </>
                 ) : (
-                    <div></div>
+                    <></>
                 )}
             </div>
         </div>
