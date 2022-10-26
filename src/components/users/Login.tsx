@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [state, setState] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
 
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Login = () => {
   };
 
   const navigateRegister = () => {
-    navigate('/register');
+    navigate("/register");
   };
 
   const sendLogin = () => {
@@ -30,14 +30,14 @@ const Login = () => {
       .then((res) => {
         console.log(res);
         if (res.status == 201) {
-          localStorage.setItem('userToken', res.data.access_token);
-          localStorage.setItem('userId', res.data.userId);
-          navigate('/home');
+          localStorage.setItem("userToken", res.data.access_token);
+          localStorage.setItem("userId", res.data.userId);
+          navigate("/home");
         }
       })
       .catch((res) => {
         console.log(res);
-        alert('Usuario o pass incorrectos');
+        alert("Usuario o pass incorrectos");
       });
   };
 
@@ -51,7 +51,7 @@ const Login = () => {
             name="username"
             value={state.username}
             onChange={handleChange}
-            placeholder="Nombre de usuario"
+            placeholder="Email"
             className="mr-4 mb-4 w-full rounded-md p-2"
           />
           <input

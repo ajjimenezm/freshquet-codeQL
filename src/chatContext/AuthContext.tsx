@@ -1,26 +1,31 @@
-import { createContext, useEffect, useState, Children} from "react";
-import PropTypes from "prop-types";
-import {auth} from "../firebase";
+import { createContext, useEffect, useState } from "react";
+import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import {User} from "firebase/auth";
+import { User } from "firebase/auth";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 
+export const AuthContext = createContext<User | null | undefined>(null);
 
-export const AuthContext = createContext<any>("");
-
-export const AuthContextProvider = ({children}:{children:any}) => {
+export const AuthContextProvider = ({
+    children,
+}: {
+    children: ReactJSXElement;
+}) => {
     const [currentUser, setCurrentUser] = useState<User | null>();
 
     useEffect(() => {
-      onAuthStateChanged(auth, (user) => {
-        if(user) {
-        setCurrentUser(user);
-        } else {
-          console.log("No user");
-        }
-      });
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setCurrentUser(user);
+            } else {
+                console.log("No user");
+            }
+        });
     }, []);
 
-    return(<AuthContext.Provider value={currentUser}> 
-              {children}
-            </AuthContext.Provider>)
-} 
+    return (
+        <AuthContext.Provider value={currentUser}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
