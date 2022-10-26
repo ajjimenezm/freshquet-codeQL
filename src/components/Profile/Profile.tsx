@@ -1,10 +1,9 @@
-import ReadProfile from "./ReadProfile";
-import EditProfile from "./EditProfile";
-import { useEffect } from "react";
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import axios from "axios";
-import React, { useState } from "react";
-import DataUser from "./dataUser";
+import ReadProfile from './ReadProfile';
+import EditProfile from './EditProfile';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import React from 'react';
 
 interface IProps {
   user?: string;
@@ -22,14 +21,14 @@ class ProfileNav extends React.Component<IProps, IState> {
     this.state = {
       editProfile: false,
       dataUser: {
-        name: "Cargando Nombre",
-        username: "cargando",
-        phone_number: "123456789",
-        email: "cargando@emial.com",
-        biography: "Cargando...",
-        direction: "Cargando...",
+        name: 'Cargando Nombre',
+        username: 'cargando',
+        phone_number: '123456789',
+        email: 'cargando@emial.com',
+        biography: 'Cargando...',
+        direction: 'Cargando...',
       },
-      userRole: "Cargando",
+      userRole: 'Cargando',
     };
     this.handler = this.handler.bind(this);
     this.fetchData = this.fetchData.bind(this);
@@ -46,7 +45,7 @@ class ProfileNav extends React.Component<IProps, IState> {
     axios
       .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
         },
       })
       .then((res) => {
@@ -65,7 +64,7 @@ class ProfileNav extends React.Component<IProps, IState> {
     axios
       .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
         },
       })
       .then((res) => {
@@ -109,9 +108,9 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem("userToken");
+    const user = localStorage.getItem('userToken');
     if (!user) {
-      navigate("/login");
+      navigate('/login');
     }
   }, []);
 
