@@ -1,3 +1,8 @@
+import {
+    getSearchHistory,
+    addSearchHistory,
+    checkIfSearchHistoryExists,
+} from "../libs/SearchHistory";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import { IconButton } from "@mui/material";
@@ -44,22 +49,12 @@ function Search() {
 
     React.useEffect(() => {
         const timer = setTimeout(() => {
-            if (localStorage.getItem("searchHistory") === null) {
-                localStorage.setItem("searchHistory", JSON.stringify([]));
-            }
-            const searchHistory = JSON.parse(
-                localStorage.getItem("searchHistory") || "[]"
-            );
             if (
-                !searchHistory.includes(searchParams.get("search")) &&
+                !checkIfSearchHistoryExists(searchParams.get("search")) &&
                 searchParams.get("search") !== "" &&
                 searchParams.get("search") !== null
             ) {
-                searchHistory.push(searchParams.get("search"));
-                localStorage.setItem(
-                    "searchHistory",
-                    JSON.stringify(searchHistory)
-                );
+                addSearchHistory(searchParams.get("search"));
             }
             setSearchHistoryElements(loadSearchHistory());
         }, 2000);
@@ -132,9 +127,7 @@ function Search() {
     };
 
     const loadSearchHistory = () => {
-        const searchHistory = JSON.parse(
-            localStorage.getItem("searchHistory") || "[]"
-        );
+        const searchHistory = getSearchHistory();
         return searchHistory.map((historyString: string) => (
             <SearchHistoryElement
                 key={historyString}
