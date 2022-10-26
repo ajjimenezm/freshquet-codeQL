@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Rating } from '@mui/material';
+import { Avatar, Divider, Rating } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
@@ -54,11 +54,14 @@ function SellerPage() {
 
   const fetchSellerData = async () => {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${id}/profile`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-        },
-      })
+      .get(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${id}/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+          },
+        }
+      )
       .then((res) => {
         setSeller({
           name: res.data.name,
@@ -84,13 +87,8 @@ function SellerPage() {
       .then((res) => {
         setAdvertisements(res.data);
         setDataLoaded(true);
-        //clearInterval(intervalFetchSellerProducts);
       });
   };
-
-  //  const intervalFetchSellerProducts = setInterval(() => {
-  //    fetchSellerProductsData();
-  //  }, 3000);
 
   fetchSellerData();
   fetchSellerProductsData();
@@ -99,7 +97,6 @@ function SellerPage() {
     setTimeout(() => {
       setMinimumTimeElapsed(true);
     }, waitingTimeSkeletonLoader);
-    //intervalFetchSellerProducts;
   }, []);
 
   React.useEffect(() => {
