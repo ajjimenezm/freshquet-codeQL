@@ -14,13 +14,14 @@ export const AuthContextProvider = ({
     const [currentUser, setCurrentUser] = useState<User | null>();
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
+        const unsub = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setCurrentUser(user);
             } else {
                 console.log("No user");
             }
         });
+        return () => { unsub(); };
     }, []);
 
     return (
