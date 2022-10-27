@@ -1,16 +1,24 @@
 import { Button } from "@mui/material";
 import Advertisement from "../types/Advertisement";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toNamespacedPath } from "path";
 
 interface AdvertisementCardProps {
     advertisement: Advertisement;
     onClickFunction: () => void;
 }
 function AdvertisementCard(props: AdvertisementCardProps) {
+
     const navigate = useNavigate();
 
     const navigateFunction = (id: string) => {
         navigate(`/products/detail/${id}`);
+    };
+
+    const navigateChat = (name: string) => {
+        console.log(name);
     };
 
     return (
@@ -32,7 +40,7 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                     <Button
                         variant="outlined"
                         color="primary"
-                        onClick={props.onClickFunction}
+                        onClick={navigateChat.bind(null, props.advertisement.sellerId.name)}
                     >
                         Comprar
                     </Button>

@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import {auth} from "../../firebase";
 
 const Login = () => {
   const [state, setState] = useState({
     username: "",
     password: "",
   });
+
+  const [err, setErr] = useState(false);
 
   const navigate = useNavigate();
 
@@ -41,6 +45,22 @@ const Login = () => {
       });
   };
 
+  const loginChat = async () => {
+    const email = state.username;
+    const password = state.password;
+    try{
+      const user = await signInWithEmailAndPassword(auth, email, password);
+    }
+    catch(err){
+      setErr(true);
+    }  
+  };
+
+  const loginProcess = () => {
+    sendLogin();
+    loginChat();
+}
+
   return (
     <div className="flex h-screen w-full items-center justify-center bg-zinc-200">
       <div className="m-4 flex max-w-[400px] justify-center text-center md:max-w-[700px]">
@@ -64,7 +84,7 @@ const Login = () => {
           />
           <button
             className="rounded-md px-8 py-3 text-2xl text-white hover:bg-transparent hover:text-3xl"
-            onClick={sendLogin}
+            onClick={loginProcess}
           >
             Iniciar Sesión
           </button>
