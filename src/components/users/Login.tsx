@@ -71,7 +71,7 @@ const Login = () => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                   Iniciar sesión
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <div className="space-y-4 md:space-y-6">
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
                     <input type="text" name="username" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com" value={state.username} onChange={handleChange}/>
@@ -86,7 +86,7 @@ const Login = () => {
                   <p className="text-sm font-light text-black ">
                       ¿Aún no tienes cuenta? <a href="#" className="font-medium text-emerald-300 hover:underline " onClick={navigateRegister}>¡Regístrate!</a>
                   </p>
-              </form>
+              </div>
           </div>
       </div>
   </div>
