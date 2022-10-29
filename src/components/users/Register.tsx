@@ -92,7 +92,7 @@ const Register = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                 Iniciar sesión
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <div className="space-y-4 md:space-y-6">
                 <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Nombre</label>
                     <input type="text" name="name" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Nombre Apellido" value={state.name} onChange={handleChange}/>
@@ -133,7 +133,7 @@ const Register = () => {
                   </FormControl>
                   </Box>
                   <button className="w-full text-white bg-emerald-300 hover:bg-emerald-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " onClick={registerProcess}>Regístrate</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
