@@ -11,6 +11,7 @@ type Advertisement = {
   sellerId: {
     _id: string;
     name: string;
+    username: string;
   };
 };
 
