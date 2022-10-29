@@ -4,6 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Advertisement from '../../types/Advertisement';
 import { Button, Rating } from '@mui/material';
+import {db} from "../../firebase";
+import { User } from "firebase/auth";
+import { AuthContext } from '../../chatContext/AuthContext';
+import {collection, getDocs, query, where} from "firebase/firestore";
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +16,9 @@ function AdDetail() {
   const [userCategory, setUserCategory] = useState<string>();
   const [sellerId, setSellerId] = useState<string>();
   const [error, setError] = useState(false);
+  const [userChat, setUserChat] = useState<string>();
+
+  const currentUser = React.useContext(AuthContext);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -54,8 +61,25 @@ function AdDetail() {
     navigate(`/products/edit/${id}`);
   };
 
-  const navigateChat = (name: any) => {
-    console.log(name);
+  const searchUserChat = async () => {
+    const q = query(collection(db, "users"), where("displayName", "==", advertisement?.sellerId.username));
+    const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+          setUserChat(doc.id);
+      });
+    console.log(userChat);
+  }
+
+  const navigateChat = async () => {
+    const uid = currentUser!.uid;
+    console.log(uid);
+    searchUserChat();
+    const combinedId : unknown = 
+      uid > userChat!
+        ? uid + userChat
+        : userChat + uid;
+    console.log(combinedId);
+    //const res = await getDocs(db, "chats", combinedId)
 };
 
   let edit: any;
@@ -118,7 +142,7 @@ function AdDetail() {
               className="left-2"
               variant="outlined"
               color="primary"
-              onClick={navigateChat.bind(null,advertisement.sellerId)}
+              onClick={() => navigateChat()}
             >
               Comprar
             </Button>

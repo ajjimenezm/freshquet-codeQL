@@ -11,6 +11,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 
 const Register = () => {
   const [state, setState] = useState({
@@ -64,14 +66,16 @@ const Register = () => {
     const registerChat = async () => {
         const email = state.email;
         const password = state.password;
-        const name = state.username;
+        const displayName = state.username;
         const res = await createUserWithEmailAndPassword(auth, email, password)
         const username = await updateProfile(res.user, {
-            displayName: name
+            displayName: displayName
         })
 
+        const user = await signInWithEmailAndPassword(auth, email, password);
+
         await setDoc(doc(db, "users", res.user.uid), {
-            name,
+            displayName,
             email
         });
 
