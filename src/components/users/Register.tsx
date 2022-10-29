@@ -99,7 +99,7 @@ const Register = () => {
                 </div>
                 <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
-                    <input type="email" name="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com" value={state.email} onChange={handleChange}/>
+                    <input type="text" name="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com" value={state.email} onChange={handleChange}/>
                 </div>
                 <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 ">Número de teléfono</label>
@@ -132,7 +132,7 @@ const Register = () => {
                     </Select>
                   </FormControl>
                   </Box>
-                  <button type="submit" className="w-full text-white bg-emerald-300 hover:bg-emerald-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Regístrate</button>
+                  <button className="w-full text-white bg-emerald-300 hover:bg-emerald-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " onClick={registerProcess}>Regístrate</button>
             </form>
         </div>
     </div>

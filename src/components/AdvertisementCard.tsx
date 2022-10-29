@@ -9,16 +9,13 @@ interface AdvertisementCardProps {
     advertisement: Advertisement;
     onClickFunction: () => void;
 }
+
 function AdvertisementCard(props: AdvertisementCardProps) {
 
     const navigate = useNavigate();
 
     const navigateFunction = (id: string) => {
         navigate(`/products/detail/${id}`);
-    };
-
-    const navigateChat = (name: string) => {
-        console.log(name);
     };
 
     return (
@@ -37,13 +34,6 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                     {`${props.advertisement.pricePerKilogram} €/kg`}
                 </div>
                 <span>
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={navigateChat.bind(null, props.advertisement.sellerId.name)}
-                    >
-                        Comprar
-                    </Button>
                     <Button
                         className="left-2"
                         variant="outlined"
