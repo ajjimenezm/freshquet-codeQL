@@ -54,6 +54,10 @@ function AdDetail() {
     navigate(`/products/edit/${id}`);
   };
 
+  const navigateChat = (name: any) => {
+    console.log(name);
+};
+
   let edit: any;
   advertisement && userCategory === 'seller' && sellerId === userId
     ? (edit = (
@@ -99,7 +103,7 @@ function AdDetail() {
             precision={0.5}
             readOnly
           />
-          <div className="mt-2 text-center">
+          <div className="mt-2 text-center flex flex-col items-center justify-center mb-4">
             Vendido por{' '}
             <span className="font-bold"> {advertisement.sellerId.name}</span>
             <Button
@@ -109,6 +113,14 @@ function AdDetail() {
               onClick={navigateToSeller.bind(null, sellerId as string)}
             >
               Visita su tienda
+            </Button>
+            <Button
+              className="left-2"
+              variant="outlined"
+              color="primary"
+              onClick={navigateChat.bind(null,advertisement.sellerId)}
+            >
+              Comprar
             </Button>
           </div>
           {edit}
