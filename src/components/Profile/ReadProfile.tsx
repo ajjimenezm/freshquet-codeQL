@@ -3,6 +3,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
 import DataUser from './dataUser';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfileProps {
   dataUser: DataUser;
@@ -23,6 +24,14 @@ function stringAvatar(name: string) {
   };
 }
 function ReadProfile(props: ProfileProps) {
+  const navigate = useNavigate();
+
+  const logout = () => {
+    console.log('called')
+    localStorage.removeItem('userToken');
+    navigate('/login');
+  }
+
   return (
     <div className="m-4 space-y-4">
       <div className="flex space-x-4 py-4">
@@ -65,9 +74,19 @@ function ReadProfile(props: ProfileProps) {
           <Button variant="contained" disabled>
             Tus estadisticas
           </Button>
+          <Button variant="contained" disabled>
+            Tus solicitudes
+          </Button>
+          <Button variant="contained" onClick={logout}>
+            Cerrar Sesión
+          </Button>
         </div>
       ) : (
-        <div />
+        <div className="flex flex-col space-y-4 text-center">
+          <Button variant="contained" onClick={logout}>
+            Cerrar Sesión
+          </Button>
+        </div>
       )}
     </div>
   );
