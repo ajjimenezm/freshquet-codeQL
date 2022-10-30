@@ -6,21 +6,31 @@ import { common } from "@mui/material/colors";
 import {db} from "../../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { AuthContext } from '../../chatContext/AuthContext';
+import { UserContext } from "../../chatContext/UserContext";
+import Photo from "./jorgemoreno.png";
+import { useNavigate } from "react-router-dom";
 
 function ChatMenu() {
+    const navigate = useNavigate();
     const currentUser = React.useContext(AuthContext);
+    const {dispatch} = React.useContext(UserContext);
+
 
     const [chats, setChats] = React.useState<any>([])
-
     useEffect(() => {
-        const unsubscribe = onSnapshot(doc(db, "userChats", currentUser!.uid), (doc) => {
-            setChats(doc.data())
+        const unsubscribe = onSnapshot(doc(db, "userChats", currentUser!.uid), (doc : any) => {
+            setChats(doc.data());
         });
         return unsubscribe
     }, [currentUser!.uid])
     
     console.log(currentUser!.uid)
     console.log(Object.entries(chats))
+    
+    const handleSelectChat = (info:any) => {
+        dispatch({type: "CHANGE_USER", payload: info})
+        navigate("/chat")
+    }
 
     return (
         <div className="chatMenu">
@@ -32,15 +42,22 @@ function ChatMenu() {
                     Chats
                 </div>
             </div>
-            <div className="chatCards pt-20 h-[calc(100vh-55px)] overflow-auto">              
-                <ChatCard/>
-                <ChatCard/>
-                <ChatCard/>
-                <ChatCard/>
-                <ChatCard/>
-                <ChatCard/>
-                <ChatCard/>
-                <ChatCard/>
+            <div className="chatCards pt-20 h-[calc(100vh-55px)] overflow-auto">
+                {Object.entries(chats).map((chat : any) => (    
+                    <div className="flex flex-row h-21 items-center border-b-2 border-b-slate-100 hover:bg-slate-100" key={chat[0]} onClick={() => handleSelectChat(chat[1].userInfo)}>
+                        <img
+                            src={Photo}
+                            alt="Photo"
+                            className="max-h-20 max-w-20 mx-2 object-contain shadow rounded-full"
+                            />
+                        <div className="pt-5 pb-5 h-36 ml-2 flex flex-col justify-evenly items-start">
+                            <div className="text-xl font-bold mt-4">
+                                {chat[1].userInfo.displayName}
+                            </div>
+                        <div className="text-sm mb-4">{chat[1].userInfo.lastMessage?.text}</div>
+                        </div>
+                    </div>
+                ))}              
             </div>
         </div>
     );
