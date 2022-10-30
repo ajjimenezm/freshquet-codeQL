@@ -1,12 +1,17 @@
 import { Button } from "@mui/material";
 import Advertisement from "../types/Advertisement";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toNamespacedPath } from "path";
 
 interface AdvertisementCardProps {
     advertisement: Advertisement;
     onClickFunction: () => void;
 }
+
 function AdvertisementCard(props: AdvertisementCardProps) {
+
     const navigate = useNavigate();
 
     const navigateFunction = (id: string) => {
@@ -29,13 +34,6 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                     {`${props.advertisement.pricePerKilogram} €/kg`}
                 </div>
                 <span>
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={props.onClickFunction}
-                    >
-                        Comprar
-                    </Button>
                     <Button
                         className="left-2"
                         variant="outlined"
