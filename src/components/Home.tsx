@@ -7,7 +7,7 @@ import React from 'react';
 import AdvertisementCardSkeleton from './AdvertisementCardSkeleton';
 import AddProduct from './advertisements/AddProduct';
 import AddIcon from '@mui/icons-material/Add';
-import { Divider, Fab } from '@mui/material';
+import { Fab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
@@ -32,6 +32,10 @@ const Home = () => {
   }, []);
 
   React.useEffect(() => {
+    setTimeout(() => {
+      setMinimumTimeElapsed(true);
+    }, waitingTimeSkeletonLoader);
+
     axios
       .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
         headers: {
@@ -41,17 +45,19 @@ const Home = () => {
       .then((res) => {
         setUserRole(res.data.userRole);
       });
-  });
 
-  const intervalGetProducts = setInterval(() => {
-    getAdvertisements();
-  }, 3000);
-
-  React.useEffect(() => {
-    intervalGetProducts;
-    setTimeout(() => {
-      setMinimumTimeElapsed(true);
-    }, waitingTimeSkeletonLoader);
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all`)
+      .then((response) => {
+        if (response.status === 200) {
+          setAdvertisements(response.data);
+          setDataLoaded(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        //llevar a página de error
+      });
   }, []);
 
   React.useEffect(() => {
@@ -69,21 +75,6 @@ const Home = () => {
       })
     );
   }, [dataLoaded]);
-
-  const getAdvertisements = () => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all`)
-      .then((response) => {
-        if (response.status === 200) {
-          setAdvertisements(response.data);
-          setDataLoaded(true);
-          clearInterval(intervalGetProducts);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return (
     <div>
@@ -106,7 +97,7 @@ const Home = () => {
           <div></div>
         )}
       </div>
-      {/* <Fab
+      <Fab
         color="primary"
         aria-label="add product"
         sx={{
@@ -114,9 +105,10 @@ const Home = () => {
           bottom: 80,
           right: 20,
         }}
+        onClick={() => navigate('/newproduct')}
       >
         <AddIcon />
-      </Fab> */}
+      </Fab>
     </div>
   );
 };
