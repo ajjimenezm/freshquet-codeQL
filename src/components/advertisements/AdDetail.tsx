@@ -39,6 +39,7 @@ function AdDetail() {
     getProduct();
   }, [id]);
 
+
   axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
       headers: {
@@ -62,25 +63,34 @@ function AdDetail() {
   };
 
   const searchUserChat = async () => {
+    console.log(advertisement?.sellerId.username);
     const q = query(collection(db, "users"), where("displayName", "==", advertisement?.sellerId.username));
     const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
           setUserChat(doc.id);
       });
     console.log(userChat);
-  }
+  };
 
   const navigateChat = async () => {
     const uid = currentUser!.uid;
     console.log(uid);
-    searchUserChat();
+    if (userChat == undefined) {
+      await searchUserChat();
+    }
     const combinedId : unknown = 
       uid > userChat!
         ? uid + userChat
         : userChat + uid;
     console.log(combinedId);
+    
     //const res = await getDocs(db, "chats", combinedId)
-};
+  };
+
+  const chatProcess = () => {
+    searchUserChat();
+    navigateChat();
+  };
 
   let edit: any;
   advertisement && userCategory === 'seller' && sellerId === userId
@@ -95,6 +105,7 @@ function AdDetail() {
         </Button>
       ))
     : (edit = <></>);
+
 
   return (
     <>
@@ -142,7 +153,7 @@ function AdDetail() {
               className="left-2"
               variant="outlined"
               color="primary"
-              onClick={() => navigateChat()}
+              onClick={() => chatProcess()}
             >
               Comprar
             </Button>
