@@ -1,19 +1,19 @@
 import { Button } from '@mui/material';
-import { ReadType, useFilePicker } from 'use-file-picker';
 import React from 'react';
-import uploadProfilePicture from '../../services/user.service';
-import axios from 'axios';
+import { ReadType, useFilePicker } from 'use-file-picker';
+import { NewProductsState } from './NewProduct';
 
-interface ProfileUploadProps {
+interface AdImagesSelectProps {
   readAs: ReadType;
   accept: string;
   multiple: boolean;
   limitFilesConfig: { max: number };
   maxFileSize: number;
   text: string;
+  stateSetter: React.Dispatch<React.SetStateAction<NewProductsState>>;
 }
 
-const ProfilePictureUpload = (props: ProfileUploadProps) => {
+const AdImagesSelect = (props: AdImagesSelectProps) => {
   const [openFileSelector, { plainFiles }] = useFilePicker({
     readAs: props.readAs,
     accept: props.accept,
@@ -24,16 +24,10 @@ const ProfilePictureUpload = (props: ProfileUploadProps) => {
 
   React.useEffect(() => {
     if (plainFiles.length) {
-      axios.post(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/upload`,
-        { file: plainFiles[0] },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      props.stateSetter((prevState) => ({
+        ...prevState,
+        images: plainFiles,
+      }));
     }
   }, [plainFiles]);
 
@@ -48,4 +42,4 @@ const ProfilePictureUpload = (props: ProfileUploadProps) => {
   );
 };
 
-export default ProfilePictureUpload;
+export default AdImagesSelect;

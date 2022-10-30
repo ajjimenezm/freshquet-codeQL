@@ -27,7 +27,11 @@ function stringAvatar(name: string) {
 
 function getAvatar(avatar: string | undefined, dataUser: DataUser) {
   return avatar ? (
-    <Avatar src={avatar} sx={{ width: 100, height: 100 }} />
+    <Avatar
+      src={avatar}
+      sx={{ width: 100, height: 100 }}
+      alt={dataUser.username}
+    />
   ) : (
     <Avatar {...stringAvatar(dataUser.name)} />
   );
