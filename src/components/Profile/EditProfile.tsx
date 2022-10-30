@@ -1,28 +1,31 @@
-import { Button, Avatar, Divider, TextField } from "@mui/material";
-import InputAdornment from "@mui/material/InputAdornment";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import CallIcon from "@mui/icons-material/Call";
-import EmailIcon from "@mui/icons-material/Email";
-import DataUser from "./dataUser";
-import axios from "axios";
-import React, { useState } from "react";
+import { Button, Avatar, Divider, TextField } from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import CallIcon from '@mui/icons-material/Call';
+import EmailIcon from '@mui/icons-material/Email';
+import DataUser from './dataUser';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useFilePicker } from 'use-file-picker';
+import ProfilePictureUpload from './ProfilePictureUpload';
 
 interface ProfileProps {
   dataUser: DataUser;
   userRole: string;
   editHandler: () => void;
+  avatar?: string;
 }
 
 function stringAvatar(name: string) {
   return {
     sx: {
-      bgcolor: "#63d4a1",
+      bgcolor: '#63d4a1',
       width: 100,
       height: 100,
       fontSize: 45,
-      fontWeight: "bold",
+      fontWeight: 'bold',
     },
-    children: `${name.split(" ")[0][0]}`,
+    children: `${name.split(' ')[0][0]}`,
   };
 }
 
@@ -30,12 +33,20 @@ function updateData(dataUser: DataUser, afterFunction: () => void) {
   axios
     .put(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/edit`, dataUser, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
       },
     })
     .then((res) => {
       afterFunction();
     });
+}
+
+function getAvatar(avatar: string | undefined, dataUser: DataUser) {
+  return avatar ? (
+    <Avatar src={avatar} sx={{ width: 100, height: 100 }} />
+  ) : (
+    <Avatar {...stringAvatar(dataUser.name)} />
+  );
 }
 
 const EditProfile = (props: ProfileProps) => {
@@ -49,16 +60,18 @@ const EditProfile = (props: ProfileProps) => {
   });
 
   const handleChange = (e: any) => {
+    console.log(e);
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
+    console.log(state);
   };
 
   return (
     <div className="m-4 space-y-4">
       <div className="flex space-x-4 py-4">
-        <Avatar {...stringAvatar(props.dataUser.name)} />
+        {getAvatar(props.avatar, props.dataUser)}
         <div className=" flex-col space-y-4 text-4xl">
           <TextField
             fullWidth
@@ -70,7 +83,15 @@ const EditProfile = (props: ProfileProps) => {
             multiline
           />
           <p className=" text-lg opacity-50">{props.dataUser.username}</p>
-          {/*<Button variant="outlined">Change photo</Button>*/}
+
+          <ProfilePictureUpload
+            readAs="DataURL"
+            accept="image/*"
+            multiple={true}
+            limitFilesConfig={{ max: 1 }}
+            maxFileSize={5}
+            text="Change profile picture"
+          />
         </div>
       </div>
       <Divider />
