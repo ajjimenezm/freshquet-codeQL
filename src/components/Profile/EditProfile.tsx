@@ -43,7 +43,11 @@ function updateData(dataUser: DataUser, afterFunction: () => void) {
 
 function getAvatar(avatar: string | undefined, dataUser: DataUser) {
   return avatar ? (
-    <Avatar src={avatar} sx={{ width: 100, height: 100 }} />
+    <Avatar
+      src={avatar}
+      sx={{ width: 100, height: 100 }}
+      alt={dataUser.username}
+    />
   ) : (
     <Avatar {...stringAvatar(dataUser.name)} />
   );
@@ -92,6 +96,7 @@ const EditProfile = (props: ProfileProps) => {
             maxFileSize={5}
             text="Change profile picture"
           />
+          <p className=" text-xs opacity-75">Any changes apply on save</p>
         </div>
       </div>
       <Divider />
