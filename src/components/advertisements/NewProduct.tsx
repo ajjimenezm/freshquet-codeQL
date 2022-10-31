@@ -96,16 +96,18 @@ export default function NewProducts() {
               console.log(res);
             });
 
-          axios.post(
-            `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/advertisements/${res.data}/uploadimages`,
-            { files: state.images },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-                'Content-Type': 'multipart/form-data',
-              },
-            }
-          );
+          axios
+            .post(
+              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}/uploadimages`,
+              { files: state.images },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+                  'Content-Type': 'multipart/form-data',
+                },
+              }
+            )
+            .then((res) => console.log(res));
 
           if (res.status == 201) {
             navigate('/home');
