@@ -38,10 +38,6 @@ function BuyAd() {
                     )
                     .then((res) => {
                         setAdvertisement(res.data);
-                        console.log(advertisement);
-                        console.log(
-                            `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}`
-                        );
                     });
             } catch (err) {
                 alert(err);
@@ -79,11 +75,26 @@ function BuyAd() {
     };
 
     const handleNext = () => {
+        if (activeStep === 1 && !checkCorrectQuantity()) {
+            return;
+        }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         if (activeStep === steps.length - 1) {
             sendBuyRequest();
         }
     };
+
+    function checkCorrectQuantity(): boolean {
+        if (
+            (regexDecimalWithPoint.test(quantityValue) ||
+                regexDecimalWithComma.test(quantityValue)) &&
+            quantityValue !== ""
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     const handleQuantityChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -155,6 +166,11 @@ function BuyAd() {
                                     "aria-label": "weight",
                                 }}
                                 label="Cantidad"
+                                onKeyDown={(event) => {
+                                    if (event.key === "Enter") {
+                                        handleNext();
+                                    }
+                                }}
                             />
                             <FormHelperText id="quantity-field-helper-text">
                                 {quantityError
