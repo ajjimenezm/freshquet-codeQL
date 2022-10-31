@@ -4,11 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Advertisement from '../../types/Advertisement';
 import { Button, Rating } from '@mui/material';
-import {db} from "../../firebase";
-import { User } from "firebase/auth";
+import { db } from '../../firebase';
+import { User } from 'firebase/auth';
 import { AuthContext } from '../../chatContext/AuthContext';
 import {collection, getDocs, query, setDoc, where, doc, updateDoc, serverTimestamp, getDoc} from "firebase/firestore";
 import { serialize } from 'v8';
+import SimpleImageSlider from 'react-simple-image-slider';
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +21,8 @@ function AdDetail() {
   const [userChat, setUserChat] = React.useState<string>();
   const [showConfirm, setShowConfirm] = useState(false);
   const [combinedId, setCombinedId] = React.useState<string>();
+  const [images, setImages] = useState<string[]>([]);
+  const [imagenames, setImagenames] = useState<string[]>([]);
 
   const currentUser = React.useContext(AuthContext);
 
@@ -39,9 +42,51 @@ function AdDetail() {
         alert(err);
       }
     };
-    getProduct();
-  }, [id]);
+    const getProductImagenames = async () => {
+      try {
+        axios
+          .get(
+            `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images`
+          )
+          .then((res) => {
+            console.log(res);
+            setImagenames(res.data);
+          });
+      } catch (err) {
+        setError(true);
+        alert(err);
+      }
+    };
+    const getProductImages = async () => {
+      try {
+        getProductImagenames();
 
+        imagenames.map((imagename) => {
+          axios
+            .get(
+              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imagename}`,
+              {
+                responseType: 'arraybuffer',
+              }
+            )
+            .then((res) => {
+              setImages(
+                images.concat(
+                  `data:;base64,${Buffer.from(res.data, 'binary').toString(
+                    'base64'
+                  )}`
+                )
+              );
+            });
+        });
+      } catch (err) {
+        setError(true);
+        alert(err);
+      }
+    };
+    getProduct();
+    getProductImages();
+  }, [id]);
 
   axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
@@ -144,7 +189,6 @@ function AdDetail() {
       ))
     : (edit = <></>);
 
-
   return (
     <>
       {advertisement && (
@@ -152,10 +196,23 @@ function AdDetail() {
           <h1 className="mb-4 text-3xl font-bold uppercase">
             {advertisement.name}
           </h1>
-          <img
+          {/* <img
             src="https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Patata"
             className="max-w-[80%]"
+          /> */}
+          <SimpleImageSlider
+            width={896}
+            height={504}
+            showBullets={true}
+            showNavs={true}
+            images={
+              images
+                ? images
+                : [
+                    'https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600',
+                  ]
+            }
           />
           <p className="py-4 text-2xl font-semibold">
             {advertisement.pricePerKilogram} €/kg
@@ -176,7 +233,7 @@ function AdDetail() {
             precision={0.5}
             readOnly
           />
-          <div className="mt-2 text-center flex flex-col items-center justify-center mb-4">
+          <div className="mt-2 mb-4 flex flex-col items-center justify-center text-center">
             Vendido por{' '}
             <span className="font-bold"> {advertisement.sellerId.name}</span>
             <Button

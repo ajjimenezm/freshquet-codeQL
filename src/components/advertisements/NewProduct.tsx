@@ -1,11 +1,21 @@
 import ComboBox from './Combobox';
+import {
+  Button,
+  TextField,
+  FormHelperText,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+} from '@mui/material';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Category } from '../../types/Category';
 import Heading from '../Heading';
+import AdImagesSelect from './AdImagesSelect';
 
-interface NewProductsState {
+export interface NewProductsState {
   id: string;
   name: string;
   description: string;
@@ -13,6 +23,7 @@ interface NewProductsState {
   category: Category;
   averageReviewScore: number;
   sellerId: string;
+  images: File[];
 }
 
 export default function NewProducts() {
@@ -25,6 +36,7 @@ export default function NewProducts() {
     }
   }, []);
 
+  const [quantityError, setQuantityError] = useState(false);
   const [state, setState] = useState<NewProductsState>({
     id: '',
     name: '',
@@ -33,6 +45,7 @@ export default function NewProducts() {
     category: Category.Fresh,
     averageReviewScore: 0.0,
     sellerId: localStorage.getItem('userId') || '',
+    images: [],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +55,31 @@ export default function NewProducts() {
     });
   };
 
-  /*    const fileSelectedHandler = (event: any) => {
-        state.selectedFile = event.target.files[0];
-    }*/
+  const regexDecimalWithPoint = /^\d*\.?\d*$/;
+  const regexDecimalWithComma = /^\d*,?\d*$/;
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (
+      value !== '' &&
+      (regexDecimalWithPoint.test(value) || regexDecimalWithComma.test(value))
+    ) {
+      setQuantityError(false);
+      setState({
+        ...state,
+        pricePerKilogram: parseFloat(value),
+      });
+    } else {
+      setQuantityError(true);
+    }
+  };
+
+  const fileSelectedHandler = (event: any) => {
+    console.log(event.target.files);
+    // setState({
+    //   ...state,
+    //   selectedFiles: event.target.files,
+    // });
+  };
 
   const handleCategory = (
     event: SyntheticEvent<Element, Event>,
@@ -79,6 +114,28 @@ export default function NewProducts() {
         )
         .then((res) => {
           console.log(res);
+
+          axios
+            .get(
+              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}`
+            )
+            .then((res) => {
+              console.log(res);
+            });
+
+          axios
+            .post(
+              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}/uploadimages`,
+              { files: state.images },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+                  'Content-Type': 'multipart/form-data',
+                },
+              }
+            )
+            .then((res) => console.log(res));
+
           if (res.status == 201) {
             navigate('/home');
           }
@@ -91,56 +148,70 @@ export default function NewProducts() {
   };
 
   return (
-    <div>
-      <Heading text="ADD NEW PRODUCT" />
-
-      <form onSubmit={handleSubmit}>
-        <label>Product name:</label>
-        <br />
-        <input
-          id="prod_name"
-          name="name"
-          type="text"
-          value={state.name}
-          onChange={handleChange}
-          className="mr-4 mb-4 w-full rounded-md p-2"
+    <div className="ml-7 mt-8">
+      <Heading text="AÑADIR NUEVO PRODUCTO" />
+      <div>
+        <div className="mb-8">
+          <TextField
+            name="name"
+            label="Nombre del producto"
+            onChange={handleChange}
+            id="fullWidth"
+            defaultValue={state.name}
+          />
+        </div>
+        <div className="mb-8">
+          <FormControl
+            sx={{ marginTop: 2 }}
+            variant="outlined"
+            error={quantityError}
+          >
+            <InputLabel htmlFor="quantity-field">Cantidad</InputLabel>
+            <OutlinedInput
+              id="quantity-field"
+              value={state.pricePerKilogram}
+              onChange={handlePriceChange}
+              endAdornment={<InputAdornment position="end">kg</InputAdornment>}
+              aria-describedby="quantity-field-helper-text"
+              inputProps={{
+                'aria-label': 'weight',
+              }}
+              label="Cantidad"
+            />
+            <FormHelperText id="quantity-field-helper-text">
+              {quantityError ? 'Introduzca un número válido' : ''}
+            </FormHelperText>
+          </FormControl>
+        </div>
+        <div className="mb-8">
+          <ComboBox onChangeHandler={handleCategory} />
+        </div>
+        <div className="mb-8 mr-8">
+          <TextField
+            fullWidth
+            name="description"
+            label="Descripción del producto"
+            onChange={handleChange}
+            id="fullWidth"
+            defaultValue={state.description}
+            multiline
+          />
+        </div>
+        <AdImagesSelect
+          readAs="DataURL"
+          accept="image/*"
+          multiple={true}
+          maxFileSize={10}
+          text="Añade hasta 5 imagenes de tu producto"
+          limitFilesConfig={{ max: 5 }}
+          stateSetter={setState}
         />
         <br />
-        <label>Price per kilogram (€):</label>
-        <br />
-        <input
-          name="pricePerKilogram"
-          type="number"
-          value={state.pricePerKilogram}
-          onChange={handleChange}
-          className="mr-4 mb-4 w-full rounded-md p-2"
-        />
-        <br />
-        <label>Product description:</label>
-        <br />
-        <input
-          name="description"
-          type="text"
-          value={state.description}
-          onChange={handleChange}
-          className="mr-4 mb-4 w-full rounded-md p-2"
-        />
-        <br />
-        <label>Category:</label>
-        <br />
-        <ComboBox onChangeHandler={handleCategory} />
-        <br />
-        {/*
-                <input
-                    id="prod_img"
-                    name="prod_img"
-                    type="file"
-                    onChange={fileSelectedHandler}
-                />
-                <br />
-                */}
-        <button type="submit">ACEPTAR</button>
-      </form>
+        <Button className="mt-8" variant="outlined" onClick={handleSubmit}>
+          ACEPTAR
+        </Button>
+      </div>
+      <Button onClick={() => console.log(state)}>clickme</Button>
     </div>
   );
 }
