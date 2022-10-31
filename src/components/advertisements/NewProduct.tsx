@@ -13,8 +13,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Category } from "../../types/Category";
 import Heading from "../Heading";
+import AdImagesSelect from "./AdImagesSelect";
 
-interface NewProductsState {
+export interface NewProductsState {
   id: string;
   name: string;
   description: string;
@@ -22,6 +23,7 @@ interface NewProductsState {
   category: Category;
   averageReviewScore: number;
   sellerId: string;
+  images: File[];
 }
 
 export default function NewProducts() {
@@ -43,6 +45,7 @@ export default function NewProducts() {
     category: Category.Fresh,
     averageReviewScore: 0.0,
     sellerId: localStorage.getItem("userId") || "",
+    images: [],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,9 +73,13 @@ export default function NewProducts() {
     }
   };
 
-  /*    const fileSelectedHandler = (event: any) => {
-        state.selectedFile = event.target.files[0];
-    }*/
+  const fileSelectedHandler = (event: any) => {
+    console.log(event.target.files);
+    // setState({
+    //   ...state,
+    //   selectedFiles: event.target.files,
+    // });
+  };
 
   const handleCategory = (
     event: SyntheticEvent<Element, Event>,
@@ -107,6 +114,26 @@ export default function NewProducts() {
         )
         .then((res) => {
           console.log(res);
+
+          axios
+            .get(
+              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}`
+            )
+            .then((res) => {
+              console.log(res);
+            });
+
+          axios.post(
+            `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/advertisements/${res.data}/uploadimages`,
+            { files: state.images },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+
           if (res.status == 201) {
             navigate("/home");
           }
@@ -168,10 +195,21 @@ export default function NewProducts() {
             multiline
           />
         </div>
+        <AdImagesSelect
+          readAs="DataURL"
+          accept="image/*"
+          multiple={true}
+          maxFileSize={10}
+          text="Añade hasta 5 imagenes de tu producto"
+          limitFilesConfig={{ max: 5 }}
+          stateSetter={setState}
+        />
+        <br />
         <Button className="mt-8" variant="outlined" onClick={handleSubmit}>
           ACEPTAR
         </Button>
       </div>
+      <Button onClick={() => console.log(state)}>clickme</Button>
     </div>
   );
 }
