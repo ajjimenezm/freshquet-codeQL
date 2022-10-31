@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 interface AdvertisementCardProps {
     advertisement: Advertisement;
-    onClickFunction: () => void;
 }
 function AdvertisementCard(props: AdvertisementCardProps) {
     const navigate = useNavigate();
@@ -32,7 +31,11 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                     <Button
                         variant="outlined"
                         color="primary"
-                        onClick={props.onClickFunction}
+                        onClick={() => {
+                            navigate(
+                                `/products/buy/${props.advertisement._id}`
+                            );
+                        }}
                     >
                         Comprar
                     </Button>

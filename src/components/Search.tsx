@@ -100,9 +100,6 @@ function Search() {
                     <AdvertisementCard
                         key={advertisement._id}
                         advertisement={advertisement}
-                        onClickFunction={() => {
-                            console.log("Clicked");
-                        }}
                     />
                 ))
             );
