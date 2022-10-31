@@ -13,14 +13,16 @@ import {
     CircularProgress,
 } from "@mui/material";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Advertisement from "../../../types/Advertisement";
 import VerticalBuyAdCard from "./VerticalBuyAdCard";
 import axios from "axios";
 import BuyAdStepButtons from "./BuyAdStepButtons";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 function BuyAd() {
     const { id } = useParams<{ id: string }>();
+    const [requestSent, setRequestSent] = React.useState(false);
     const [advertisement, setAdvertisement] = React.useState<Advertisement>();
     const [activeStep, setActiveStep] = React.useState(0);
     const [quantity, setQuantity] = React.useState(0);
@@ -28,6 +30,7 @@ function BuyAd() {
     const [quantityError, setQuantityError] = React.useState(false);
     const regexDecimalWithPoint = /^\d*\.?\d*$/;
     const regexDecimalWithComma = /^\d*,?\d*$/;
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         const getProduct = async () => {
@@ -45,6 +48,20 @@ function BuyAd() {
         };
         getProduct();
     }, [id]);
+
+    React.useEffect(() => {
+        let timeout: string | number | NodeJS.Timeout | undefined;
+        if (requestSent) {
+            timeout = setTimeout(() => {
+                navigate("/chatmenu");
+            }, 3000);
+        }
+        return () => {
+            if (requestSent) {
+                clearTimeout(timeout);
+            }
+        };
+    }, [requestSent]);
 
     const steps = [
         {
@@ -66,6 +83,9 @@ function BuyAd() {
 
     const sendBuyRequest = () => {
         console.log("Sending buy request");
+        setTimeout(() => {
+            setRequestSent(true);
+        }, 3000);
         // TODO: Send buy request
         // AJ Aqui tiens que ir tu
     };
@@ -221,18 +241,35 @@ function BuyAd() {
                     </StepContent>
                 </Step>
             </Stepper>
+
             <Backdrop
                 sx={{
                     backgroundColor: (theme) => theme.palette.primary.main,
                     color: "#fff",
                     zIndex: (theme) => theme.zIndex.drawer + 1,
                 }}
-                open={activeStep === steps.length}
+                open={activeStep === steps.length && !requestSent}
             >
                 <div className="flex flex-col items-center">
                     <CircularProgress color="inherit" />
                     <Typography sx={{ marginTop: 2 }} variant="h6">
                         Enviando solicitud...
+                    </Typography>
+                </div>
+            </Backdrop>
+
+            <Backdrop
+                sx={{
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    color: "#fff",
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={requestSent}
+            >
+                <div className="flex flex-col items-center">
+                    <CheckCircleIcon sx={{ fontSize: 100 }} />
+                    <Typography sx={{ marginTop: 2 }} variant="h6">
+                        Solicitud enviada!
                     </Typography>
                 </div>
             </Backdrop>
