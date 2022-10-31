@@ -1,8 +1,9 @@
-import { Button, Avatar, Divider } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import CallIcon from '@mui/icons-material/Call';
-import EmailIcon from '@mui/icons-material/Email';
-import DataUser from './dataUser';
+import { Button, Avatar, Divider } from "@mui/material";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CallIcon from "@mui/icons-material/Call";
+import EmailIcon from "@mui/icons-material/Email";
+import DataUser from "./dataUser";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileProps {
   dataUser: DataUser;
@@ -13,16 +14,18 @@ interface ProfileProps {
 function stringAvatar(name: string) {
   return {
     sx: {
-      bgcolor: '#63d4a1',
+      bgcolor: "#63d4a1",
       width: 100,
       height: 100,
       fontSize: 45,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
-    children: `${name.split(' ')[0][0]}`,
+    children: `${name.split(" ")[0][0]}`,
   };
 }
-function ReadProfile(props: ProfileProps) {
+const ReadProfile = (props: ProfileProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="m-4 space-y-4">
       <div className="flex space-x-4 py-4">
@@ -54,9 +57,14 @@ function ReadProfile(props: ProfileProps) {
       </div>
 
       <Divider />
-      {props.userRole == 'seller' ? (
+      {props.userRole == "seller" ? (
         <div className="flex flex-col space-y-4 text-center">
-          <Button variant="contained" disabled>
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate("/advertisementHistory");
+            }}
+          >
             Historial de Anuncios
           </Button>
           <Button variant="contained" disabled>
@@ -71,6 +79,6 @@ function ReadProfile(props: ProfileProps) {
       )}
     </div>
   );
-}
+};
 
 export default ReadProfile;
