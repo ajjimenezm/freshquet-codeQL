@@ -22,16 +22,17 @@ export default function NewProducts() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem('userToken');
+    const user = localStorage.getItem("userToken");
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, []);
 
+  const [quantityError, setQuantityError] = useState(false);
   const [state, setState] = useState<NewProductsState>({
-    id: '',
-    name: '',
-    description: '',
+    id: "",
+    name: "",
+    description: "",
     pricePerKilogram: 0,
     category: Category.Fresh,
     averageReviewScore: 0.0,
@@ -68,15 +69,15 @@ export default function NewProducts() {
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    if (state.name === '') {
-      alert('Add a valid name to the product');
+    if (state.name === "") {
+      alert("Add a valid name to the product");
     } else if (
       state.pricePerKilogram <= 0 ||
       state.pricePerKilogram.toString().length === 0
     ) {
-      alert('Add a valid price for the product');
-    } else if (state.description === '') {
-      alert('Add a valid description to the product');
+      alert("Add a valid price for the product");
+    } else if (state.description === "") {
+      alert("Add a valid description to the product");
     } else {
       axios
         .post(
@@ -110,12 +111,12 @@ export default function NewProducts() {
             .then((res) => console.log(res));
 
           if (res.status == 201) {
-            navigate('/home');
+            navigate("/home");
           }
         })
         .catch((res) => {
           //                console.log(res)
-          if (res.message == 'Network Error') alert('Network Error');
+          if (res.message == "Network Error") alert("Network Error");
         });
     }
   };
