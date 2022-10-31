@@ -9,6 +9,7 @@ interface ProfileProps {
   dataUser: DataUser;
   userRole: string;
   editHandler: () => void;
+  avatar?: string;
 }
 
 function stringAvatar(name: string) {
@@ -23,13 +24,25 @@ function stringAvatar(name: string) {
     children: `${name.split(" ")[0][0]}`,
   };
 }
-const ReadProfile = (props: ProfileProps) => {
-  const navigate = useNavigate();
 
+function getAvatar(avatar: string | undefined, dataUser: DataUser) {
+  return avatar ? (
+    <Avatar
+      src={avatar}
+      sx={{ width: 100, height: 100 }}
+      alt={dataUser.username}
+    />
+  ) : (
+    <Avatar {...stringAvatar(dataUser.name)} />
+  );
+}
+
+function ReadProfile(props: ProfileProps) {
+  const navigate = useNavigate();
   return (
     <div className="m-4 space-y-4">
       <div className="flex space-x-4 py-4">
-        <Avatar {...stringAvatar(props.dataUser.name)} />
+        {getAvatar(props.avatar, props.dataUser)}
         <div className=" flex-col space-y-4">
           <h1 className="text-4xl">{props.dataUser.name}</h1>
           <p className=" text-lg opacity-50">{props.dataUser.username}</p>
@@ -79,6 +92,6 @@ const ReadProfile = (props: ProfileProps) => {
       )}
     </div>
   );
-};
+}
 
 export default ReadProfile;

@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import React from 'react';
+import DataUser from './dataUser';
+import { Buffer } from 'buffer';
 
 interface IProps {
   user?: string;
@@ -11,8 +13,9 @@ interface IProps {
 
 interface IState {
   editProfile?: boolean;
-  dataUser?: any;
+  dataUser: DataUser;
   userRole: string;
+  avatar: string;
 }
 
 class ProfileNav extends React.Component<IProps, IState> {
@@ -29,6 +32,7 @@ class ProfileNav extends React.Component<IProps, IState> {
         direction: 'Cargando...',
       },
       userRole: 'Cargando',
+      avatar: '',
     };
     this.handler = this.handler.bind(this);
     this.fetchData = this.fetchData.bind(this);
@@ -57,8 +61,10 @@ class ProfileNav extends React.Component<IProps, IState> {
             email: res.data[0].email,
             direction: res.data[0].direction,
             biography: res.data[0].biography,
+            profile_picture: res.data[0].profile_picture,
           },
         });
+        this.getProfilePic(res.data[0].profile_picture);
       });
 
     axios
@@ -68,12 +74,28 @@ class ProfileNav extends React.Component<IProps, IState> {
         },
       })
       .then((res) => {
-        console.log(res);
         this.setState({
           userRole: res.data.userRole,
         });
       });
   }
+
+  getProfilePic = (pic: string) => {
+    axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile-picture/${pic}`,
+        {
+          responseType: 'arraybuffer',
+        }
+      )
+      .then((res) => {
+        this.setState({
+          avatar: `data:;base64,${Buffer.from(res.data, 'binary').toString(
+            'base64'
+          )}`,
+        });
+      });
+  };
 
   render() {
     return (
@@ -84,12 +106,14 @@ class ProfileNav extends React.Component<IProps, IState> {
             dataUser={this.state.dataUser}
             editHandler={this.handler}
             userRole={this.state.userRole}
+            avatar={this.state.avatar}
           />
         ) : (
           <ReadProfile
             dataUser={this.state.dataUser}
             editHandler={this.handler}
             userRole={this.state.userRole}
+            avatar={this.state.avatar}
           />
         )}
       </div>
