@@ -4,6 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Advertisement from '../../types/Advertisement';
 import { Button, Rating } from '@mui/material';
+import {db} from "../../firebase";
+import { User } from "firebase/auth";
+import { AuthContext } from '../../chatContext/AuthContext';
+import {collection, getDocs, query, where} from "firebase/firestore";
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +16,9 @@ function AdDetail() {
   const [userCategory, setUserCategory] = useState<string>();
   const [sellerId, setSellerId] = useState<string>();
   const [error, setError] = useState(false);
+  const [userChat, setUserChat] = useState<string>();
+
+  const currentUser = React.useContext(AuthContext);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -31,6 +38,7 @@ function AdDetail() {
     };
     getProduct();
   }, [id]);
+
 
   axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
@@ -54,6 +62,36 @@ function AdDetail() {
     navigate(`/products/edit/${id}`);
   };
 
+  const searchUserChat = async () => {
+    console.log(advertisement?.sellerId.username);
+    const q = query(collection(db, "users"), where("displayName", "==", advertisement?.sellerId.username));
+    const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+          setUserChat(doc.id);
+      });
+    console.log(userChat);
+  };
+
+  const navigateChat = async () => {
+    const uid = currentUser!.uid;
+    console.log(uid);
+    if (userChat == undefined) {
+      await searchUserChat();
+    }
+    const combinedId : unknown = 
+      uid > userChat!
+        ? uid + userChat
+        : userChat + uid;
+    console.log(combinedId);
+    
+    //const res = await getDocs(db, "chats", combinedId)
+  };
+
+  const chatProcess = () => {
+    searchUserChat();
+    navigateChat();
+  };
+
   let edit: any;
   advertisement && userCategory === 'seller' && sellerId === userId
     ? (edit = (
@@ -67,6 +105,7 @@ function AdDetail() {
         </Button>
       ))
     : (edit = <></>);
+
 
   return (
     <>
@@ -99,7 +138,7 @@ function AdDetail() {
             precision={0.5}
             readOnly
           />
-          <div className="mt-2 text-center">
+          <div className="mt-2 text-center flex flex-col items-center justify-center mb-4">
             Vendido por{' '}
             <span className="font-bold"> {advertisement.sellerId.name}</span>
             <Button
@@ -109,6 +148,14 @@ function AdDetail() {
               onClick={navigateToSeller.bind(null, sellerId as string)}
             >
               Visita su tienda
+            </Button>
+            <Button
+              className="left-2"
+              variant="outlined"
+              color="primary"
+              onClick={() => chatProcess()}
+            >
+              Comprar
             </Button>
           </div>
           {edit}
