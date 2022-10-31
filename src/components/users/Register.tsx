@@ -204,7 +204,7 @@ const Register = () => {
                     name="userType"
                     value={state.userType}
                     label="Tipo de usuario"
-                    onChange={handleChange}
+                    onChange={selectRole}
                   >
                     <MenuItem value="buyer">Comprador</MenuItem>
                     <MenuItem value="seller">Vendedor</MenuItem>
