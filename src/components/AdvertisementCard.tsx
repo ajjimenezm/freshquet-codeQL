@@ -7,7 +7,6 @@ import { toNamespacedPath } from "path";
 
 interface AdvertisementCardProps {
     advertisement: Advertisement;
-    onClickFunction: () => void;
 }
 
 function AdvertisementCard(props: AdvertisementCardProps) {
