@@ -43,7 +43,7 @@ function ChatMenu() {
                 </div>
             </div>
             <div className="chatCards pt-20 h-[calc(100vh-55px)] overflow-auto">
-                {Object.entries(chats).map((chat : any) => (    
+                {Object.entries(chats)?.sort((a:any ,b:any) => b[1].date - a[1].date).map((chat : any) => (    
                     <div className="flex flex-row h-21 items-center border-b-2 border-b-slate-100 hover:bg-slate-100" key={chat[0]} onClick={() => handleSelectChat(chat[1].userInfo)}>
                         <img
                             src={Photo}
@@ -54,7 +54,7 @@ function ChatMenu() {
                             <div className="text-xl font-bold mt-4">
                                 {chat[1].userInfo.displayName}
                             </div>
-                        <div className="text-sm mb-4">{chat[1].userInfo.lastMessage?.text}</div>
+                        <div className="text-sm mb-4">{chat[1].lastMessage?.text}</div>
                         </div>
                     </div>
                 ))}              
