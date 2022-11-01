@@ -19,6 +19,7 @@ import VerticalBuyAdCard from "./VerticalBuyAdCard";
 import axios from "axios";
 import BuyAdStepButtons from "./BuyAdStepButtons";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import AdvertisementManagement from "../../../libs/AdvertisementManagement";
 
 function BuyAd() {
     const { id } = useParams<{ id: string }>();
@@ -33,20 +34,11 @@ function BuyAd() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        const getProduct = async () => {
-            try {
-                axios
-                    .get(
-                        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}`
-                    )
-                    .then((res) => {
-                        setAdvertisement(res.data);
-                    });
-            } catch (err) {
-                alert(err);
-            }
-        };
-        getProduct();
+        if (id) {
+            AdvertisementManagement.GetAdvertisementById(id).then((res) => {
+                setAdvertisement(res);
+            });
+        }
     }, [id]);
 
     React.useEffect(() => {

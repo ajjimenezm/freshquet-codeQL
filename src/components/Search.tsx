@@ -15,6 +15,7 @@ import axios from "axios";
 import Advertisement from "../types/Advertisement";
 import SearchHistoryElement from "./search/SearchHistoryElement";
 import SearchHistoryElementSkeleton from "./search/SearchHistoryElementSkeleton";
+import AdvertisementManagement from "../libs/AdvertisementManagement";
 
 function Search() {
     const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -108,19 +109,10 @@ function Search() {
 
     const getAds = () => {
         setDataRequested(true);
-        axios
-            .get(
-                `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all`
-            )
-            .then((res) => {
-                if (res.status === 200) {
-                    setAdvertisements(res.data);
-                    setDataLoaded(true);
-                }
-            })
-            .catch(() => {
-                console.log("Error");
-            });
+        AdvertisementManagement.GetAllAdvertisements().then((ads) => {
+            setAdvertisements(ads);
+            setDataLoaded(true);
+        });
     };
 
     const loadSearchHistory = () => {
