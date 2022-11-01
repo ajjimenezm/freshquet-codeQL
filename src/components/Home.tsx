@@ -7,8 +7,9 @@ import React from "react";
 import AdvertisementCardSkeleton from "./AdvertisementCardSkeleton";
 import AddProduct from "./advertisements/AddProduct";
 import AddIcon from "@mui/icons-material/Add";
-import { Fab } from "@mui/material";
+import { Button, Fab } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { ShopFilters } from "./ShopFilters";
 
 const Home = () => {
     const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -21,6 +22,41 @@ const Home = () => {
     const waitingTimeSkeletonLoader = 500;
 
     const [userRole, setUserRole] = React.useState<string>();
+
+    const [openModal, setOpen] = React.useState(false);
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = (filters: any) => {
+        setOpen(false);
+        const minPrice = parseInt(filters.min_price);
+        const maxPrice = parseInt(filters.max_price);
+        //Do not apply filters if there is an error on the input
+        if (isNaN(minPrice) || isNaN(maxPrice) || minPrice >= maxPrice) {
+
+            setAdvertisementsToShow(
+                advertisements.map((advertisement) => (
+                    <AdvertisementCard
+                        key={advertisement._id}
+                        advertisement={advertisement}
+                    />
+                ))
+            );
+            return
+        } else {
+
+            setAdvertisementsToShow(
+                advertisements.map((ad, idx) => {
+                    if (ad.pricePerKilogram >= minPrice && ad.pricePerKilogram <= maxPrice) {
+                        return <AdvertisementCard key={ad._id} advertisement={ad} />;
+                    } else {
+                        return <></>;
+                    }
+                })
+            );
+        }
+
+    };
 
     const navigate = useNavigate();
 
@@ -77,11 +113,14 @@ const Home = () => {
             <Heading text="Lo más fresco para tí" />
             <SubHeading text="Creemos que estos productos pueden interesarte" />
             {userRole == "seller" ? <AddProduct /> : <></>}
-
+            <div className="border-y-2 my-4 p-4 text-right">
+                <ShopFilters open={openModal} handleClose={handleClose} />
+                <Button variant="contained" onClick={handleOpen}>
+                    Filtros
+                </Button>
+            </div>
             <div className="mb-16 ml-5 mr-5 divide-y-2">
-                {dataLoaded ? (
-                    advertisementsToShow
-                ) : minimumTimeElapsed ? (
+                {dataLoaded ? (advertisementsToShow) : minimumTimeElapsed ? (
                     <>
                         <AdvertisementCardSkeleton />
                         <AdvertisementCardSkeleton />
