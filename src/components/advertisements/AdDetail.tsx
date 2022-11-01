@@ -46,8 +46,7 @@ function AdDetail() {
             `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images`
           )
           .then((res) => {
-            console.log(res);
-            setImagenames(res.data);
+            if (res.data.length) setImagenames(res.data);
           });
       } catch (err) {
         setError(true);
@@ -92,7 +91,6 @@ function AdDetail() {
       },
     })
     .then((res) => {
-      console.log(res);
       setUserCategory(res.data.userRole);
       setUserId(res.data.userId);
     });
@@ -108,7 +106,6 @@ function AdDetail() {
   };
 
   const searchUserChat = async () => {
-    console.log(advertisement?.sellerId.username);
     const q = query(
       collection(db, 'users'),
       where('displayName', '==', advertisement?.sellerId.username)
@@ -117,18 +114,15 @@ function AdDetail() {
     querySnapshot.forEach((doc) => {
       setUserChat(doc.id);
     });
-    console.log(userChat);
   };
 
   const navigateChat = async () => {
     const uid = currentUser!.uid;
-    console.log(uid);
     if (userChat == undefined) {
       await searchUserChat();
     }
     const combinedId: unknown =
       uid > userChat! ? uid + userChat : userChat + uid;
-    console.log(combinedId);
 
     //const res = await getDocs(db, "chats", combinedId)
   };
@@ -152,6 +146,14 @@ function AdDetail() {
       ))
     : (edit = <></>);
 
+  function isThereMoreThanOnePicture(): boolean {
+    return images.length > 1;
+  }
+  function isTherePicture(): boolean {
+    console.log('images: ' + images); //ME HE QUEDADO AQUÍ
+    return images.length > 0;
+  }
+
   return (
     <>
       {advertisement && (
@@ -167,10 +169,10 @@ function AdDetail() {
           <SimpleImageSlider
             width={896}
             height={504}
-            showBullets={true}
-            showNavs={true}
+            showBullets={isThereMoreThanOnePicture()}
+            showNavs={isThereMoreThanOnePicture()}
             images={
-              images
+              isTherePicture()
                 ? images
                 : [
                     'https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600',

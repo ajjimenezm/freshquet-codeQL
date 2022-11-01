@@ -90,14 +90,6 @@ export default function NewProducts() {
           console.log(res);
 
           axios
-            .get(
-              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}`
-            )
-            .then((res) => {
-              console.log(res);
-            });
-
-          axios
             .post(
               `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}/uploadimages`,
               { files: state.images },
@@ -108,7 +100,10 @@ export default function NewProducts() {
                 },
               }
             )
-            .then((res) => console.log(res));
+            .then((res) => console.log(res))
+            .catch((err) => console.log('image upload error: ' + err));
+
+          console.log(1);
 
           if (res.status == 201) {
             navigate("/home");
