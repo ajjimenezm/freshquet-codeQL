@@ -81,6 +81,7 @@ class ProfileNav extends React.Component<IProps, IState> {
   }
 
   getProfilePic = (pic: string) => {
+    if (!pic) return;
     axios
       .get(
         `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile-picture/${pic}`,
