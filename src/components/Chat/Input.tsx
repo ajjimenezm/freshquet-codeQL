@@ -14,8 +14,9 @@ function Input() {
     const currentUser = React.useContext(AuthContext);
     const {data} = React.useContext(UserContext);
 
-
+    
     const handleSend = async () => {
+        setText("");
         if (text != ""){
             await updateDoc(doc(db, "chats", data.chatId),{
                 messages: arrayUnion({
@@ -33,7 +34,6 @@ function Input() {
                 [data.chatId + ".date"]: serverTimestamp(),
             })
 
-            setText("");
             
             await updateDoc(doc(db, "userChats", data.user.uid),{
                 [data.chatId + ".lastMessage"]: {
