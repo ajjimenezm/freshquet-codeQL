@@ -4,10 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Advertisement from '../../types/Advertisement';
 import { Button, Rating } from '@mui/material';
-import {db} from "../../firebase";
-import { User } from "firebase/auth";
+import { db } from '../../firebase';
+import { User } from 'firebase/auth';
 import { AuthContext } from '../../chatContext/AuthContext';
-import {collection, getDocs, query, where} from "firebase/firestore";
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import SimpleImageSlider from 'react-simple-image-slider';
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,8 @@ function AdDetail() {
   const [sellerId, setSellerId] = useState<string>();
   const [error, setError] = useState(false);
   const [userChat, setUserChat] = useState<string>();
+  const [images, setImages] = useState<string[]>([]);
+  const [imagenames, setImagenames] = useState<string[]>([]);
 
   const currentUser = React.useContext(AuthContext);
 
@@ -36,9 +39,50 @@ function AdDetail() {
         alert(err);
       }
     };
-    getProduct();
-  }, [id]);
+    const getProductImagenames = async () => {
+      try {
+        axios
+          .get(
+            `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images`
+          )
+          .then((res) => {
+            if (res.data.length) setImagenames(res.data);
+          });
+      } catch (err) {
+        setError(true);
+        alert(err);
+      }
+    };
+    const getProductImages = async () => {
+      try {
+        getProductImagenames();
 
+        imagenames.map((imagename) => {
+          axios
+            .get(
+              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imagename}`,
+              {
+                responseType: 'arraybuffer',
+              }
+            )
+            .then((res) => {
+              setImages(
+                images.concat(
+                  `data:;base64,${Buffer.from(res.data, 'binary').toString(
+                    'base64'
+                  )}`
+                )
+              );
+            });
+        });
+      } catch (err) {
+        setError(true);
+        alert(err);
+      }
+    };
+    getProduct();
+    getProductImages();
+  }, [id]);
 
   axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
@@ -47,7 +91,6 @@ function AdDetail() {
       },
     })
     .then((res) => {
-      console.log(res);
       setUserCategory(res.data.userRole);
       setUserId(res.data.userId);
     });
@@ -63,27 +106,24 @@ function AdDetail() {
   };
 
   const searchUserChat = async () => {
-    console.log(advertisement?.sellerId.username);
-    const q = query(collection(db, "users"), where("displayName", "==", advertisement?.sellerId.username));
+    const q = query(
+      collection(db, 'users'),
+      where('displayName', '==', advertisement?.sellerId.username)
+    );
     const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-          setUserChat(doc.id);
-      });
-    console.log(userChat);
+    querySnapshot.forEach((doc) => {
+      setUserChat(doc.id);
+    });
   };
 
   const navigateChat = async () => {
     const uid = currentUser!.uid;
-    console.log(uid);
     if (userChat == undefined) {
       await searchUserChat();
     }
-    const combinedId : unknown = 
-      uid > userChat!
-        ? uid + userChat
-        : userChat + uid;
-    console.log(combinedId);
-    
+    const combinedId: unknown =
+      uid > userChat! ? uid + userChat : userChat + uid;
+
     //const res = await getDocs(db, "chats", combinedId)
   };
 
@@ -106,6 +146,13 @@ function AdDetail() {
       ))
     : (edit = <></>);
 
+  function isThereMoreThanOnePicture(): boolean {
+    return images.length > 1;
+  }
+  function isTherePicture(): boolean {
+    console.log('images: ' + images); //ME HE QUEDADO AQUÍ
+    return images.length > 0;
+  }
 
   return (
     <>
@@ -114,10 +161,23 @@ function AdDetail() {
           <h1 className="mb-4 text-3xl font-bold uppercase">
             {advertisement.name}
           </h1>
-          <img
+          {/* <img
             src="https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Patata"
             className="max-w-[80%]"
+          /> */}
+          <SimpleImageSlider
+            width={896}
+            height={504}
+            showBullets={isThereMoreThanOnePicture()}
+            showNavs={isThereMoreThanOnePicture()}
+            images={
+              isTherePicture()
+                ? images
+                : [
+                    'https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600',
+                  ]
+            }
           />
           <p className="py-4 text-2xl font-semibold">
             {advertisement.pricePerKilogram} €/kg
@@ -138,7 +198,7 @@ function AdDetail() {
             precision={0.5}
             readOnly
           />
-          <div className="mt-2 text-center flex flex-col items-center justify-center mb-4">
+          <div className="mt-2 mb-4 flex flex-col items-center justify-center text-center">
             Vendido por{' '}
             <span className="font-bold"> {advertisement.sellerId.name}</span>
             <Button

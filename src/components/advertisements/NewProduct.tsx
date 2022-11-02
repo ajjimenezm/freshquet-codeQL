@@ -1,4 +1,4 @@
-import ComboBox from "./Combobox";
+import ComboBox from './Combobox';
 import {
   Button,
   TextField,
@@ -7,13 +7,13 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
-} from "@mui/material";
-import React, { SyntheticEvent, useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Category } from "../../types/Category";
-import Heading from "../Heading";
-import AdImagesSelect from "./AdImagesSelect";
+} from '@mui/material';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Category } from '../../types/Category';
+import Heading from '../Heading';
+import AdImagesSelect from './AdImagesSelect';
 
 export interface NewProductsState {
   id: string;
@@ -30,21 +30,21 @@ export default function NewProducts() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem("userToken");
+    const user = localStorage.getItem('userToken');
     if (!user) {
-      navigate("/login");
+      navigate('/login');
     }
   }, []);
 
   const [quantityError, setQuantityError] = useState(false);
   const [state, setState] = useState<NewProductsState>({
-    id: "",
-    name: "",
-    description: "",
+    id: '',
+    name: '',
+    description: '',
     pricePerKilogram: 0,
     category: Category.Fresh,
     averageReviewScore: 0.0,
-    sellerId: localStorage.getItem("userId") || "",
+    sellerId: localStorage.getItem('userId') || '',
     images: [],
   });
 
@@ -60,7 +60,7 @@ export default function NewProducts() {
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (
-      value !== "" &&
+      value !== '' &&
       (regexDecimalWithPoint.test(value) || regexDecimalWithComma.test(value))
     ) {
       setQuantityError(false);
@@ -95,15 +95,15 @@ export default function NewProducts() {
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    if (state.name === "") {
-      alert("Add a valid name to the product");
+    if (state.name === '') {
+      alert('Add a valid name to the product');
     } else if (
       state.pricePerKilogram <= 0 ||
       state.pricePerKilogram.toString().length === 0
     ) {
-      alert("Add a valid price for the product");
-    } else if (state.description === "") {
-      alert("Add a valid description to the product");
+      alert('Add a valid price for the product');
+    } else if (state.description === '') {
+      alert('Add a valid description to the product');
     } else {
       axios
         .post(
@@ -116,31 +116,28 @@ export default function NewProducts() {
           console.log(res);
 
           axios
-            .get(
-              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}`
+            .post(
+              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}/uploadimages`,
+              { files: state.images },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+                  'Content-Type': 'multipart/form-data',
+                },
+              }
             )
-            .then((res) => {
-              console.log(res);
-            });
+            .then((res) => console.log(res))
+            .catch((err) => console.log('image upload error: ' + err));
 
-          axios.post(
-            `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/advertisements/${res.data}/uploadimages`,
-            { files: state.images },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+          console.log(1);
 
           if (res.status == 201) {
-            navigate("/home");
+            navigate('/home');
           }
         })
         .catch((res) => {
           //                console.log(res)
-          if (res.message == "Network Error") alert("Network Error");
+          if (res.message == 'Network Error') alert('Network Error');
         });
     }
   };
@@ -172,12 +169,12 @@ export default function NewProducts() {
               endAdornment={<InputAdornment position="end">kg</InputAdornment>}
               aria-describedby="quantity-field-helper-text"
               inputProps={{
-                "aria-label": "weight",
+                'aria-label': 'weight',
               }}
               label="Cantidad"
             />
             <FormHelperText id="quantity-field-helper-text">
-              {quantityError ? "Introduzca un número válido" : ""}
+              {quantityError ? 'Introduzca un número válido' : ''}
             </FormHelperText>
           </FormControl>
         </div>
