@@ -9,6 +9,7 @@ import { User } from 'firebase/auth';
 import { AuthContext } from '../../chatContext/AuthContext';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import SimpleImageSlider from 'react-simple-image-slider';
+import { Buffer } from 'buffer';
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -46,43 +47,38 @@ function AdDetail() {
             `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images`
           )
           .then((res) => {
-            if (res.data.length) setImagenames(res.data);
+            if (res.data.length > 0) setImagenames(res.data);
           });
       } catch (err) {
         setError(true);
         alert(err);
       }
     };
-    const getProductImages = async () => {
-      try {
-        getProductImagenames();
-
-        imagenames.map((imagename) => {
-          axios
-            .get(
-              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imagename}`,
-              {
-                responseType: 'arraybuffer',
-              }
-            )
-            .then((res) => {
-              setImages(
-                images.concat(
-                  `data:;base64,${Buffer.from(res.data, 'binary').toString(
-                    'base64'
-                  )}`
-                )
-              );
-            });
-        });
-      } catch (err) {
-        setError(true);
-        alert(err);
-      }
-    };
     getProduct();
-    getProductImages();
+    getProductImagenames();
   }, [id]);
+
+  React.useEffect(() => {
+    console.log(imagenames);
+    for (let i = 0; i < imagenames.length; i++) {
+      axios
+        .get(
+          `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imagenames[i]}`,
+          {
+            responseType: 'arraybuffer',
+          }
+        )
+        .then((res) => {
+          setImages(
+            images.concat(
+              `data:;base64,${Buffer.from(res.data, 'binary').toString(
+                'base64'
+              )}`
+            )
+          );
+        });
+    }
+  }, [imagenames]);
 
   axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
@@ -150,7 +146,6 @@ function AdDetail() {
     return images.length > 1;
   }
   function isTherePicture(): boolean {
-    console.log('images: ' + images); //ME HE QUEDADO AQUÍ
     return images.length > 0;
   }
 
@@ -171,13 +166,7 @@ function AdDetail() {
             height={504}
             showBullets={isThereMoreThanOnePicture()}
             showNavs={isThereMoreThanOnePicture()}
-            images={
-              isTherePicture()
-                ? images
-                : [
-                    'https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600',
-                  ]
-            }
+            images={images}
           />
           <p className="py-4 text-2xl font-semibold">
             {advertisement.pricePerKilogram} €/kg
