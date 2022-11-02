@@ -9,7 +9,6 @@ import { AuthContext } from '../../chatContext/AuthContext';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import SimpleImageSlider from 'react-simple-image-slider';
 import { Buffer } from 'buffer';
-import { Mutex } from 'async-mutex';
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -22,8 +21,6 @@ function AdDetail() {
   const [images, setImages] = useState<string[]>([]);
   const [imagenames, setImagenames] = useState<string[]>([]);
   const [imagesLoaded, setImagesLoaded] = useState<number>(0);
-
-  const mutex = new Mutex();
 
   const currentUser = React.useContext(AuthContext);
 
@@ -77,21 +74,14 @@ function AdDetail() {
     axios.all(requests).then(
       axios.spread((...responses) => {
         for (let i = 0; i < responses.length; i++) {
-          mutex.acquire().then((release) => {
-            console.log(images);
-            const tmp = images.concat(
+          setImages((images) =>
+            images.concat(
               `data:;base64,${Buffer.from(responses[i].data, 'binary').toString(
                 'base64'
               )}`
-            );
-            console.log(tmp);
-            setImages(tmp);
-            setImagesLoaded((imagesLoaded) => imagesLoaded + 1);
-            console.log(imagesLoaded);
-            console.log(images);
-
-            release();
-          });
+            )
+          );
+          setImagesLoaded((imagesLoaded) => imagesLoaded + 1);
         }
       })
     );
