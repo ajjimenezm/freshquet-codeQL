@@ -11,7 +11,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import AdvertisementCard from "./AdvertisementCard";
 import AdvertisementCardSkeleton from "./AdvertisementCardSkeleton";
 import Heading from "./Heading";
-import axios from "axios";
 import Advertisement from "../types/Advertisement";
 import SearchHistoryElement from "./search/SearchHistoryElement";
 import SearchHistoryElementSkeleton from "./search/SearchHistoryElementSkeleton";
@@ -49,16 +48,19 @@ function Search() {
     };
 
     React.useEffect(() => {
-        const timer = setTimeout(() => {
-            if (
-                !checkIfSearchHistoryExists(searchParams.get("search")) &&
-                searchParams.get("search") !== "" &&
-                searchParams.get("search") !== null
-            ) {
-                addSearchHistory(searchParams.get("search"));
-            }
-            setSearchHistoryElements(loadSearchHistory());
-        }, 2000);
+        let timer: NodeJS.Timeout;
+        if (
+            advertisements.length > 0 &&
+            searchParams.get("search") !== null &&
+            searchParams.get("search") !== ""
+        ) {
+            timer = setTimeout(() => {
+                if (!checkIfSearchHistoryExists(searchParams.get("search"))) {
+                    addSearchHistory(searchParams.get("search"));
+                }
+                setSearchHistoryElements(loadSearchHistory());
+            }, 2000);
+        }
         return () => clearTimeout(timer);
     }, [advertisementsToShow]);
 
@@ -67,10 +69,8 @@ function Search() {
         if (!user) {
             navigate("/login");
         }
-        setTimeout(() => {
-            setLocalStorageLoaded(true);
-        }, 2000);
-        loadSearchHistory();
+        setSearchHistoryElements(loadSearchHistory());
+        setLocalStorageLoaded(true);
 
         if (searchParams.get("search") && searchParams.get("search") !== "") {
             setTimeout(() => {
