@@ -7,6 +7,8 @@ import NewProduct from "./components/advertisements/NewProduct";
 import Login from "./components/users/Login";
 import Register from "./components/users/Register";
 import { AuthContext } from "./chatContext/AuthContext";
+import BuyAd from "./components/advertisements/BuyAdvertisement/BuyAdDialog";
+import AdvertismentHistory from "./components/advertismentHistory";
 
 function App() {
   // useContext user authcontext
@@ -35,6 +37,8 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="newproduct" element={<NewProduct />} />
+          <Route path="products/buy/:id" element={<BuyAd />} />
+          <Route path="advertismentHistory" element={<AdvertismentHistory />} />
         </Routes>
       </ThemeProvider>
     </div>

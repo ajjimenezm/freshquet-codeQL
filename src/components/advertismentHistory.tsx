@@ -65,15 +65,7 @@ const AdvertismentHistory = () => {
   React.useEffect(() => {
     setAdvertisementsToShow(
       advertisements.map((ad) => {
-        return (
-          <AdvertisementCard
-            key={ad._id}
-            advertisement={ad}
-            onClickFunction={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-          />
-        );
+        return <AdvertisementCard key={ad._id} advertisement={ad} />;
       })
     );
   }, [dataLoaded]);

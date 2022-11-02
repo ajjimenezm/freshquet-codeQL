@@ -7,7 +7,6 @@ import { toNamespacedPath } from "path";
 
 interface AdvertisementCardProps {
     advertisement: Advertisement;
-    onClickFunction: () => void;
 }
 
 function AdvertisementCard(props: AdvertisementCardProps) {
@@ -34,6 +33,17 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                     {`${props.advertisement.pricePerKilogram} €/kg`}
                 </div>
                 <span>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                            navigate(
+                                `/products/buy/${props.advertisement._id}`
+                            );
+                        }}
+                    >
+                        Comprar
+                    </Button>
                     <Button
                         className="left-2"
                         variant="outlined"
