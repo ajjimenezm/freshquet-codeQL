@@ -1,15 +1,15 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Advertisement from '../../types/Advertisement';
 import { Button, Rating } from '@mui/material';
 import { db } from '../../firebase';
-import { User } from 'firebase/auth';
 import { AuthContext } from '../../chatContext/AuthContext';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import SimpleImageSlider from 'react-simple-image-slider';
 import { Buffer } from 'buffer';
+import { Mutex } from 'async-mutex';
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +21,9 @@ function AdDetail() {
   const [userChat, setUserChat] = useState<string>();
   const [images, setImages] = useState<string[]>([]);
   const [imagenames, setImagenames] = useState<string[]>([]);
+  const [imagesLoaded, setImagesLoaded] = useState<number>(0);
+
+  const mutex = new Mutex();
 
   const currentUser = React.useContext(AuthContext);
 
@@ -59,25 +62,39 @@ function AdDetail() {
   }, [id]);
 
   React.useEffect(() => {
-    console.log(imagenames);
+    let requests: Promise<AxiosResponse<any, any>>[] = [];
     for (let i = 0; i < imagenames.length; i++) {
-      axios
-        .get(
+      requests = requests.concat(
+        axios.get(
           `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imagenames[i]}`,
           {
             responseType: 'arraybuffer',
           }
         )
-        .then((res) => {
-          setImages(
-            images.concat(
-              `data:;base64,${Buffer.from(res.data, 'binary').toString(
+      );
+    }
+
+    axios.all(requests).then(
+      axios.spread((...responses) => {
+        for (let i = 0; i < responses.length; i++) {
+          mutex.acquire().then((release) => {
+            console.log(images);
+            const tmp = images.concat(
+              `data:;base64,${Buffer.from(responses[i].data, 'binary').toString(
                 'base64'
               )}`
-            )
-          );
-        });
-    }
+            );
+            console.log(tmp);
+            setImages(tmp);
+            setImagesLoaded((imagesLoaded) => imagesLoaded + 1);
+            console.log(imagesLoaded);
+            console.log(images);
+
+            release();
+          });
+        }
+      })
+    );
   }, [imagenames]);
 
   axios
@@ -142,11 +159,22 @@ function AdDetail() {
       ))
     : (edit = <></>);
 
-  function isThereMoreThanOnePicture(): boolean {
-    return images.length > 1;
-  }
-  function isTherePicture(): boolean {
-    return images.length > 0;
+  function getAdPicturesSlider(): JSX.Element {
+    const moreThanOne = images.length > 1;
+
+    if (imagesLoaded < imagenames.length) {
+      return <></>;
+    }
+
+    return (
+      <SimpleImageSlider
+        width={400}
+        height={400}
+        showBullets={moreThanOne}
+        showNavs={true}
+        images={images}
+      />
+    );
   }
 
   return (
@@ -161,13 +189,7 @@ function AdDetail() {
             alt="Patata"
             className="max-w-[80%]"
           /> */}
-          <SimpleImageSlider
-            width={896}
-            height={504}
-            showBullets={isThereMoreThanOnePicture()}
-            showNavs={isThereMoreThanOnePicture()}
-            images={images}
-          />
+          {getAdPicturesSlider()}
           <p className="py-4 text-2xl font-semibold">
             {advertisement.pricePerKilogram} €/kg
           </p>
@@ -205,6 +227,9 @@ function AdDetail() {
               onClick={() => chatProcess()}
             >
               Comprar
+            </Button>
+            <Button onClick={() => console.log(images)}>
+              Eliminame si me ves
             </Button>
           </div>
           {edit}
