@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { AuthContextProvider } from "./chatContext/AuthContext";
+import "leaflet/dist/leaflet.css";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
