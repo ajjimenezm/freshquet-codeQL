@@ -19,6 +19,24 @@ import VerticalBuyAdCard from "./VerticalBuyAdCard";
 import axios from "axios";
 import BuyAdStepButtons from "./BuyAdStepButtons";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { db } from "../../../firebase";
+import { User } from "firebase/auth";
+import { AuthContext } from "../../../chatContext/AuthContext";
+import {
+  collection,
+  getDocs,
+  query,
+  setDoc,
+  where,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  getDoc,
+  Timestamp,
+  arrayUnion,
+} from "firebase/firestore";
+import { v4 as uuid } from 'uuid';
+import { UserContext } from "../../../chatContext/UserContext";
 import AdvertisementManagement from "../../../libs/AdvertisementManagement";
 
 function BuyAd() {
@@ -29,9 +47,14 @@ function BuyAd() {
     const [quantity, setQuantity] = React.useState(0);
     const [quantityValue, setQuantityValue] = React.useState("");
     const [quantityError, setQuantityError] = React.useState(false);
+    const [userChat, setUserChat] = React.useState<any>();
+    const [combinedId, setCombinedId] = React.useState<string>("");
+    const [text, setText] = React.useState<string>("");
     const regexDecimalWithPoint = /^\d*\.?\d*$/;
     const regexDecimalWithComma = /^\d*,?\d*$/;
     const navigate = useNavigate();
+
+    const currentUser = React.useContext(AuthContext);
 
     React.useEffect(() => {
         if (id) {
@@ -73,13 +96,41 @@ function BuyAd() {
         },
     ];
 
-    const sendBuyRequest = () => {
+    const sendBuyRequest = async () => {
         console.log("Sending buy request");
         setTimeout(() => {
             setRequestSent(true);
-        }, 3000);
-        // TODO: Send buy request
-        // AJ Aqui tiens que ir tu
+        }, 5000);
+    };
+    
+    const sendBuyMessage = async () => {
+        console.log(text)
+        if (text != ""){
+            await updateDoc(doc(db, "chats", combinedId),{
+                messages: arrayUnion({
+                id: uuid(),
+                text,
+                senderId: currentUser!.uid,
+                date: Timestamp.now()   
+                })
+            })
+    
+            await updateDoc(doc(db, "userChats", currentUser!.uid),{
+                [combinedId + ".lastMessage"]: {
+                    text
+                },
+                [combinedId + ".date"]: serverTimestamp(),
+            })
+    
+            
+            await updateDoc(doc(db, "userChats", userChat),{
+                [combinedId + ".lastMessage"]: {
+                    text
+                },
+                [combinedId + ".date"]: serverTimestamp(),
+            })
+        }
+        
     };
 
     const handleBack = () => {
@@ -92,6 +143,8 @@ function BuyAd() {
         }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         if (activeStep === steps.length - 1) {
+            setText("Buenas, me gustaría comprarle " + quantity + "kg de " + advertisement?.name + ". ¿Podría enviarme más información?");
+            searchUserChat();
             sendBuyRequest();
         }
     };
@@ -124,6 +177,65 @@ function BuyAd() {
             setQuantityError(true);
         }
     };
+
+    const searchUserChat = async () => {
+        const q = query(
+          collection(db, "users"),
+          where("displayName", "==", advertisement?.sellerId.username)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          setUserChat(doc.id);
+          createCombinedId(doc.id);
+        });
+        //console.log(userChat);
+      };
+    
+      const createCombinedId = async (id: string) => {
+        const uid = currentUser!.uid;
+        const newId = uid > id! ? uid + id : id + uid;
+        setCombinedId(newId);
+      };
+    
+      const navigateChat = async () => {
+        //navigate(`/chat/${userChat}`);
+        console.log(combinedId)
+        let exists = false;
+        const q = query(collection(db, "chats"));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          if (doc.id === combinedId) {
+            exists = true;
+          }
+        });
+        // const res = await getDoc(doc(db, "chats", combinedId!));
+        if (!exists) {
+          await setDoc(doc(db, "chats", combinedId!), { messages: [] });
+    
+          await updateDoc(doc(db, "userChats", currentUser!.uid), {
+            [combinedId! + ".userInfo"]: {
+              uid: userChat,
+              displayName: advertisement?.sellerId.username,
+            },
+            [combinedId! + ".date"]: serverTimestamp(),
+          });
+          await updateDoc(doc(db, "userChats", userChat!), {
+            [combinedId! + ".userInfo"]: {
+              uid: currentUser!.uid,
+              displayName: currentUser!.displayName,
+            },
+            [combinedId! + ".date"]: serverTimestamp(),
+          });
+
+            await sendBuyMessage();
+        }
+      };
+    
+      React.useEffect(() => {
+        if (combinedId !== "" && text !== "") {
+          navigateChat();
+        }
+      }, [combinedId]);
 
     return (
         <>
