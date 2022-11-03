@@ -34,17 +34,6 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                 </div>
                 <span>
                     <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                            navigate(
-                                `/products/buy/${props.advertisement._id}`
-                            );
-                        }}
-                    >
-                        Comprar
-                    </Button>
-                    <Button
                         className="left-2"
                         variant="outlined"
                         color="primary"

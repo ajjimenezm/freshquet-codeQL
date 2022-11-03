@@ -29,7 +29,6 @@ function AdDetail() {
   const [sellerId, setSellerId] = useState<string>();
   const [error, setError] = useState(false);
   const [userChat, setUserChat] = React.useState<string>();
-  const [showConfirm, setShowConfirm] = useState(false);
   const [combinedId, setCombinedId] = React.useState<string>("");
   const [images, setImages] = useState<string[]>([]);
   const [imagenames, setImagenames] = useState<string[]>([]);
@@ -118,75 +117,63 @@ function AdDetail() {
     navigate(`/products/edit/${id}`);
   };
 
-  const searchUserChat = async () => {
-    const q = query(
-      collection(db, "users"),
-      where("displayName", "==", advertisement?.sellerId.username)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      setUserChat(doc.id);
-      createCombinedId(doc.id);
-    });
-    //console.log(userChat);
-  };
+  // const searchUserChat = async () => {
+  //   const q = query(
+  //     collection(db, "users"),
+  //     where("displayName", "==", advertisement?.sellerId.username)
+  //   );
+  //   const querySnapshot = await getDocs(q);
+  //   querySnapshot.forEach((doc) => {
+  //     setUserChat(doc.id);
+  //     createCombinedId(doc.id);
+  //   });
+  //   //console.log(userChat);
+  // };
 
-  const createCombinedId = async (id: string) => {
-    const uid = currentUser!.uid;
-    const newId = uid > id! ? uid + id : id + uid;
-    setCombinedId(newId);
-  };
+  // const createCombinedId = async (id: string) => {
+  //   const uid = currentUser!.uid;
+  //   const newId = uid > id! ? uid + id : id + uid;
+  //   setCombinedId(newId);
+  // };
 
-  const chatProcess = async () => {
-    searchUserChat();
-    //createCombinedId();
-  };
+  // const navigateChat = async () => {
+  //   //navigate(`/chat/${userChat}`);
+  //   console.log(combinedId)
+  //   let exists = false;
+  //   const q = query(collection(db, "chats"));
+  //   const querySnapshot = await getDocs(q);
+  //   querySnapshot.forEach((doc) => {
+  //     if (doc.id === combinedId) {
+  //       exists = true;
+  //     }
+  //   });
+  //   // const res = await getDoc(doc(db, "chats", combinedId!));
+  //   if (!exists) {
+  //     await setDoc(doc(db, "chats", combinedId!), { messages: [] });
 
-  const navigateChat = async () => {
-    //navigate(`/chat/${userChat}`);
-    let exists = false;
-    const q = query(collection(db, "chats"));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      if (doc.id === combinedId) {
-        exists = true;
-      }
-    });
-    // const res = await getDoc(doc(db, "chats", combinedId!));
-    if (!exists) {
-      await setDoc(doc(db, "chats", combinedId!), { messages: [] });
+  //     await updateDoc(doc(db, "userChats", currentUser!.uid), {
+  //       [combinedId! + ".userInfo"]: {
+  //         uid: userChat,
+  //         displayName: advertisement?.sellerId.username,
+  //       },
+  //       [combinedId! + ".date"]: serverTimestamp(),
+  //     });
+  //     await updateDoc(doc(db, "userChats", userChat!), {
+  //       [combinedId! + ".userInfo"]: {
+  //         uid: currentUser!.uid,
+  //         displayName: currentUser!.displayName,
+  //       },
+  //       [combinedId! + ".date"]: serverTimestamp(),
+  //     });
+  //   }
+  // };
 
-      await updateDoc(doc(db, "userChats", currentUser!.uid), {
-        [combinedId! + ".userInfo"]: {
-          uid: userChat,
-          displayName: advertisement?.sellerId.username,
-        },
-        [combinedId! + ".date"]: serverTimestamp(),
-      });
-      await updateDoc(doc(db, "userChats", userChat!), {
-        [combinedId! + ".userInfo"]: {
-          uid: currentUser!.uid,
-          displayName: currentUser!.displayName,
-        },
-        [combinedId! + ".date"]: serverTimestamp(),
-      });
-    }
-  };
+  // React.useEffect(() => {
+  //   if (combinedId !== "") {
+  //     navigateChat();
+  //   }
+  // }, [combinedId]);
 
-  const buyProcess = () => {
-    setShowConfirm(true);
-    chatProcess();
-  };
-
-  React.useEffect(() => {
-    if (combinedId !== "") {
-      navigateChat();
-    }
-  }, [combinedId]);
-
-  const confirmBuy = () => {
-    chatProcess();
-  };
 
   let edit: any;
   advertisement && userCategory === "seller" && sellerId === userId
@@ -258,10 +245,13 @@ function AdDetail() {
               Visita su tienda
             </Button>
             <Button
-              className="left-2"
               variant="outlined"
               color="primary"
-              onClick={() => buyProcess()}
+              onClick={() => {
+                  navigate(
+                      `/products/buy/${advertisement._id}`
+                  );
+              }}
             >
               Comprar
             </Button>
@@ -269,48 +259,6 @@ function AdDetail() {
           {edit}
         </div>
       )}
-      {showConfirm ? (
-        <>
-          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-            <div className="relative my-6 mx-auto w-auto max-w-3xl">
-              {/*content*/}
-              <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
-                {/*header*/}
-                <div className="flex items-start justify-between rounded-t border-b border-solid border-slate-200 p-5">
-                  <h3 className="justify-center text-3xl font-semibold">
-                    Confirmar compra
-                  </h3>
-                  <button
-                    className="float-right ml-auto border-0 bg-transparent p-1 text-3xl font-semibold leading-none text-black opacity-5 outline-none focus:outline-none"
-                    onClick={() => setShowConfirm(false)}
-                  >
-                    <span className="block h-6 w-6 bg-transparent text-2xl text-black opacity-5 outline-none focus:outline-none">
-                      ×
-                    </span>
-                  </button>
-                </div>
-                <div className="flex items-center justify-end rounded-b border-t border-solid border-slate-200 p-6">
-                  <button
-                    className="background-transparent mr-1 mb-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
-                    type="button"
-                    onClick={() => setShowConfirm(false)}
-                  >
-                    Atrás
-                  </button>
-                  <button
-                    className="mr-1 mb-1 rounded bg-emerald-300 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
-                    type="button"
-                    onClick={() => confirmBuy()}
-                  >
-                    Enviar mensaje
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
-        </>
-      ) : null}
     </>
   );
 }

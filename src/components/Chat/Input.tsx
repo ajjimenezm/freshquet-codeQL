@@ -9,7 +9,6 @@ import { v4 as uuid } from 'uuid';
 
 function Input() {
     const [text, setText] = React.useState<string>("");
-    const [inputText, setInputText] = React.useState<string>("");
 
     const currentUser = React.useContext(AuthContext);
     const {data} = React.useContext(UserContext);
