@@ -206,6 +206,7 @@ function BuyAd() {
         querySnapshot.forEach((doc) => {
           if (doc.id === combinedId) {
             exists = true;
+            sendBuyMessage();
           }
         });
         // const res = await getDoc(doc(db, "chats", combinedId!));
@@ -227,7 +228,7 @@ function BuyAd() {
             [combinedId! + ".date"]: serverTimestamp(),
           });
 
-            await sendBuyMessage();
+          await sendBuyMessage();
         }
       };
     
