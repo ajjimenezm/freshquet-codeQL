@@ -29,8 +29,8 @@ function Map() {
         const map = useMap();
         React.useEffect(() => {
             map.locate().on("locationfound", (e) => {
-                setRadius(e.accuracy / 2);
-                map.flyTo(e.latlng, 13, { duration: 0.5 });
+                setRadius(e.accuracy);
+                map.flyTo(e.latlng, 13, { duration: 0.01 });
                 setPosition(e.latlng);
                 setLocationFound(true);
             });
