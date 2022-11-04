@@ -1,14 +1,26 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import Advertisement from '../../types/Advertisement';
-import { Button, Rating } from '@mui/material';
-import { db } from '../../firebase';
-import { User } from 'firebase/auth';
-import { AuthContext } from '../../chatContext/AuthContext';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import SimpleImageSlider from 'react-simple-image-slider';
+import React from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Advertisement from "../../types/Advertisement";
+import { Button, Rating } from "@mui/material";
+import { db } from "../../firebase";
+import { User } from "firebase/auth";
+import { AuthContext } from "../../chatContext/AuthContext";
+import {
+  collection,
+  getDocs,
+  query,
+  setDoc,
+  where,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
+import { serialize } from "v8";
+import SimpleImageSlider from "react-simple-image-slider";
+import { Buffer } from 'buffer';
+import axios, { AxiosResponse } from 'axios';
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -17,9 +29,11 @@ function AdDetail() {
   const [userCategory, setUserCategory] = useState<string>();
   const [sellerId, setSellerId] = useState<string>();
   const [error, setError] = useState(false);
-  const [userChat, setUserChat] = useState<string>();
+  const [userChat, setUserChat] = React.useState<string>();
+  const [combinedId, setCombinedId] = React.useState<string>("");
   const [images, setImages] = useState<string[]>([]);
   const [imagenames, setImagenames] = useState<string[]>([]);
+  const [imagesLoaded, setImagesLoaded] = useState<number>(0);
 
   const currentUser = React.useContext(AuthContext);
 
@@ -46,48 +60,50 @@ function AdDetail() {
             `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images`
           )
           .then((res) => {
-            if (res.data.length) setImagenames(res.data);
+            if (res.data.length > 0) setImagenames(res.data);
           });
       } catch (err) {
         setError(true);
         alert(err);
       }
     };
-    const getProductImages = async () => {
-      try {
-        getProductImagenames();
-
-        imagenames.map((imagename) => {
-          axios
-            .get(
-              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imagename}`,
-              {
-                responseType: 'arraybuffer',
-              }
-            )
-            .then((res) => {
-              setImages(
-                images.concat(
-                  `data:;base64,${Buffer.from(res.data, 'binary').toString(
-                    'base64'
-                  )}`
-                )
-              );
-            });
-        });
-      } catch (err) {
-        setError(true);
-        alert(err);
-      }
-    };
     getProduct();
-    getProductImages();
+    getProductImagenames();
   }, [id]);
+
+  React.useEffect(() => {
+    let requests: Promise<AxiosResponse<any, any>>[] = [];
+    for (let i = 0; i < imagenames.length; i++) {
+      requests = requests.concat(
+        axios.get(
+          `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imagenames[i]}`,
+          {
+            responseType: 'arraybuffer',
+          }
+        )
+      );
+    }
+
+    axios.all(requests).then(
+      axios.spread((...responses) => {
+        for (let i = 0; i < responses.length; i++) {
+          setImages((images) =>
+            images.concat(
+              `data:;base64,${Buffer.from(responses[i].data, 'binary').toString(
+                'base64'
+              )}`
+            )
+          );
+          setImagesLoaded((imagesLoaded) => imagesLoaded + 1);
+        }
+      })
+    );
+  }, [imagenames]);
 
   axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       },
     })
     .then((res) => {
@@ -105,35 +121,66 @@ function AdDetail() {
     navigate(`/products/edit/${id}`);
   };
 
-  const searchUserChat = async () => {
-    const q = query(
-      collection(db, 'users'),
-      where('displayName', '==', advertisement?.sellerId.username)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      setUserChat(doc.id);
-    });
-  };
+  // const searchUserChat = async () => {
+  //   const q = query(
+  //     collection(db, "users"),
+  //     where("displayName", "==", advertisement?.sellerId.username)
+  //   );
+  //   const querySnapshot = await getDocs(q);
+  //   querySnapshot.forEach((doc) => {
+  //     setUserChat(doc.id);
+  //     createCombinedId(doc.id);
+  //   });
+  //   //console.log(userChat);
+  // };
 
-  const navigateChat = async () => {
-    const uid = currentUser!.uid;
-    if (userChat == undefined) {
-      await searchUserChat();
-    }
-    const combinedId: unknown =
-      uid > userChat! ? uid + userChat : userChat + uid;
+  // const createCombinedId = async (id: string) => {
+  //   const uid = currentUser!.uid;
+  //   const newId = uid > id! ? uid + id : id + uid;
+  //   setCombinedId(newId);
+  // };
 
-    //const res = await getDocs(db, "chats", combinedId)
-  };
+  // const navigateChat = async () => {
+  //   //navigate(`/chat/${userChat}`);
+  //   console.log(combinedId)
+  //   let exists = false;
+  //   const q = query(collection(db, "chats"));
+  //   const querySnapshot = await getDocs(q);
+  //   querySnapshot.forEach((doc) => {
+  //     if (doc.id === combinedId) {
+  //       exists = true;
+  //     }
+  //   });
+  //   // const res = await getDoc(doc(db, "chats", combinedId!));
+  //   if (!exists) {
+  //     await setDoc(doc(db, "chats", combinedId!), { messages: [] });
 
-  const chatProcess = () => {
-    searchUserChat();
-    navigateChat();
-  };
+  //     await updateDoc(doc(db, "userChats", currentUser!.uid), {
+  //       [combinedId! + ".userInfo"]: {
+  //         uid: userChat,
+  //         displayName: advertisement?.sellerId.username,
+  //       },
+  //       [combinedId! + ".date"]: serverTimestamp(),
+  //     });
+  //     await updateDoc(doc(db, "userChats", userChat!), {
+  //       [combinedId! + ".userInfo"]: {
+  //         uid: currentUser!.uid,
+  //         displayName: currentUser!.displayName,
+  //       },
+  //       [combinedId! + ".date"]: serverTimestamp(),
+  //     });
+  //   }
+  // };
+
+  // React.useEffect(() => {
+  //   if (combinedId !== "") {
+  //     navigateChat();
+  //   }
+  // }, [combinedId]);
+
 
   let edit: any;
-  advertisement && userCategory === 'seller' && sellerId === userId
+  advertisement && userCategory === "seller" && sellerId === userId
     ? (edit = (
         <Button
           className="center-2"
@@ -146,12 +193,22 @@ function AdDetail() {
       ))
     : (edit = <></>);
 
-  function isThereMoreThanOnePicture(): boolean {
-    return images.length > 1;
-  }
-  function isTherePicture(): boolean {
-    console.log('images: ' + images); //ME HE QUEDADO AQUÍ
-    return images.length > 0;
+  function getAdPicturesSlider(): JSX.Element {
+    const moreThanOne = images.length > 1;
+
+    if (imagesLoaded < imagenames.length) {
+      return <></>;
+    }
+
+    return (
+      <SimpleImageSlider
+        width={400}
+        height={400}
+        showBullets={moreThanOne}
+        showNavs={true}
+        images={images}
+      />
+    );
   }
 
   return (
@@ -166,19 +223,7 @@ function AdDetail() {
             alt="Patata"
             className="max-w-[80%]"
           /> */}
-          <SimpleImageSlider
-            width={896}
-            height={504}
-            showBullets={isThereMoreThanOnePicture()}
-            showNavs={isThereMoreThanOnePicture()}
-            images={
-              isTherePicture()
-                ? images
-                : [
-                    'https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600',
-                  ]
-            }
-          />
+          {getAdPicturesSlider()}
           <p className="py-4 text-2xl font-semibold">
             {advertisement.pricePerKilogram} €/kg
           </p>
@@ -187,7 +232,7 @@ function AdDetail() {
             <p className="text-xl">{advertisement.description}</p>
           </div>
           <p className="py-4 text-2xl font-medium">
-            Categoría:{' '}
+            Categoría:{" "}
             <span className="border-1 rounded-lg p-2 uppercase">
               {advertisement.category}
             </span>
@@ -199,7 +244,7 @@ function AdDetail() {
             readOnly
           />
           <div className="mt-2 mb-4 flex flex-col items-center justify-center text-center">
-            Vendido por{' '}
+            Vendido por{" "}
             <span className="font-bold"> {advertisement.sellerId.name}</span>
             <Button
               className="left-2"
@@ -210,12 +255,18 @@ function AdDetail() {
               Visita su tienda
             </Button>
             <Button
-              className="left-2"
               variant="outlined"
               color="primary"
-              onClick={() => chatProcess()}
+              onClick={() => {
+                  navigate(
+                      `/products/buy/${advertisement._id}`
+                  );
+              }}
             >
               Comprar
+            </Button>
+            <Button onClick={() => console.log(images)}>
+              Eliminame si me ves
             </Button>
           </div>
           {edit}

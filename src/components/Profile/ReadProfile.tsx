@@ -39,6 +39,14 @@ function getAvatar(avatar: string | undefined, dataUser: DataUser) {
 
 function ReadProfile(props: ProfileProps) {
   const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userId");
+    alert("La sesion se ha cerrado correctamente");
+    navigate("/login");
+  };
+
   return (
     <div className="m-4 space-y-4">
       <div className="flex space-x-4 py-4">
@@ -86,9 +94,19 @@ function ReadProfile(props: ProfileProps) {
           <Button variant="contained" disabled>
             Tus estadisticas
           </Button>
+          <Button variant="contained" disabled>
+            Tus solicitudes
+          </Button>
+          <Button variant="contained" onClick={logout}>
+            Cerrar Sesión
+          </Button>
         </div>
       ) : (
-        <div />
+        <div className="flex flex-col space-y-4 text-center">
+          <Button variant="contained" onClick={logout}>
+            Cerrar Sesión
+          </Button>
+        </div>
       )}
     </div>
   );

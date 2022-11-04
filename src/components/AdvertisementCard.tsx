@@ -6,16 +6,15 @@ import axios from "axios";
 import { toNamespacedPath } from "path";
 
 interface AdvertisementCardProps {
-    advertisement: Advertisement;
+  advertisement: Advertisement;
 }
 
 function AdvertisementCard(props: AdvertisementCardProps) {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-
-    const navigateFunction = (id: string) => {
-        navigate(`/products/detail/${id}`);
-    };
+  const navigateFunction = (id: string) => {
+    navigate(`/products/detail/${id}`);
+  };
 
     return (
         <div className="h-25 mt-1 mb-1 flex flex-row items-center">
@@ -33,17 +32,6 @@ function AdvertisementCard(props: AdvertisementCardProps) {
                     {`${props.advertisement.pricePerKilogram} €/kg`}
                 </div>
                 <span>
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                            navigate(
-                                `/products/buy/${props.advertisement._id}`
-                            );
-                        }}
-                    >
-                        Comprar
-                    </Button>
                     <Button
                         className="left-2"
                         variant="outlined"
