@@ -57,7 +57,6 @@ function Map() {
         LocationManagement.GetCoordinatesFromAddress(
             "Camí de Vera, s/n, 46022 València, Valencia"
         ).then((coordinates) => {
-            console.log(coordinates);
             setStores([
                 {
                     id: 1,
