@@ -11,7 +11,7 @@ import SellerPage from "./seller-page/SellerPage";
 import EditAdDetail from "./advertisements/EditAdDetail";
 import { useEffect } from "react";
 import ChatMenu from "./Chat/ChatMenu";
-import AdvertismentHistory from "./advertismentHistory";
+import AdvertismentHistory from "./advertismentHistory/advertismentHistory";
 
 function MainApp() {
   //localStorage.clear();

@@ -8,7 +8,7 @@ import Login from "./components/users/Login";
 import Register from "./components/users/Register";
 import { AuthContext } from "./chatContext/AuthContext";
 import BuyAd from "./components/advertisements/BuyAdvertisement/BuyAdDialog";
-import AdvertismentHistory from "./components/advertismentHistory";
+import AdvertismentHistory from "./components/advertismentHistory/advertismentHistory";
 
 function App() {
   // useContext user authcontext
