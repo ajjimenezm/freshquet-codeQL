@@ -48,7 +48,6 @@ function Map() {
             }
             setLocationRequested(true);
             map.locate().on("locationfound", (e) => {
-                console.log("location found");
                 setRadius(e.accuracy);
                 map.flyTo(e.latlng, 13, { duration: 0.01 });
                 setPosition(e.latlng);
@@ -56,7 +55,6 @@ function Map() {
                 setShowLocationFoundSnackbar(true);
             });
             map.locate().on("locationerror", () => {
-                console.log("location error");
                 setShowLocationSnackbar(false);
                 setShowLocationNotFoundSnackbar(true);
             });
