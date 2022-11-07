@@ -1,4 +1,4 @@
-import { Alert, Button, Snackbar } from "@mui/material";
+import { Alert, Button, Snackbar, Typography } from "@mui/material";
 import { Icon, LatLng } from "leaflet";
 import React from "react";
 import {
@@ -9,8 +9,19 @@ import {
     TileLayer,
     useMap,
 } from "react-leaflet";
+import { useNavigate } from "react-router-dom";
 import LocationManagement from "../../libs/LocationManagement";
+import Navigation from "../../libs/Navigation";
 import CurrentPositionIconSvg from "./current-location-icon.svg";
+import MarkerIconSvg from "./location-pin.svg";
+
+type StoreType = {
+    id: number;
+    name: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+};
 
 function Map() {
     // https://nominatim.org/release-docs/develop/api/Search/
@@ -22,8 +33,9 @@ function Map() {
         React.useState(false);
     const [showLocationNotFoundSnackbar, setShowLocationNotFoundSnackbar] =
         React.useState(false);
-    const [stores, setStores] = React.useState([]);
+    const [stores, setStores] = React.useState<StoreType[]>([]);
     const [storeMarkers, setStoreMarkers] = React.useState<JSX.Element[]>([]);
+    const navigate = useNavigate();
 
     function CurrentLocationIcon() {
         const icon = new Icon({
@@ -33,11 +45,80 @@ function Map() {
         return icon;
     }
 
+    function MarkerIcon() {
+        const icon = new Icon({
+            iconUrl: MarkerIconSvg,
+            iconSize: [35, 35],
+        });
+        return icon;
+    }
+
     React.useEffect(() => {
-        console.log(
-            LocationManagement.GetCoordinatesFromAddress("Buenos Aires")
-        );
+        LocationManagement.GetCoordinatesFromAddress(
+            "Camí de Vera, s/n, 46022 València, Valencia"
+        ).then((coordinates) => {
+            console.log(coordinates);
+            setStores([
+                {
+                    id: 1,
+                    name: "UPV",
+                    address: "Camí de Vera, s/n, 46022 València, Valencia",
+                    latitude: coordinates.lat,
+                    longitude: coordinates.lng,
+                },
+            ]);
+        });
     }, []);
+
+    React.useEffect(() => {
+        if (stores.length > 0) {
+            const markers = stores.map((store) => {
+                return (
+                    <Marker
+                        key={store.id}
+                        position={new LatLng(store.latitude, store.longitude)}
+                        icon={MarkerIcon()}
+                    >
+                        <Popup>
+                            <div className="flex-column">
+                                <Typography variant="h6">
+                                    {store.name}
+                                </Typography>
+                                <Typography variant="body1">
+                                    {store.address}
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    onClick={() => {
+                                        navigate("/seller/" + store.id);
+                                    }}
+                                >
+                                    Ver productos
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color={"secondary"}
+                                    size="small"
+                                    onClick={() => {
+                                        Navigation.OpenGoogleMaps(
+                                            store.latitude,
+                                            store.longitude
+                                        );
+                                    }}
+                                    sx={{ ml: 1 }}
+                                >
+                                    Cómo llegar
+                                </Button>
+                            </div>
+                        </Popup>
+                    </Marker>
+                );
+            });
+            setStoreMarkers(markers);
+        }
+    }, [stores]);
 
     function MapManager() {
         const [radius, setRadius] = React.useState<number>(0);
@@ -80,6 +161,7 @@ function Map() {
                         <Button>Click me!</Button>
                     </Popup>
                 </Marker>
+                {storeMarkers}
                 <MapManager />
             </MapContainer>
             <Snackbar
