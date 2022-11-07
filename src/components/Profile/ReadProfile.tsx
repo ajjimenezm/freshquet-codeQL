@@ -86,7 +86,7 @@ function ReadProfile(props: ProfileProps) {
               navigate("/advertisementHistory");
             }}
           >
-            Historial de Anuncios
+            Historial de Ventas
           </Button>
           <Button variant="contained" disabled>
             Promocionar Anuncios
