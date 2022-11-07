@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Buffer } from "buffer";
 import { toNamespacedPath } from "path";
+import AdvertisementManagement from "../libs/AdvertisementManagement";
 
 interface AdvertisementCardProps {
   advertisement: Advertisement;
@@ -12,7 +13,6 @@ interface AdvertisementCardProps {
 
 function AdvertisementCard(props: AdvertisementCardProps) {
   const navigate = useNavigate();
-  const [imageName, setImageName] = useState<string>("");
   const [image, setImage] = useState<string>("");
 
   const navigateFunction = (id: string) => {
@@ -20,29 +20,12 @@ function AdvertisementCard(props: AdvertisementCardProps) {
   };
 
   useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${props.advertisement._id}/images`
-      )
-      .then((res) => {
-        if (res.data.length > 0) setImageName(res.data[0]);
-      });
+    AdvertisementManagement.GetImageAdvertisment(props.advertisement._id).then(
+      (res) => {
+        setImage(res);
+      }
+    );
   });
-
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${props.advertisement._id}/images/${imageName}`,
-        {
-          responseType: "arraybuffer",
-        }
-      )
-      .then((res) => {
-        setImage(
-          `data:;base64,${Buffer.from(res.data, "binary").toString("base64")}`
-        );
-      });
-  }, [imageName]);
 
   return (
     <div

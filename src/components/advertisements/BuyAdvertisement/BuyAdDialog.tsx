@@ -50,6 +50,7 @@ function BuyAd() {
   const [userChat, setUserChat] = React.useState<any>();
   const [combinedId, setCombinedId] = React.useState<string>("");
   const [text, setText] = React.useState<string>("");
+  const [image, setImage] = React.useState<string>("");
   const regexDecimalWithPoint = /^\d*\.?\d*$/;
   const regexDecimalWithComma = /^\d*,?\d*$/;
   const navigate = useNavigate();
@@ -63,6 +64,14 @@ function BuyAd() {
       });
     }
   }, [id]);
+
+  React.useEffect(() => {
+    if (id) {
+      AdvertisementManagement.GetImageAdvertisment(id).then((res) => {
+        setImage(res);
+      });
+    }
+  });
 
   React.useEffect(() => {
     let timeout: string | number | NodeJS.Timeout | undefined;
@@ -277,7 +286,7 @@ function BuyAd() {
               name={advertisement?.name}
               description={advertisement?.description}
               pricePerKilogram={advertisement?.pricePerKilogram}
-              image="https://media.istockphoto.com/photos/tomatoes-isolate-on-white-background-tomato-half-isolated-tomatoes-picture-id1258142863?k=20&m=1258142863&s=612x612&w=0&h=lVLMaX3tiP407SwLUElEifKqHpNRYw4ZR6B0GOycGc4="
+              image={image}
             />
             <BuyAdStepButtons
               primaryButtonText="Siguiente"
@@ -339,7 +348,7 @@ function BuyAd() {
               name={advertisement?.name}
               description={advertisement?.description}
               pricePerKilogram={advertisement?.pricePerKilogram}
-              image="https://media.istockphoto.com/photos/tomatoes-isolate-on-white-background-tomato-half-isolated-tomatoes-picture-id1258142863?k=20&m=1258142863&s=612x612&w=0&h=lVLMaX3tiP407SwLUElEifKqHpNRYw4ZR6B0GOycGc4="
+              image={image}
             />
             <div className="ml-3 mb-3 font-light">
               <div>Cantidad: {quantity} kg</div>

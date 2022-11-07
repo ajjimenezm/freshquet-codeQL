@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Advertisement from "../../types/Advertisement";
-import { Buffer } from "buffer";
+import AdvertisementManagement from "../../libs/AdvertisementManagement";
 
 interface advHistoryCardProps {
   adv_id: string;
@@ -16,7 +16,6 @@ function AdvHistoryCard(props: advHistoryCardProps) {
 
   const [advertisement, setAdv] = useState<Advertisement>();
   const [buyerName, setBuyerName] = useState<string>("");
-  const [imageName, setImageName] = useState<string>("");
   const [image, setImage] = useState<string>("");
 
   useEffect(() => {
@@ -39,30 +38,13 @@ function AdvHistoryCard(props: advHistoryCardProps) {
     axios(config2).then(function (response) {
       setAdv(response.data);
     });
-
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${props.adv_id}/images`
-      )
-      .then((res) => {
-        if (res.data.length > 0) setImageName(res.data[0]);
-      });
   });
 
   useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${props.adv_id}/images/${imageName}`,
-        {
-          responseType: "arraybuffer",
-        }
-      )
-      .then((res) => {
-        setImage(
-          `data:;base64,${Buffer.from(res.data, "binary").toString("base64")}`
-        );
-      });
-  }, [imageName]);
+    AdvertisementManagement.GetImageAdvertisment(props.adv_id).then((res) => {
+      setImage(res);
+    });
+  });
 
   return (
     <div className="h-25 mt-1 mb-1 flex flex-row items-center">
