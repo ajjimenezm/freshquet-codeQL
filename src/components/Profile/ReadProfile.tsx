@@ -1,9 +1,9 @@
-import { Button, Avatar, Divider } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import CallIcon from '@mui/icons-material/Call';
-import EmailIcon from '@mui/icons-material/Email';
-import DataUser from './dataUser';
-import { useNavigate } from 'react-router-dom';
+import { Button, Avatar, Divider } from "@mui/material";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CallIcon from "@mui/icons-material/Call";
+import EmailIcon from "@mui/icons-material/Email";
+import DataUser from "./dataUser";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileProps {
   dataUser: DataUser;
@@ -15,13 +15,13 @@ interface ProfileProps {
 function stringAvatar(name: string) {
   return {
     sx: {
-      bgcolor: '#63d4a1',
+      bgcolor: "#63d4a1",
       width: 100,
       height: 100,
       fontSize: 45,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
-    children: `${name.split(' ')[0][0]}`,
+    children: `${name.split(" ")[0][0]}`,
   };
 }
 
@@ -41,10 +41,11 @@ function ReadProfile(props: ProfileProps) {
   const navigate = useNavigate();
 
   const logout = () => {
-    console.log('called')
-    localStorage.removeItem('userToken');
-    navigate('/login');
-  }
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userId");
+    alert("La sesion se ha cerrado correctamente");
+    navigate("/login");
+  };
 
   return (
     <div className="m-4 space-y-4">
@@ -77,10 +78,15 @@ function ReadProfile(props: ProfileProps) {
       </div>
 
       <Divider />
-      {props.userRole == 'seller' ? (
+      {props.userRole == "seller" ? (
         <div className="flex flex-col space-y-4 text-center">
-          <Button variant="contained" disabled>
-            Historial de Anuncios
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate("/advertisementHistory");
+            }}
+          >
+            Historial de Ventas
           </Button>
           <Button variant="contained" disabled>
             Promocionar Anuncios

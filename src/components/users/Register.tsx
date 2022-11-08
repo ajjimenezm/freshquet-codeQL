@@ -62,6 +62,10 @@ const Register = () => {
       alert("Las contraseñas no coinciden");
       return;
     }
+    if (state.password.length <= 6) {
+      alert("La contraseña debe tener más de 6 caracteres");
+      return;
+    }
     axios
       .post(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/register`, {
         ...state,
@@ -104,14 +108,20 @@ const Register = () => {
     registerChat();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      registerProcess();
+    }
+  };
+
   return (
-    <section className="items-center bg-gray-50">
+    <section className="items-center bg-gray-50" onKeyDown={handleKeyDown}>
       <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 lg:py-0">
         <img className="mb-4 h-20 w-20" src={Photo} alt="" />
         <div className="w-full rounded-lg bg-white shadow dark:border sm:max-w-md md:mt-0 xl:p-0 ">
           <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Iniciar sesión
+              Registro
             </h1>
             <div className="space-y-4 md:space-y-6">
               <div>
@@ -204,7 +214,7 @@ const Register = () => {
                     name="userType"
                     value={state.userType}
                     label="Tipo de usuario"
-                    onChange={handleChange}
+                    onChange={selectRole}
                   >
                     <MenuItem value="buyer">Comprador</MenuItem>
                     <MenuItem value="seller">Vendedor</MenuItem>
@@ -222,78 +232,6 @@ const Register = () => {
         </div>
       </div>
     </section>
-
-    // <div className="flex h-screen w-full items-center justify-center bg-zinc-200">
-    //   <div className="m-4 flex max-w-[400px] justify-center text-center md:max-w-[700px]">
-    //     <div className="rounded-xl  bg-slate-900/95 p-8 drop-shadow-2xl">
-    //       <h2 className="text-bold pb-8 text-3xl text-white">Registro</h2>
-    //       <input
-    //         type="text"
-    //         name="name"
-    //         value={state.name}
-    //         onChange={handleChange}
-    //         placeholder="Nombre"
-    //         className="mr-4 mb-4 w-full rounded-md p-2"
-    //       />
-    //       <input
-    //         type="text"
-    //         name="email"
-    //         value={state.email}
-    //         onChange={handleChange}
-    //         placeholder="Email"
-    //         className="mr-4 mb-4 w-full rounded-md p-2"
-    //       />
-    //       <input
-    //         type="text"
-    //         name="phone_number"
-    //         value={state.phone_number}
-    //         onChange={handleChange}
-    //         placeholder="Numero de telefono"
-    //         className="mr-4 mb-4 w-full rounded-md p-2"
-    //       />
-    //       <input
-    //         type="text"
-    //         name="username"
-    //         value={state.username}
-    //         onChange={handleChange}
-    //         placeholder="Nombre de usuario"
-    //         className="mr-4 mb-4 w-full rounded-md p-2"
-    //       />
-    //       <input
-    //         type="password"
-    //         name="password"
-    //         value={state.password}
-    //         onChange={handleChange}
-    //         placeholder="Contraseña"
-    //         className="mr-4 mb-4 w-full rounded-md p-2"
-    //       />
-    //       <input
-    //         type="password"
-    //         name="repeat_password"
-    //         value={state.repeat_password}
-    //         onChange={handleChange}
-    //         placeholder="Repite la Contraseña"
-    //         className="mr-4 mb-4 w-full rounded-md p-2"
-    //       />
-    // <div onChange={selectRole} className="grid grid-cols-2">
-    //   <label>
-    //     <input type="radio" value="buyer" name="role" className="grow" />
-    //     <p className="text-xl text-white">Comprador</p>
-    //   </label>
-    //   <label>
-    //     <input type="radio" value="seller" name="role" />
-    //     <p className="text-xl text-white">Vendedor</p>
-    //   </label>
-    // </div>
-    //       <button
-    //         className="rounded-md px-8 py-3 text-2xl text-white hover:bg-transparent"
-    //         onClick={registerProcess}
-    //       >
-    //         Registrarse
-    //       </button>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 

@@ -24,29 +24,27 @@ const Home = () => {
 
     const navigate = useNavigate();
 
-    React.useEffect(() => {
-        const user = localStorage.getItem("userToken");
-        if (!user) {
-            navigate("/login");
-        }
-    }, []);
+  React.useEffect(() => {
+    const user = localStorage.getItem("userToken");
+    if (!user) {
+      navigate("/login");
+    }
+  }, []);
 
     React.useEffect(() => {
         setTimeout(() => {
             setMinimumTimeElapsed(true);
         }, waitingTimeSkeletonLoader);
 
-        axios
-            .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem(
-                        "userToken"
-                    )}`,
-                },
-            })
-            .then((res) => {
-                setUserRole(res.data.userRole);
-            });
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      })
+      .then((res) => {
+        setUserRole(res.data.userRole);
+      });
 
         axios
             .get(
@@ -64,49 +62,53 @@ const Home = () => {
             });
     }, []);
 
-    React.useEffect(() => {
-        setAdvertisementsToShow(
-            advertisements.map((ad) => {
-                return <AdvertisementCard key={ad._id} advertisement={ad} />;
-            })
-        );
-    }, [dataLoaded]);
-
-    return (
-        <div>
-            <Heading text="Lo más fresco para tí" />
-            <SubHeading text="Creemos que estos productos pueden interesarte" />
-            {userRole == "seller" ? <AddProduct /> : <></>}
-
-            <div className="mb-16 ml-5 mr-5 divide-y-2">
-                {dataLoaded ? (
-                    advertisementsToShow
-                ) : minimumTimeElapsed ? (
-                    <>
-                        <AdvertisementCardSkeleton />
-                        <AdvertisementCardSkeleton />
-                        <AdvertisementCardSkeleton />
-                        <AdvertisementCardSkeleton />
-                        <AdvertisementCardSkeleton />
-                    </>
-                ) : (
-                    <div></div>
-                )}
-            </div>
-            <Fab
-                color="primary"
-                aria-label="add product"
-                sx={{
-                    position: "fixed",
-                    bottom: 80,
-                    right: 20,
-                }}
-                onClick={() => navigate("/newproduct")}
-            >
-                <AddIcon />
-            </Fab>
-        </div>
+  React.useEffect(() => {
+    setAdvertisementsToShow(
+      advertisements.map((ad) => {
+        return <AdvertisementCard key={ad._id} advertisement={ad} />;
+      })
     );
+  }, [dataLoaded]);
+
+  return (
+    <div>
+      <Heading text="Lo más fresco para tí" />
+      <SubHeading text="Creemos que estos productos pueden interesarte" />
+
+      <div className="mb-16 ml-5 mr-5 divide-y-2">
+        {dataLoaded ? (
+          advertisementsToShow
+        ) : minimumTimeElapsed ? (
+          <>
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+          </>
+        ) : (
+          <div></div>
+        )}
+      </div>
+
+      {userRole == "seller" ? (
+        <Fab
+          color="primary"
+          aria-label="add product"
+          sx={{
+            position: "fixed",
+            bottom: 80,
+            right: 20,
+          }}
+          onClick={() => navigate("/newproduct")}
+        >
+          <AddIcon />
+        </Fab>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
 };
 
 export default Home;
