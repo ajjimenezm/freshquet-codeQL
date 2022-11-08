@@ -62,6 +62,10 @@ const Register = () => {
       alert("Las contraseñas no coinciden");
       return;
     }
+    if (state.password.length <= 6) {
+      alert("La contraseña debe tener más de 6 caracteres");
+      return;
+    }
     axios
       .post(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/register`, {
         ...state,
@@ -105,10 +109,10 @@ const Register = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if(e.key === "Enter"){
-        registerProcess();
+    if (e.key === "Enter") {
+      registerProcess();
     }
-  }
+  };
 
   return (
     <section className="items-center bg-gray-50" onKeyDown={handleKeyDown}>

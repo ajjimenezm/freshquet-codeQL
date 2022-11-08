@@ -67,6 +67,7 @@ const AdvertismentHistory = () => {
         0;
         return (
           <AdvHistoryCard
+            key={ad.adv_id}
             adv_id={ad.adv_id}
             buyer_id={ad.buyer_id}
             quantity={ad.quantity}
