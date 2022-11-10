@@ -26,6 +26,7 @@ type StoreType = {
 function Map() {
     // https://nominatim.org/release-docs/develop/api/Search/
     const [position, setPosition] = React.useState<LatLng | null>(null);
+    const [radius, setRadius] = React.useState<number>(0);
     const [locationRequested, setLocationRequested] = React.useState(false);
     const [showLocationSnackbar, setShowLocationSnackbar] =
         React.useState(true);
@@ -120,7 +121,6 @@ function Map() {
     }, [stores]);
 
     function MapManager() {
-        const [radius, setRadius] = React.useState<number>(0);
         const map = useMap();
         React.useEffect(() => {
             if (locationRequested) {
@@ -128,8 +128,8 @@ function Map() {
             }
             setLocationRequested(true);
             map.locate().on("locationfound", (e) => {
-                setRadius(e.accuracy);
                 map.flyTo(e.latlng, 13, { duration: 0.01 });
+                setRadius(e.accuracy);
                 setPosition(e.latlng);
                 setShowLocationSnackbar(false);
                 setShowLocationFoundSnackbar(true);
