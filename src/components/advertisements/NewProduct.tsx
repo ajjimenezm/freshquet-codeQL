@@ -1,4 +1,4 @@
-import ComboBox from './Combobox';
+import ComboBox from "./Combobox";
 import {
   Button,
   TextField,
@@ -7,14 +7,14 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
-} from '@mui/material';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Category } from '../../types/Category';
-import Heading from '../Heading';
-import AdImagesSelect from './AdImagesSelect';
-import fs from 'fs';
+} from "@mui/material";
+import React, { SyntheticEvent, useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Category } from "../../types/Category";
+import Heading from "../Heading";
+import AdImagesSelect from "./AdImagesSelect";
+import fs from "fs";
 
 export interface NewProductsState {
   id: string;
@@ -45,7 +45,7 @@ export default function NewProducts() {
     pricePerKilogram: 0,
     category: Category.Fresh,
     averageReviewScore: 0.0,
-    sellerId: localStorage.getItem('userId') || '',
+    sellerId: localStorage.getItem("userId") || "",
     images: [],
   });
 
@@ -61,7 +61,7 @@ export default function NewProducts() {
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (
-      value !== '' &&
+      value !== "" &&
       (regexDecimalWithPoint.test(value) || regexDecimalWithComma.test(value))
     ) {
       setQuantityError(false);
@@ -117,7 +117,7 @@ export default function NewProducts() {
           const filesdata = new FormData();
 
           for (let i = 0; i < state.images.length; i++) {
-            filesdata.append('files', state.images[i]);
+            filesdata.append("files", state.images[i]);
           }
 
           //state.images.map((image) => {
@@ -126,10 +126,10 @@ export default function NewProducts() {
           //});
 
           const config = {
-            method: 'post',
-            url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}/uploadimages`,
+            method: "post",
+            url: `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${res.data}/uploadimages`,
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+              Authorization: `Bearer ${localStorage.getItem("userToken")}`,
               //'Content-Type': 'multipart/form-data',
             },
             data: filesdata,
@@ -182,12 +182,12 @@ export default function NewProducts() {
               endAdornment={<InputAdornment position="end">kg</InputAdornment>}
               aria-describedby="quantity-field-helper-text"
               inputProps={{
-                'aria-label': 'weight',
+                "aria-label": "weight",
               }}
               label="Cantidad"
             />
             <FormHelperText id="quantity-field-helper-text">
-              {quantityError ? 'Introduzca un número válido' : ''}
+              {quantityError ? "Introduzca un número válido" : ""}
             </FormHelperText>
           </FormControl>
         </div>
