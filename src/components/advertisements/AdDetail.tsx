@@ -19,8 +19,8 @@ import {
 } from "firebase/firestore";
 import { serialize } from "v8";
 import SimpleImageSlider from "react-simple-image-slider";
-import { Buffer } from 'buffer';
-import axios, { AxiosResponse } from 'axios';
+import { Buffer } from "buffer";
+import axios, { AxiosResponse } from "axios";
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -57,7 +57,7 @@ function AdDetail() {
       try {
         axios
           .get(
-            `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images`
+            `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images`
           )
           .then((res) => {
             if (res.data.length > 0) setImagenames(res.data);
@@ -76,9 +76,9 @@ function AdDetail() {
     for (let i = 0; i < imagenames.length; i++) {
       requests = requests.concat(
         axios.get(
-          `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imagenames[i]}`,
+          `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images/${imagenames[i]}`,
           {
-            responseType: 'arraybuffer',
+            responseType: "arraybuffer",
           }
         )
       );
@@ -89,8 +89,8 @@ function AdDetail() {
         for (let i = 0; i < responses.length; i++) {
           setImages((images) =>
             images.concat(
-              `data:;base64,${Buffer.from(responses[i].data, 'binary').toString(
-                'base64'
+              `data:;base64,${Buffer.from(responses[i].data, "binary").toString(
+                "base64"
               )}`
             )
           );
@@ -178,7 +178,6 @@ function AdDetail() {
   //   }
   // }, [combinedId]);
 
-
   let edit: any;
   advertisement && userCategory === "seller" && sellerId === userId
     ? (edit = (
@@ -258,9 +257,7 @@ function AdDetail() {
               variant="outlined"
               color="primary"
               onClick={() => {
-                  navigate(
-                      `/products/buy/${advertisement._id}`
-                  );
+                navigate(`/products/buy/${advertisement._id}`);
               }}
             >
               Comprar

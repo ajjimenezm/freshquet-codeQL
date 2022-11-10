@@ -1,8 +1,8 @@
-import { Button } from '@mui/material';
-import { ReadType, useFilePicker } from 'use-file-picker';
-import React from 'react';
-import uploadProfilePicture from '../../services/user.service';
-import axios from 'axios';
+import { Button } from "@mui/material";
+import { ReadType, useFilePicker } from "use-file-picker";
+import React from "react";
+import uploadProfilePicture from "../../services/user.service";
+import axios from "axios";
 
 interface ProfileUploadProps {
   readAs: ReadType;
@@ -25,12 +25,12 @@ const ProfilePictureUpload = (props: ProfileUploadProps) => {
   React.useEffect(() => {
     if (plainFiles.length) {
       axios.post(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/upload`,
+        `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}users/upload`,
         { file: plainFiles[0] },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );

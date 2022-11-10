@@ -19,17 +19,19 @@ async function GetAllAdvertisements(): Promise<Advertisement[]> {
 
 async function GetImageAdvertisment(id: string): Promise<string> {
   const res = await axios.get(
-    `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images`
+    `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images`
   );
 
   const imageName = res.data[0];
 
-  const image = await axios.get(
-    `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}/images/${imageName}`,
-    {
-      responseType: "arraybuffer",
-    }
-  );
+  const image = await axios
+    .get(
+      `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images/${imageName}`,
+      {
+        responseType: "arraybuffer",
+      }
+    )
+    .catch();
 
   return `data:;base64,${Buffer.from(image.data, "binary").toString("base64")}`;
 }
