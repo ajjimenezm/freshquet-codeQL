@@ -1,11 +1,11 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Advertisement from "../../types/Advertisement";
-import { Button, Rating } from "@mui/material";
-import { db } from "../../firebase";
-import { User } from "firebase/auth";
-import { AuthContext } from "../../chatContext/AuthContext";
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import Advertisement from '../../types/Advertisement';
+import { Button, Rating } from '@mui/material';
+import { db } from '../../firebase';
+import { User } from 'firebase/auth';
+import { AuthContext } from '../../chatContext/AuthContext';
 import {
   collection,
   getDocs,
@@ -16,11 +16,12 @@ import {
   updateDoc,
   serverTimestamp,
   getDoc,
-} from "firebase/firestore";
-import { serialize } from "v8";
-import SimpleImageSlider from "react-simple-image-slider";
-import { Buffer } from "buffer";
-import axios, { AxiosResponse } from "axios";
+} from 'firebase/firestore';
+import { serialize } from 'v8';
+import SimpleImageSlider from 'react-simple-image-slider';
+import { Buffer } from 'buffer';
+import axios, { AxiosResponse } from 'axios';
+import { Skeleton } from '@mui/material';
 
 function AdDetail() {
   const { id } = useParams<{ id: string }>();
@@ -30,7 +31,7 @@ function AdDetail() {
   const [sellerId, setSellerId] = useState<string>();
   const [error, setError] = useState(false);
   const [userChat, setUserChat] = React.useState<string>();
-  const [combinedId, setCombinedId] = React.useState<string>("");
+  const [combinedId, setCombinedId] = React.useState<string>('');
   const [images, setImages] = useState<string[]>([]);
   const [imagenames, setImagenames] = useState<string[]>([]);
   const [imagesLoaded, setImagesLoaded] = useState<number>(0);
@@ -78,7 +79,7 @@ function AdDetail() {
         axios.get(
           `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images/${imagenames[i]}`,
           {
-            responseType: "arraybuffer",
+            responseType: 'arraybuffer',
           }
         )
       );
@@ -89,8 +90,8 @@ function AdDetail() {
         for (let i = 0; i < responses.length; i++) {
           setImages((images) =>
             images.concat(
-              `data:;base64,${Buffer.from(responses[i].data, "binary").toString(
-                "base64"
+              `data:;base64,${Buffer.from(responses[i].data, 'binary').toString(
+                'base64'
               )}`
             )
           );
@@ -103,7 +104,7 @@ function AdDetail() {
   axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
       },
     })
     .then((res) => {
@@ -179,7 +180,7 @@ function AdDetail() {
   // }, [combinedId]);
 
   let edit: any;
-  advertisement && userCategory === "seller" && sellerId === userId
+  advertisement && userCategory === 'seller' && sellerId === userId
     ? (edit = (
         <Button
           className="center-2"
@@ -196,7 +197,13 @@ function AdDetail() {
     const moreThanOne = images.length > 1;
 
     if (imagesLoaded < imagenames.length) {
-      return <></>;
+      return (
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          sx={{ width: 400, height: 400 }}
+        />
+      );
     }
 
     return (
@@ -204,7 +211,7 @@ function AdDetail() {
         width={400}
         height={400}
         showBullets={moreThanOne}
-        showNavs={true}
+        showNavs={moreThanOne}
         images={images}
       />
     );
@@ -231,7 +238,7 @@ function AdDetail() {
             <p className="text-xl">{advertisement.description}</p>
           </div>
           <p className="py-4 text-2xl font-medium">
-            Categoría:{" "}
+            Categoría:{' '}
             <span className="border-1 rounded-lg p-2 uppercase">
               {advertisement.category}
             </span>
@@ -243,7 +250,7 @@ function AdDetail() {
             readOnly
           />
           <div className="mt-2 mb-4 flex flex-col items-center justify-center text-center">
-            Vendido por{" "}
+            Vendido por{' '}
             <span className="font-bold"> {advertisement.sellerId.name}</span>
             <Button
               className="left-2"
