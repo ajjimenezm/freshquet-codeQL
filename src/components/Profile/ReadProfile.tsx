@@ -80,8 +80,13 @@ function ReadProfile(props: ProfileProps) {
       <Divider />
       {props.userRole == "seller" ? (
         <div className="flex flex-col space-y-4 text-center">
-          <Button variant="contained" disabled>
-            Historial de Anuncios
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate("/advertisementHistory");
+            }}
+          >
+            Historial de Ventas
           </Button>
           <Button variant="contained" disabled>
             Promocionar Anuncios

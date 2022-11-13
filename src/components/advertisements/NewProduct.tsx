@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { Category } from "../../types/Category";
 import Heading from "../Heading";
 import AdImagesSelect from "./AdImagesSelect";
+import fs from "fs";
 
 export interface NewProductsState {
   id: string;
@@ -113,23 +114,35 @@ export default function NewProducts() {
           }
         )
         .then((res) => {
-          console.log(res);
+          const filesdata = new FormData();
 
-          axios
-            .post(
-              `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${res.data}/uploadimages`,
-              { files: state.images },
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            )
-            .then((res) => console.log(res))
-            .catch((err) => console.log("image upload error: " + err));
+          for (let i = 0; i < state.images.length; i++) {
+            filesdata.append("files", state.images[i]);
+          }
 
-          console.log(1);
+          //state.images.map((image) => {
+          //  console.log(image);
+          // filesdata.append('file', image);
+          //});
+
+          const config = {
+            method: "post",
+            url: `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${res.data}/uploadimages`,
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+              //'Content-Type': 'multipart/form-data',
+            },
+            data: filesdata,
+          };
+          console.log(config);
+
+          axios(config)
+            .then(function (response) {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
 
           if (res.status == 201) {
             navigate("/home");

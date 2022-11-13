@@ -1,11 +1,11 @@
-import ReadProfile from './ReadProfile';
-import EditProfile from './EditProfile';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import React from 'react';
-import DataUser from './dataUser';
-import { Buffer } from 'buffer';
+import ReadProfile from "./ReadProfile";
+import EditProfile from "./EditProfile";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import React from "react";
+import DataUser from "./dataUser";
+import { Buffer } from "buffer";
 
 interface IProps {
   user?: string;
@@ -19,22 +19,20 @@ interface IState {
 }
 
 class ProfileNav extends React.Component<IProps, IState> {
-
-
   constructor(props: IProps) {
     super(props);
     this.state = {
       editProfile: false,
       dataUser: {
-        name: 'Cargando Nombre',
-        username: 'cargando',
-        phone_number: '123456789',
-        email: 'cargando@emial.com',
-        biography: 'Cargando...',
-        direction: 'Cargando...',
+        name: "Cargando Nombre",
+        username: "cargando",
+        phone_number: "123456789",
+        email: "cargando@emial.com",
+        biography: "Cargando...",
+        direction: "Cargando...",
       },
-      userRole: 'Cargando',
-      avatar: '',
+      userRole: "Cargando",
+      avatar: "",
     };
     this.handler = this.handler.bind(this);
     this.fetchData = this.fetchData.bind(this);
@@ -51,7 +49,7 @@ class ProfileNav extends React.Component<IProps, IState> {
     axios
       .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       })
       .then((res) => {
@@ -72,7 +70,7 @@ class ProfileNav extends React.Component<IProps, IState> {
     axios
       .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       })
       .then((res) => {
@@ -86,15 +84,15 @@ class ProfileNav extends React.Component<IProps, IState> {
     if (!pic) return;
     axios
       .get(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile-picture/${pic}`,
+        `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}users/profile-picture/${pic}`,
         {
-          responseType: 'arraybuffer',
+          responseType: "arraybuffer",
         }
       )
       .then((res) => {
         this.setState({
-          avatar: `data:;base64,${Buffer.from(res.data, 'binary').toString(
-            'base64'
+          avatar: `data:;base64,${Buffer.from(res.data, "binary").toString(
+            "base64"
           )}`,
         });
       });
@@ -135,9 +133,9 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem('userToken');
+    const user = localStorage.getItem("userToken");
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, []);
 

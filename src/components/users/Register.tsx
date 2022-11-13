@@ -84,6 +84,7 @@ const Register = () => {
             );
         } else {
             sendRequest();
+
         }
     };
 

@@ -3,7 +3,9 @@ import Advertisement from "../types/Advertisement";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Buffer } from "buffer";
 import { toNamespacedPath } from "path";
+import AdvertisementManagement from "../libs/AdvertisementManagement";
 
 interface AdvertisementCardProps {
   advertisement: Advertisement;
@@ -11,17 +13,29 @@ interface AdvertisementCardProps {
 
 function AdvertisementCard(props: AdvertisementCardProps) {
   const navigate = useNavigate();
+  const [image, setImage] = useState<string>("");
 
   const navigateFunction = (id: string) => {
     navigate(`/products/detail/${id}`);
   };
 
+  useEffect(() => {
+    AdvertisementManagement.GetImageAdvertisment(props.advertisement._id).then(
+      (res) => {
+        setImage(res);
+      }
+    );
+  });
+
   return (
-    <div className="h-25 mt-1 mb-1 flex flex-row items-center">
+    <div
+      className="h-25 mt-1 mb-1 flex flex-row items-center"
+      onClick={navigateFunction.bind(null, props.advertisement._id)}
+    >
       <img
-        src="https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg"
+        src={image}
         alt={props.advertisement.name}
-        className="max-w-28 max-h-28 object-contain"
+        className="aspect-square w-28 rounded-lg border-2 object-cover object-center"
       />
       <div className="ml-3 flex h-36 flex-col items-start justify-evenly pt-3 pb-3">
         <div className="text-lg font-normal">{props.advertisement.name}</div>
@@ -29,25 +43,6 @@ function AdvertisementCard(props: AdvertisementCardProps) {
         <div className="font-light">
           {`${props.advertisement.pricePerKilogram} €/kg`}
         </div>
-        <span>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => {
-              navigate(`/products/buy/${props.advertisement._id}`);
-            }}
-          >
-            Comprar
-          </Button>
-          <Button
-            className="left-2"
-            variant="outlined"
-            color="primary"
-            onClick={navigateFunction.bind(null, props.advertisement._id)}
-          >
-            Ver Más
-          </Button>
-        </span>
       </div>
     </div>
   );

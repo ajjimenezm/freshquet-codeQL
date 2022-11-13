@@ -6,15 +6,19 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { AuthContextProvider } from "./chatContext/AuthContext";
 import "leaflet/dist/leaflet.css";
+import { UserContextProvider } from "./chatContext/UserContext";
+
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
 );
 root.render(
     <AuthContextProvider>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <UserContextProvider>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </UserContextProvider>
     </AuthContextProvider>
 );
 

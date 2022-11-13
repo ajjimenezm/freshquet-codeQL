@@ -5,9 +5,11 @@ import Photo from "./jorgemoreno.png";
 import Messages from "./Messages";
 import Input from "./Input";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../chatContext/UserContext";
 
 function Chat() {
     const navigate = useNavigate();
+    const {data}  = React.useContext(UserContext);
     return (
         <div className="chat">
             <div className="chatInfo h-24 flex flex-row items-center border-b-2 bg-emerald-100  justify-center">
@@ -16,7 +18,7 @@ function Chat() {
                 </IconButton>
                 <img src={Photo} alt="Photo" className="max-h-20 max-w-20 mx-2 object-contain shadow rounded-full"/>
                 <div className="text-xl font-bold">
-                    Jorge Moreno Latorre
+                    {data.user?.displayName}
                 </div>
             </div>
             <Messages/>
