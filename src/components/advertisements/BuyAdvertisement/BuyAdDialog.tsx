@@ -11,17 +11,17 @@ import {
   InputLabel,
   Backdrop,
   CircularProgress,
-} from "@mui/material";
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Advertisement from "../../../types/Advertisement";
-import VerticalBuyAdCard from "./VerticalBuyAdCard";
-import axios from "axios";
-import BuyAdStepButtons from "./BuyAdStepButtons";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { db } from "../../../firebase";
-import { User } from "firebase/auth";
-import { AuthContext } from "../../../chatContext/AuthContext";
+} from '@mui/material';
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import Advertisement from '../../../types/Advertisement';
+import VerticalBuyAdCard from './VerticalBuyAdCard';
+import axios from 'axios';
+import BuyAdStepButtons from './BuyAdStepButtons';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { db } from '../../../firebase';
+import { User } from 'firebase/auth';
+import { AuthContext } from '../../../chatContext/AuthContext';
 import {
   collection,
   getDocs,
@@ -34,10 +34,10 @@ import {
   getDoc,
   Timestamp,
   arrayUnion,
-} from "firebase/firestore";
-import { v4 as uuid } from "uuid";
-import { UserContext } from "../../../chatContext/UserContext";
-import AdvertisementManagement from "../../../libs/AdvertisementManagement";
+} from 'firebase/firestore';
+import { v4 as uuid } from 'uuid';
+import { UserContext } from '../../../chatContext/UserContext';
+import AdvertisementManagement from '../../../libs/AdvertisementManagement';
 
 function BuyAd() {
   const { id } = useParams<{ id: string }>();
@@ -45,12 +45,12 @@ function BuyAd() {
   const [advertisement, setAdvertisement] = React.useState<Advertisement>();
   const [activeStep, setActiveStep] = React.useState(0);
   const [quantity, setQuantity] = React.useState(0);
-  const [quantityValue, setQuantityValue] = React.useState("");
+  const [quantityValue, setQuantityValue] = React.useState('');
   const [quantityError, setQuantityError] = React.useState(false);
   const [userChat, setUserChat] = React.useState<any>();
-  const [combinedId, setCombinedId] = React.useState<string>("");
-  const [text, setText] = React.useState<string>("");
-  const [image, setImage] = React.useState<string>("");
+  const [combinedId, setCombinedId] = React.useState<string>('');
+  const [text, setText] = React.useState<string>('');
+  const [image, setImage] = React.useState<string>('');
   const regexDecimalWithPoint = /^\d*\.?\d*$/;
   const regexDecimalWithComma = /^\d*,?\d*$/;
   const navigate = useNavigate();
@@ -71,13 +71,13 @@ function BuyAd() {
         setImage(res);
       });
     }
-  });
+  }, [id]);
 
   React.useEffect(() => {
     let timeout: string | number | NodeJS.Timeout | undefined;
     if (requestSent) {
       timeout = setTimeout(() => {
-        navigate("/chatmenu");
+        navigate('/chatmenu');
       }, 3000);
     }
     return () => {
@@ -90,23 +90,24 @@ function BuyAd() {
   const steps = [
     {
       stepNumber: 0,
-      label: "Confirme el producto",
-      description: "Confirme que el producto es el que desea comprar",
+      label: 'Confirme el producto',
+      description: 'Confirme que el producto es el que desea comprar',
     },
     {
       stepNumber: 1,
-      label: "Elija la cantidad",
-      description: "Introduzca la cantidad que desea comprar",
+      label: 'Elija la cantidad',
+      description: 'Introduzca la cantidad que desea comprar',
     },
     {
       stepNumber: 2,
-      label: "Revise la solicitud",
-      description: "Revise la solicitud antes de enviarla",
+      label: 'Revise la solicitud',
+      description: 'Revise la solicitud antes de enviarla',
     },
   ];
 
   const sendBuyRequest = async () => {
-    console.log("Sending buy request");
+    console.log('Sending buy request');
+    console.log(currentUser);
     setTimeout(() => {
       setRequestSent(true);
     }, 5000);
@@ -114,8 +115,8 @@ function BuyAd() {
 
   const sendBuyMessage = async () => {
     console.log(text);
-    if (text != "") {
-      await updateDoc(doc(db, "chats", combinedId), {
+    if (text != '') {
+      await updateDoc(doc(db, 'chats', combinedId), {
         messages: arrayUnion({
           id: uuid(),
           text,
@@ -124,18 +125,18 @@ function BuyAd() {
         }),
       });
 
-      await updateDoc(doc(db, "userChats", currentUser!.uid), {
-        [combinedId + ".lastMessage"]: {
+      await updateDoc(doc(db, 'userChats', currentUser!.uid), {
+        [combinedId + '.lastMessage']: {
           text,
         },
-        [combinedId + ".date"]: serverTimestamp(),
+        [combinedId + '.date']: serverTimestamp(),
       });
 
-      await updateDoc(doc(db, "userChats", userChat), {
-        [combinedId + ".lastMessage"]: {
+      await updateDoc(doc(db, 'userChats', userChat), {
+        [combinedId + '.lastMessage']: {
           text,
         },
-        [combinedId + ".date"]: serverTimestamp(),
+        [combinedId + '.date']: serverTimestamp(),
       });
     }
   };
@@ -151,11 +152,11 @@ function BuyAd() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if (activeStep === steps.length - 1) {
       setText(
-        "Buenas, me gustaría comprarle " +
+        'Buenas, me gustaría comprarle ' +
           quantity +
-          "kg de " +
+          'kg de ' +
           advertisement?.name +
-          ". ¿Podría enviarme más información?"
+          '. ¿Podría enviarme más información?'
       );
       createCompraBD();
       searchUserChat();
@@ -166,16 +167,16 @@ function BuyAd() {
   const createCompraBD = () => {
     const data = JSON.stringify({
       adv_id: advertisement?._id,
-      buyer_id: `${localStorage.getItem("userId")}`,
+      buyer_id: `${localStorage.getItem('userId')}`,
       quantity: quantity,
     });
 
     const config = {
-      method: "post",
+      method: 'post',
       url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/create`,
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        'Content-Type': 'application/json',
       },
       data: data,
     };
@@ -193,7 +194,7 @@ function BuyAd() {
     if (
       (regexDecimalWithPoint.test(quantityValue) ||
         regexDecimalWithComma.test(quantityValue)) &&
-      quantityValue !== ""
+      quantityValue !== ''
     ) {
       return true;
     } else {
@@ -205,7 +206,7 @@ function BuyAd() {
     const value = event.target.value;
     setQuantityValue(value);
     if (
-      value !== "" &&
+      value !== '' &&
       (regexDecimalWithPoint.test(value) || regexDecimalWithComma.test(value))
     ) {
       setQuantityError(false);
@@ -217,8 +218,8 @@ function BuyAd() {
 
   const searchUserChat = async () => {
     const q = query(
-      collection(db, "users"),
-      where("displayName", "==", advertisement?.sellerId.username)
+      collection(db, 'users'),
+      where('displayName', '==', advertisement?.sellerId.username)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -237,8 +238,9 @@ function BuyAd() {
   const navigateChat = async () => {
     //navigate(`/chat/${userChat}`);
     console.log(combinedId);
+    console.log(currentUser);
     let exists = false;
-    const q = query(collection(db, "chats"));
+    const q = query(collection(db, 'chats'));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       if (doc.id === combinedId) {
@@ -248,21 +250,21 @@ function BuyAd() {
     });
     // const res = await getDoc(doc(db, "chats", combinedId!));
     if (!exists) {
-      await setDoc(doc(db, "chats", combinedId!), { messages: [] });
+      await setDoc(doc(db, 'chats', combinedId!), { messages: [] });
 
-      await updateDoc(doc(db, "userChats", currentUser!.uid), {
-        [combinedId! + ".userInfo"]: {
+      await updateDoc(doc(db, 'userChats', currentUser!.uid), {
+        [combinedId! + '.userInfo']: {
           uid: userChat,
           displayName: advertisement?.sellerId.username,
         },
-        [combinedId! + ".date"]: serverTimestamp(),
+        [combinedId! + '.date']: serverTimestamp(),
       });
-      await updateDoc(doc(db, "userChats", userChat!), {
-        [combinedId! + ".userInfo"]: {
+      await updateDoc(doc(db, 'userChats', userChat!), {
+        [combinedId! + '.userInfo']: {
           uid: currentUser!.uid,
           displayName: currentUser!.displayName,
         },
-        [combinedId! + ".date"]: serverTimestamp(),
+        [combinedId! + '.date']: serverTimestamp(),
       });
 
       await sendBuyMessage();
@@ -270,7 +272,7 @@ function BuyAd() {
   };
 
   React.useEffect(() => {
-    if (combinedId !== "" && text !== "") {
+    if (combinedId !== '' && text !== '') {
       navigateChat();
     }
   }, [combinedId]);
@@ -317,23 +319,23 @@ function BuyAd() {
                 }
                 aria-describedby="quantity-field-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  'aria-label': 'weight',
                 }}
                 label="Cantidad"
                 onKeyDown={(event) => {
-                  if (event.key === "Enter") {
+                  if (event.key === 'Enter') {
                     handleNext();
                   }
                 }}
               />
               <FormHelperText id="quantity-field-helper-text">
-                {quantityError ? "Introduzca un número válido" : ""}
+                {quantityError ? 'Introduzca un número válido' : ''}
               </FormHelperText>
             </FormControl>
             <BuyAdStepButtons
               primaryButtonText="Siguiente"
               secondaryButtonText="Atrás"
-              primaryButtonDisabled={quantityError || quantityValue === ""}
+              primaryButtonDisabled={quantityError || quantityValue === ''}
               secondaryButtonDisabled={false}
               primaryButtonOnClick={handleNext}
               secondaryButtonOnClick={handleBack}
@@ -373,7 +375,7 @@ function BuyAd() {
       <Backdrop
         sx={{
           backgroundColor: (theme) => theme.palette.primary.main,
-          color: "#fff",
+          color: '#fff',
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
         open={activeStep === steps.length && !requestSent}
@@ -389,7 +391,7 @@ function BuyAd() {
       <Backdrop
         sx={{
           backgroundColor: (theme) => theme.palette.primary.main,
-          color: "#fff",
+          color: '#fff',
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
         open={requestSent}

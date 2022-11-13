@@ -1,7 +1,6 @@
-import Advertisement from "../types/Advertisement";
-import axios from "axios";
-import { Buffer } from "buffer";
-import { KeyboardReturnSharp } from "@mui/icons-material";
+import Advertisement from '../types/Advertisement';
+import axios from 'axios';
+import { Buffer } from 'buffer';
 
 async function GetAdvertisementById(id: string): Promise<Advertisement> {
   const response = await axios.get(
@@ -28,12 +27,12 @@ async function GetImageAdvertisment(id: string): Promise<string> {
     .get(
       `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images/${imageName}`,
       {
-        responseType: "arraybuffer",
+        responseType: 'arraybuffer',
       }
     )
     .catch();
 
-  return `data:;base64,${Buffer.from(image.data, "binary").toString("base64")}`;
+  return `data:;base64,${Buffer.from(image.data, 'binary').toString('base64')}`;
 }
 
 export default {
