@@ -62,7 +62,15 @@ function Map() {
             )
             .then((res) => {
                 console.log(res.data);
-                setStores(res.data);
+                setStores(
+                    res.data.filter(
+                        (store: StoreType) =>
+                            store.latitude &&
+                            store.latitude !== 0 &&
+                            store.longitude &&
+                            store.longitude !== 0
+                    )
+                );
             });
     }, []);
 
