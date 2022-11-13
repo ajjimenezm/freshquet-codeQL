@@ -1,4 +1,5 @@
 import { Alert, Button, Snackbar, Typography } from "@mui/material";
+import axios from "axios";
 import { Icon, LatLng } from "leaflet";
 import React from "react";
 import {
@@ -16,9 +17,9 @@ import CurrentPositionIconSvg from "./current-location-icon.svg";
 import MarkerIconSvg from "./location-pin.svg";
 
 type StoreType = {
-    id: number;
+    _id: number;
     name: string;
-    address: string;
+    direction: string;
     latitude: number;
     longitude: number;
 };
@@ -55,19 +56,14 @@ function Map() {
     }
 
     React.useEffect(() => {
-        LocationManagement.GetCoordinatesFromAddress(
-            "Camí de Vera, s/n, 46022 València, Valencia"
-        ).then((coordinates) => {
-            setStores([
-                {
-                    id: 1,
-                    name: "UPV",
-                    address: "Camí de Vera, s/n, 46022 València, Valencia",
-                    latitude: coordinates.lat,
-                    longitude: coordinates.lng,
-                },
-            ]);
-        });
+        axios
+            .get(
+                `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/mapLocations`
+            )
+            .then((res) => {
+                console.log(res.data);
+                setStores(res.data);
+            });
     }, []);
 
     React.useEffect(() => {
@@ -75,7 +71,7 @@ function Map() {
             const markers = stores.map((store) => {
                 return (
                     <Marker
-                        key={store.id}
+                        key={store._id}
                         position={new LatLng(store.latitude, store.longitude)}
                         icon={MarkerIcon()}
                     >
@@ -85,14 +81,14 @@ function Map() {
                                     {store.name}
                                 </Typography>
                                 <Typography variant="body1">
-                                    {store.address}
+                                    {store.direction}
                                 </Typography>
                                 <Button
                                     variant="contained"
                                     color="primary"
                                     size="small"
                                     onClick={() => {
-                                        navigate("/seller/" + store.id);
+                                        navigate("/seller/" + store._id);
                                     }}
                                 >
                                     Ver productos
