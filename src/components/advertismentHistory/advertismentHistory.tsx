@@ -10,6 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Fab } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AdvHistoryCard from "./advHistoryCard";
+import AdvHistoryCardBuyer from "./advHistoryCardBuyer";
 
 interface advHistoryCardProps {
   adv_id: string;
@@ -45,35 +46,60 @@ const AdvertismentHistory = () => {
       })
       .then((res) => {
         setUserRole(res.data.userRole);
-        const config = {
-          method: "get",
-          url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/all/${res.data.userId}`,
-          headers: {},
-        };
-
-        axios(config).then(function (response: any) {
-          if (response.status === 200) {
-            setAdvertisements(response.data);
-            setDataLoaded(true);
-          }
-        });
+        let config;
+        console.log("USER ROLE " + userRole);
+        if (userRole === "seller") {
+          config = {
+            method: "get",
+            url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/all/sell/${res.data.userId}`,
+            headers: {},
+          };
+        } else if (userRole === "buyer") {
+          config = {
+            method: "get",
+            url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/all/buy/${res.data.userId}`,
+            headers: {},
+          };
+        }
+        if (config !== undefined) {
+          axios(config).then(function (response: any) {
+            if (response.status === 200) {
+              console.log("DATA " + response);
+              console.log(response);
+              setAdvertisements(response.data);
+              setDataLoaded(true);
+            }
+          });
+        }
       });
   });
 
   React.useEffect(() => {
     setAdvertisementsToShow(
       advertisements.map((ad: any) => {
-        console.log("ad:", ad);
-        0;
-        return (
-          <AdvHistoryCard
-            key={ad.adv_id}
-            adv_id={ad.adv_id}
-            buyer_id={ad.buyer_id}
-            quantity={ad.quantity}
-            is_ended={ad.is_ended}
-          />
-        );
+        if (userRole === "seller") {
+          console.log("ad:", ad);
+          0;
+          return (
+            <AdvHistoryCard
+              key={ad.adv_id}
+              adv_id={ad.adv_id}
+              buyer_id={ad.buyer_id}
+              quantity={ad.quantity}
+              is_ended={ad.is_ended}
+            />
+          );
+        } else if (userRole === "buyer") {
+          console.log("ad:", ad);
+          return (
+            <AdvHistoryCardBuyer
+              key={ad.adv_id}
+              adv_id={ad.adv_id}
+              quantity={ad.quantity}
+              is_ended={ad.is_ended}
+            />
+          );
+        }
       })
     );
   }, [dataLoaded]);
