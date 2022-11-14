@@ -1,8 +1,9 @@
+import PlaceReview from './reviews/PlaceReview';
 import BottomNav from './BottomNav';
 import { useNavigate } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom';
 import Home from './Home';
-import Map from './Map';
+import Map from './map/Map';
 import Search from './Search';
 import Chat from './Chat/Chat';
 import AdDetail from './advertisements/AdDetail';
@@ -11,8 +12,8 @@ import SellerPage from './seller-page/SellerPage';
 import EditAdDetail from './advertisements/EditAdDetail';
 import { useEffect } from 'react';
 import ChatMenu from './Chat/ChatMenu';
+
 import AdvertismentHistory from './advertismentHistory/advertismentHistory';
-import PlaceReview from './reviews/PlaceReview';
 
 function MainApp() {
   //localStorage.clear();
