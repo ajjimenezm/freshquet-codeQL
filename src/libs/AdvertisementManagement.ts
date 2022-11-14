@@ -1,5 +1,5 @@
 import Advertisement from '../types/Advertisement';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Buffer } from 'buffer';
 
 async function GetAdvertisementById(id: string): Promise<Advertisement> {
@@ -35,8 +35,32 @@ async function GetImageAdvertisment(id: string): Promise<string> {
   return `data:;base64,${Buffer.from(image.data, 'binary').toString('base64')}`;
 }
 
+async function PlacePurchaseReview(
+  id: string,
+  rating: number,
+  comment: string,
+  confcode: string
+): Promise<AxiosResponse<any, any>> {
+  const config = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+    },
+    data: {
+      review: rating,
+      review_text: comment,
+      confirmation_code: confcode,
+    },
+    url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/${id}/review`,
+  };
+
+  return axios(config);
+}
+
 export default {
   GetAdvertisementById,
   GetAllAdvertisements,
   GetImageAdvertisment,
+  PlacePurchaseReview,
 };
