@@ -10,7 +10,6 @@ import {
     TileLayer,
     useMap,
 } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
 import CurrentPositionIconSvg from "./current-location-icon.svg";
 import MarkerIconSvg from "./location-pin.svg";
 import MapPopUp from "./MapPopUp";
@@ -35,7 +34,6 @@ function Map() {
         React.useState(false);
     const [stores, setStores] = React.useState<StoreType[]>([]);
     const [storeMarkers, setStoreMarkers] = React.useState<JSX.Element[]>([]);
-    const navigate = useNavigate();
 
     function CurrentLocationIcon() {
         const icon = new Icon({
