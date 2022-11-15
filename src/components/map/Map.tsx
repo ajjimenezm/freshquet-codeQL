@@ -1,4 +1,12 @@
-import { Alert, Button, Snackbar, Typography } from "@mui/material";
+import {
+    Alert,
+    Button,
+    Fab,
+    Snackbar,
+    Tooltip,
+    useTheme,
+    Zoom,
+} from "@mui/material";
 import axios from "axios";
 import { Icon, LatLng } from "leaflet";
 import React from "react";
@@ -10,11 +18,12 @@ import {
     TileLayer,
     useMap,
 } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
-import LocationManagement from "../../libs/LocationManagement";
-import Navigation from "../../libs/Navigation";
 import CurrentPositionIconSvg from "./current-location-icon.svg";
 import MarkerIconSvg from "./location-pin.svg";
+import MapPopUp from "./MapPopUp";
+import LocationDisabledIcon from "@mui/icons-material/LocationDisabled";
+import MyLocationIcon from "@mui/icons-material/MyLocation";
+import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 
 type StoreType = {
     _id: number;
@@ -25,8 +34,8 @@ type StoreType = {
 };
 
 function Map() {
-    // https://nominatim.org/release-docs/develop/api/Search/
     const [position, setPosition] = React.useState<LatLng | null>(null);
+    const [locationCentered, setLocationCentered] = React.useState(false);
     const [radius, setRadius] = React.useState<number>(0);
     const [locationRequested, setLocationRequested] = React.useState(false);
     const [showLocationSnackbar, setShowLocationSnackbar] =
@@ -35,9 +44,16 @@ function Map() {
         React.useState(false);
     const [showLocationNotFoundSnackbar, setShowLocationNotFoundSnackbar] =
         React.useState(false);
+    const [locationError, setLocationError] = React.useState(false);
     const [stores, setStores] = React.useState<StoreType[]>([]);
     const [storeMarkers, setStoreMarkers] = React.useState<JSX.Element[]>([]);
-    const navigate = useNavigate();
+    const theme = useTheme();
+    const transitionDuration = {
+        enter: theme.transitions.duration.enteringScreen,
+        exit: theme.transitions.duration.leavingScreen,
+    };
+
+    let navigateToLocation: () => void;
 
     function CurrentLocationIcon() {
         const icon = new Icon({
@@ -61,7 +77,6 @@ function Map() {
                 `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/mapLocations`
             )
             .then((res) => {
-                console.log(res.data);
                 setStores(
                     res.data.filter(
                         (store: StoreType) =>
@@ -83,40 +98,13 @@ function Map() {
                         position={new LatLng(store.latitude, store.longitude)}
                         icon={MarkerIcon()}
                     >
-                        <Popup>
-                            <div className="flex-column">
-                                <Typography variant="h6">
-                                    {store.name}
-                                </Typography>
-                                <Typography variant="body1">
-                                    {store.direction}
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="small"
-                                    onClick={() => {
-                                        navigate("/seller/" + store._id);
-                                    }}
-                                >
-                                    Ver productos
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    color={"secondary"}
-                                    size="small"
-                                    onClick={() => {
-                                        Navigation.OpenGoogleMaps(
-                                            store.latitude,
-                                            store.longitude
-                                        );
-                                    }}
-                                    sx={{ ml: 1 }}
-                                >
-                                    Cómo llegar
-                                </Button>
-                            </div>
-                        </Popup>
+                        <MapPopUp
+                            storeName={store.name}
+                            storeId={store._id}
+                            storeDirection={store.direction}
+                            storeLatitude={store.latitude}
+                            storeLongitude={store.longitude}
+                        />
                     </Marker>
                 );
             });
@@ -137,12 +125,28 @@ function Map() {
                 setPosition(e.latlng);
                 setShowLocationSnackbar(false);
                 setShowLocationFoundSnackbar(true);
+                setLocationError(false);
             });
             map.locate().on("locationerror", () => {
+                setLocationError(true);
                 setShowLocationSnackbar(false);
                 setShowLocationNotFoundSnackbar(true);
             });
         }, [map]);
+
+        map.addEventListener("move", () => {
+            if (position) {
+                setLocationCentered(
+                    map.distance(map.getCenter(), position) < 100
+                );
+            }
+        });
+
+        navigateToLocation = () => {
+            if (position) {
+                map.flyTo(position, 15, { duration: 1 });
+            }
+        };
 
         return position === null ? null : (
             <Marker position={position} icon={CurrentLocationIcon()}>
@@ -158,12 +162,6 @@ function Map() {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[51.505, -0.09]}>
-                    <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                        <Button>Click me!</Button>
-                    </Popup>
-                </Marker>
                 {storeMarkers}
                 <MapManager />
             </MapContainer>
@@ -211,6 +209,71 @@ function Map() {
                     Ubicación encontrada.
                 </Alert>
             </Snackbar>
+            {locationError &&
+                !(showLocationNotFoundSnackbar || showLocationSnackbar) && (
+                    <Zoom
+                        in={!showLocationNotFoundSnackbar}
+                        timeout={transitionDuration}
+                        style={{
+                            transitionDelay: "300ms",
+                        }}
+                    >
+                        <Tooltip title="Navigate to location" placement="top">
+                            <Fab
+                                color="error"
+                                aria-label="location disabled"
+                                sx={{
+                                    position: "fixed",
+                                    zIndex: 1,
+                                    bottom: 0,
+                                    marginBottom: 10,
+                                    marginRight: 2,
+                                    right: 0,
+                                }}
+                                onClick={() => {
+                                    setShowLocationNotFoundSnackbar(true);
+                                }}
+                            >
+                                <LocationDisabledIcon />
+                            </Fab>
+                        </Tooltip>
+                    </Zoom>
+                )}
+            {!locationError &&
+                !showLocationFoundSnackbar &&
+                !showLocationSnackbar && (
+                    <Zoom
+                        in={true}
+                        timeout={transitionDuration}
+                        style={{
+                            transitionDelay: "300ms",
+                        }}
+                    >
+                        <Tooltip title="Navigate to location" placement="top">
+                            <Fab
+                                color="primary"
+                                aria-label="location disabled"
+                                sx={{
+                                    position: "fixed",
+                                    zIndex: 1,
+                                    bottom: 0,
+                                    marginBottom: 10,
+                                    marginRight: 2,
+                                    right: 0,
+                                }}
+                                onClick={() => {
+                                    navigateToLocation();
+                                }}
+                            >
+                                {locationCentered ? (
+                                    <MyLocationIcon />
+                                ) : (
+                                    <LocationSearchingIcon />
+                                )}
+                            </Fab>
+                        </Tooltip>
+                    </Zoom>
+                )}
         </>
     );
 }
