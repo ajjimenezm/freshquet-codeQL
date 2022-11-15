@@ -103,6 +103,14 @@ function ReadProfile(props: ProfileProps) {
         </div>
       ) : (
         <div className="flex flex-col space-y-4 text-center">
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate("/advertisementHistory");
+            }}
+          >
+            Historial de Compras
+          </Button>
           <Button variant="contained" onClick={logout}>
             Cerrar Sesión
           </Button>
