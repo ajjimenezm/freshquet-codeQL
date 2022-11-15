@@ -125,6 +125,7 @@ function Map() {
                 setPosition(e.latlng);
                 setShowLocationSnackbar(false);
                 setShowLocationFoundSnackbar(true);
+                setLocationError(false);
             });
             map.locate().on("locationerror", () => {
                 setLocationError(true);
@@ -161,12 +162,6 @@ function Map() {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[51.505, -0.09]}>
-                    <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                        <Button>Click me!</Button>
-                    </Popup>
-                </Marker>
                 {storeMarkers}
                 <MapManager />
             </MapContainer>
