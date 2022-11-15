@@ -11,7 +11,6 @@ import {
     useMap,
 } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
-import LocationManagement from "../../libs/LocationManagement";
 import Navigation from "../../libs/Navigation";
 import CurrentPositionIconSvg from "./current-location-icon.svg";
 import MarkerIconSvg from "./location-pin.svg";
@@ -25,7 +24,6 @@ type StoreType = {
 };
 
 function Map() {
-    // https://nominatim.org/release-docs/develop/api/Search/
     const [position, setPosition] = React.useState<LatLng | null>(null);
     const [radius, setRadius] = React.useState<number>(0);
     const [locationRequested, setLocationRequested] = React.useState(false);
@@ -61,7 +59,6 @@ function Map() {
                 `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/mapLocations`
             )
             .then((res) => {
-                console.log(res.data);
                 setStores(
                     res.data.filter(
                         (store: StoreType) =>
