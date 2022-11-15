@@ -1,4 +1,4 @@
-import { Alert, Button, Snackbar, Typography } from "@mui/material";
+import { Alert, Button, Snackbar } from "@mui/material";
 import axios from "axios";
 import { Icon, LatLng } from "leaflet";
 import React from "react";
@@ -11,9 +11,9 @@ import {
     useMap,
 } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
-import Navigation from "../../libs/Navigation";
 import CurrentPositionIconSvg from "./current-location-icon.svg";
 import MarkerIconSvg from "./location-pin.svg";
+import MapPopUp from "./MapPopUp";
 
 type StoreType = {
     _id: number;
@@ -80,40 +80,13 @@ function Map() {
                         position={new LatLng(store.latitude, store.longitude)}
                         icon={MarkerIcon()}
                     >
-                        <Popup>
-                            <div className="flex-column">
-                                <Typography variant="h6">
-                                    {store.name}
-                                </Typography>
-                                <Typography variant="body1">
-                                    {store.direction}
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="small"
-                                    onClick={() => {
-                                        navigate("/seller/" + store._id);
-                                    }}
-                                >
-                                    Ver productos
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    color={"secondary"}
-                                    size="small"
-                                    onClick={() => {
-                                        Navigation.OpenGoogleMaps(
-                                            store.latitude,
-                                            store.longitude
-                                        );
-                                    }}
-                                    sx={{ ml: 1 }}
-                                >
-                                    Cómo llegar
-                                </Button>
-                            </div>
-                        </Popup>
+                        <MapPopUp
+                            storeName={store.name}
+                            storeId={store._id}
+                            storeDirection={store.direction}
+                            storeLatitude={store.latitude}
+                            storeLongitude={store.longitude}
+                        />
                     </Marker>
                 );
             });
