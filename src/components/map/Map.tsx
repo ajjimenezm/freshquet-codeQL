@@ -1,4 +1,12 @@
-import { Alert, Button, Fab, Snackbar, useTheme, Zoom } from "@mui/material";
+import {
+    Alert,
+    Button,
+    Fab,
+    Snackbar,
+    Tooltip,
+    useTheme,
+    Zoom,
+} from "@mui/material";
 import axios from "axios";
 import { Icon, LatLng } from "leaflet";
 import React from "react";
@@ -215,23 +223,25 @@ function Map() {
                             transitionDelay: "300ms",
                         }}
                     >
-                        <Fab
-                            color="error"
-                            aria-label="location disabled"
-                            sx={{
-                                position: "fixed",
-                                zIndex: 1,
-                                bottom: 0,
-                                marginBottom: 10,
-                                marginRight: 2,
-                                right: 0,
-                            }}
-                            onClick={() => {
-                                setShowLocationNotFoundSnackbar(true);
-                            }}
-                        >
-                            <LocationDisabledIcon />
-                        </Fab>
+                        <Tooltip title="Navigate to location" placement="top">
+                            <Fab
+                                color="error"
+                                aria-label="location disabled"
+                                sx={{
+                                    position: "fixed",
+                                    zIndex: 1,
+                                    bottom: 0,
+                                    marginBottom: 10,
+                                    marginRight: 2,
+                                    right: 0,
+                                }}
+                                onClick={() => {
+                                    setShowLocationNotFoundSnackbar(true);
+                                }}
+                            >
+                                <LocationDisabledIcon />
+                            </Fab>
+                        </Tooltip>
                     </Zoom>
                 )}
             {!locationError &&
@@ -244,27 +254,29 @@ function Map() {
                             transitionDelay: "300ms",
                         }}
                     >
-                        <Fab
-                            color="primary"
-                            aria-label="location disabled"
-                            sx={{
-                                position: "fixed",
-                                zIndex: 1,
-                                bottom: 0,
-                                marginBottom: 10,
-                                marginRight: 2,
-                                right: 0,
-                            }}
-                            onClick={() => {
-                                navigateToLocation();
-                            }}
-                        >
-                            {locationCentered ? (
-                                <MyLocationIcon />
-                            ) : (
-                                <LocationSearchingIcon />
-                            )}
-                        </Fab>
+                        <Tooltip title="Navigate to location" placement="top">
+                            <Fab
+                                color="primary"
+                                aria-label="location disabled"
+                                sx={{
+                                    position: "fixed",
+                                    zIndex: 1,
+                                    bottom: 0,
+                                    marginBottom: 10,
+                                    marginRight: 2,
+                                    right: 0,
+                                }}
+                                onClick={() => {
+                                    navigateToLocation();
+                                }}
+                            >
+                                {locationCentered ? (
+                                    <MyLocationIcon />
+                                ) : (
+                                    <LocationSearchingIcon />
+                                )}
+                            </Fab>
+                        </Tooltip>
                     </Zoom>
                 )}
         </>
