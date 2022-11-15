@@ -1,12 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import Advertisement from '../../types/Advertisement';
-import AdvertisementManagement from '../../libs/AdvertisementManagement';
-import { Button } from '@mui/material';
-import React from 'react';
-import ChatHelper from '../../libs/ChatHelper';
-import { AuthContext } from '../../chatContext/AuthContext';
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Advertisement from "../../types/Advertisement";
+import AdvertisementManagement from "../../libs/AdvertisementManagement";
+import { Button } from "@mui/material";
+import React from "react";
+import ChatHelper from "../../libs/ChatHelper";
+import { AuthContext } from "../../chatContext/AuthContext";
 
 interface advHistoryCardProps {
   compra_id: string;
@@ -19,15 +19,16 @@ interface advHistoryCardProps {
 
 function AdvHistoryCard(props: advHistoryCardProps) {
   const [advertisement, setAdv] = useState<Advertisement>();
-  const [buyerName, setBuyerName] = useState<string>('');
-  const [sellerName, setSellerName] = useState<string>('');
-  const [image, setImage] = useState<string>('');
+  const [buyerName, setBuyerName] = useState<string>("");
+  const [sellerName, setSellerName] = useState<string>("");
+  const [image, setImage] = useState<string>("");
+  const [isEnded, setEnded] = useState<boolean>(props.is_ended);
 
   const currentUser = React.useContext(AuthContext);
 
   useEffect(() => {
     const config = {
-      method: 'get',
+      method: "get",
       url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${props.buyer_id}/name`,
       headers: {},
     };
@@ -39,7 +40,7 @@ function AdvHistoryCard(props: advHistoryCardProps) {
     axios
       .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       })
       .then((res) => {
@@ -47,7 +48,7 @@ function AdvHistoryCard(props: advHistoryCardProps) {
       });
 
     const config2 = {
-      method: 'get',
+      method: "get",
       url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${props.adv_id}`,
       headers: {},
     };
@@ -65,10 +66,10 @@ function AdvHistoryCard(props: advHistoryCardProps) {
 
   const confirmPurchase = () => {
     const config = {
-      method: 'put',
+      method: "put",
       url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/${props.compra_id}`,
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       },
       data: {
         is_ended: true,
@@ -76,22 +77,23 @@ function AdvHistoryCard(props: advHistoryCardProps) {
     };
 
     const config2 = {
-      method: 'get',
+      method: "get",
       url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/${props.compra_id}/confirmation_code`,
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       },
     };
 
     axios(config2).then(function (response) {
       const message =
-        'El vendedor ha confirmado la compra. Código de confirmación: ' +
+        "El vendedor ha confirmado la compra. Código de confirmación: " +
         response.data;
 
       axios(config).then(function (response) {
         if (response.status === 200) {
-          console.log('Compra confirmada');
+          console.log("Compra confirmada");
           ChatHelper.sendMessageTo(sellerName, message, currentUser);
+          setEnded(true);
         }
       });
     });
@@ -128,15 +130,13 @@ function AdvHistoryCard(props: advHistoryCardProps) {
           <br />
           {props.quantity} kg
         </div>
-        <div>
-          {props.is_ended ? <div>Finalizada</div> : <div>En tramite</div>}
-        </div>
+        <div>{isEnded ? <div>Finalizada</div> : <div>En tramite</div>}</div>
       </div>
       <div>
         <Button
           variant="contained"
           onClick={() => confirmPurchase()}
-          disabled={props.is_ended}
+          disabled={isEnded}
         >
           Confirmar venta
         </Button>
