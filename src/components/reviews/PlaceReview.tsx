@@ -20,11 +20,13 @@ const PlaceReview = (props: PlaceReviewProps) => {
   const [confcode, setConfcode] = React.useState<string>('');
 
   React.useEffect(() => {
-    //Esto ha de cambiar pero no sé como hacerlo bonito :)
-    alert(
-      'Error al obtener la compra. Por favor, inténtelo de nuevo más tarde.'
-    );
-    if (!purchaseId) navigate(-1);
+    if (!purchaseId) {
+      //Esto ha de cambiar pero no sé como hacerlo bonito :)
+      alert(
+        'Error al obtener la compra. Por favor, inténtelo de nuevo más tarde.'
+      );
+      navigate('/advertisementHistory');
+    }
   }, [purchaseId]);
 
   const sendReview = () => {
@@ -35,26 +37,30 @@ const PlaceReview = (props: PlaceReviewProps) => {
       confcode
     ).then((res) => {
       console.log(res);
+      //Esto ha de cambiar pero no sé como hacerlo bonito :)
+      alert('¡Gracias por tu opinión!');
+      navigate('/advertisementHistory');
     });
   };
 
   return (
     <div className="ml-8 mt-8 mb-8 mr-8 flex flex-col space-y-3">
       <Heading text="Deja una reseña" />
-      <Rating
-        name="rating"
-        defaultValue={0}
-        precision={0.5}
-        size="large"
-        className="justify-center"
-        onChange={(event, newValue) => {
-          setRating(newValue);
-        }}
-        getLabelText={getLabelText}
-        onChangeActive={(event, newHover) => {
-          setHover(newHover);
-        }}
-      />
+      <div className="content-center">
+        <Rating
+          name="rating"
+          defaultValue={0}
+          precision={0.5}
+          size="large"
+          onChange={(event, newValue) => {
+            setRating(newValue);
+          }}
+          getLabelText={getLabelText}
+          onChangeActive={(event, newHover) => {
+            setHover(newHover);
+          }}
+        />
+      </div>
       <TextField
         id="review-comment"
         label="Comenta tu experiencia"
@@ -77,9 +83,7 @@ const PlaceReview = (props: PlaceReviewProps) => {
         <Button
           variant="text"
           onClick={() => {
-            console.log(rating);
-            console.log(comment);
-            console.log(confcode);
+            navigate('/advertisementHistory');
           }}
         >
           Cancelar
