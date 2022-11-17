@@ -10,11 +10,13 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button, Fab } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ShopFilters } from "./ShopFilters";
+import { getDistanceFromLatLonInKm } from "../libs/DistanceCalc";
 
 const Home = () => {
   const [dataLoaded, setDataLoaded] = React.useState(false);
   const [advertisementsToShow, setAdvertisementsToShow] =
     React.useState<JSX.Element[]>();
+  const [sellerIds, setSellerIds] = React.useState<string[]>([]);
   const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
     []
   );
@@ -27,35 +29,81 @@ const Home = () => {
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClose = (filters: any) => {
+
+  const filterByDistance = (
+    filterValue: number,
+    ads: Advertisement[],
+    userLocs: any
+  ) => {
+    const adsToShow: Advertisement[] = [];
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/coordinates`,
+        sellerIds,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        res.data.map((seller: any) => {
+          const distance = getDistanceFromLatLonInKm(
+            seller.latitude,
+            seller.longitude,
+            userLocs.latitude,
+            userLocs.longitude
+          );
+          if (distance < filterValue) {
+            const ad = ads.find((ad) => ad.sellerId === seller._id);
+            if (ad) adsToShow.push(ad);
+          }
+        });
+      });
+    return advertisements;
+  };
+
+  const handleClose = async (filters: any) => {
     setOpen(false);
+    let filteredAdvertisements: Advertisement[] = advertisements;
     const minPrice = parseInt(filters.min_price);
     const maxPrice = parseInt(filters.max_price);
+    const distanceFilter = filters.distanceFilter;
+    const distanceFilterValue = filters.distanceFilterValue;
+
+    if (distanceFilter) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const userLocs = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        };
+        filteredAdvertisements = filterByDistance(
+          distanceFilterValue,
+          advertisements,
+          userLocs
+        );
+      });
+    }
+
     //Do not apply filters if there is an error on the input
-    if (isNaN(minPrice) || isNaN(maxPrice) || minPrice >= maxPrice) {
-
-      setAdvertisementsToShow(
-        advertisements.map((advertisement) => (
-          <AdvertisementCard
-            key={advertisement._id}
-            advertisement={advertisement}
-          />
-        ))
-      );
-      return
-    } else {
-
-      setAdvertisementsToShow(
-        advertisements.map((ad, idx) => {
-          if (ad.pricePerKilogram >= minPrice && ad.pricePerKilogram <= maxPrice) {
-            return <AdvertisementCard key={ad._id} advertisement={ad} />;
-          } else {
-            return <></>;
+    if ((minPrice !== -1 || maxPrice !== 0) && minPrice <= maxPrice) {
+      filteredAdvertisements = filteredAdvertisements.map(
+        (ad: any, idx: any) => {
+          if (
+            ad.pricePerKilogram >= minPrice &&
+            ad.pricePerKilogram <= maxPrice
+          ) {
+            return ad;
           }
-        })
+        }
       );
     }
 
+    setAdvertisementsToShow(
+      filteredAdvertisements.map((ad: Advertisement, idx: number) => {
+        return <AdvertisementCard key={idx} advertisement={ad} />;
+      })
+    );
   };
 
   const navigate = useNavigate();
@@ -83,12 +131,15 @@ const Home = () => {
       });
 
     axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all`
-      )
+      .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/all`)
       .then((response) => {
         if (response.status === 200) {
+          const sellerIds = response.data.map(
+            (ad: Advertisement) => ad.sellerId
+          );
+          setSellerIds(sellerIds);
           setAdvertisements(response.data);
+          console.log(response.data);
           setDataLoaded(true);
         }
       })
@@ -104,13 +155,13 @@ const Home = () => {
         return <AdvertisementCard key={ad._id} advertisement={ad} />;
       })
     );
-  }, [dataLoaded]);
+  }, [advertisements, dataLoaded]);
 
   return (
     <div>
       <Heading text="Lo más fresco para tí" />
       <SubHeading text="Creemos que estos productos pueden interesarte" />
-      <div className="border-y-2 my-4 p-4 text-right">
+      <div className="my-4 border-y-2 p-4 text-right">
         <ShopFilters open={openModal} handleClose={handleClose} />
         <Button variant="contained" onClick={handleOpen}>
           Filtros
