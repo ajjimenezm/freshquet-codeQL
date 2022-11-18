@@ -3,8 +3,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Modal, Button } from '@mui/material';
+import { Modal, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useState } from 'react';
+import Combobox from "react-widgets/Combobox";
 
 const style = {
     position: 'absolute',
@@ -64,6 +65,7 @@ export const ShopFilters = (props: any) => {
   const [filters, setFilters] = useState({
     max_price: "",
     min_price: "",
+    product_type: "",
 });
 const handleChangeFilters = (event: any) => {
     setFilters({
@@ -95,17 +97,36 @@ const handleChangeFilters = (event: any) => {
 
             </div>
             <div className="w-full text-right">
-                <Button variant="contained" onClick={() => { props.handleClose(filters) }}>
-                    Guardar
-                </Button>
             </div>
         </TabPanel>
         <TabPanel value={value} index={1}>
-            Item Two
+        <Box className=" mb-2 block text-sm font-medium text-gray-900">
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">
+                                        Tipo de producto
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        name="product_type"
+                                        label="Tipo de usuario"
+                                        onChange={handleChangeFilters}
+                                    >
+                                        <MenuItem value="freshh">
+                                          freshh
+                                        </MenuItem>
+                                        <MenuItem value="miscellaneous">
+                                          miscellaneous
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
         </TabPanel>
         <TabPanel value={value} index={2}>
             Item Three
         </TabPanel>
+        <Button variant="contained" onClick={() => {console.log(filters); props.handleClose(filters) }}>
+                    Guardar
+        </Button>
         </Box>
     </Modal>
   );

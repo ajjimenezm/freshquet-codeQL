@@ -29,9 +29,20 @@ const Home = () => {
   };
   const handleClose = (filters: any) => {
     setOpen(false);
+    let filteredAdvertisements: Advertisement[] = advertisements;
     const minPrice = parseInt(filters.min_price);
     const maxPrice = parseInt(filters.max_price);
+    const typeProduct = filters.type_product;
     //Do not apply filters if there is an error on the input
+    if (typeProduct !== "") {
+      filteredAdvertisements = filteredAdvertisements.map((
+        ad:any, idx: any) => {
+          if (ad.type === typeProduct) {
+            return ad;
+          }
+        }
+    );
+  }
     if (isNaN(minPrice) || isNaN(maxPrice) || minPrice >= maxPrice) {
 
       setAdvertisementsToShow(
