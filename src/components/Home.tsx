@@ -66,7 +66,6 @@ const Home = () => {
   const handleClose = async (filters: any) => {
     setOpen(false);
     let filteredAdvertisements: Advertisement[] = advertisements;
-    console.log(filteredAdvertisements);
     const minPrice = parseInt(filters.min_price);
     const maxPrice = parseInt(filters.max_price);
     const typeProduct = filters.product_type;
@@ -86,7 +85,6 @@ const Home = () => {
         );
       });
     }
-    console.log(filteredAdvertisements);
 
     //Do not apply filters if there is an error on the input
     if (typeProduct !== "") {
@@ -99,7 +97,6 @@ const Home = () => {
       });
       filteredAdvertisements = adsToShow;
     }
-    console.log(filteredAdvertisements);
 
     //Do not apply filters if there is an error on the input
     if ((minPrice !== -1 || maxPrice !== 0) && minPrice <= maxPrice) {
