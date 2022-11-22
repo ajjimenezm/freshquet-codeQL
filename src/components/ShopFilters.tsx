@@ -91,7 +91,7 @@ export const ShopFilters = (props: any) => {
   const [filters, setFilters] = useState({
     max_price: 0,
     min_price: -1,
-    distanceFilter: true,
+    distanceFilter: false,
     distanceFilterValue: 0,
     product_type: "",
   });
@@ -146,16 +146,6 @@ export const ShopFilters = (props: any) => {
                 placeholder="Precio Maximo"
               />
             </div>
-          </div>
-          <div className="w-full text-right">
-            <Button
-              variant="contained"
-              onClick={() => {
-                props.handleClose(filters);
-              }}
-            >
-              Guardar
-            </Button>
           </div>
         </TabPanel>
         <TabPanel value={value} index={1}>

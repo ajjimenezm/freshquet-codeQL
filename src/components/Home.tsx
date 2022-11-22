@@ -37,7 +37,7 @@ const Home = () => {
   ) => {
     const adsToShow: Advertisement[] = [];
     axios
-      .post(
+      .put(
         `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/coordinates`,
         sellerIds,
         {
@@ -66,9 +66,10 @@ const Home = () => {
   const handleClose = async (filters: any) => {
     setOpen(false);
     let filteredAdvertisements: Advertisement[] = advertisements;
+    console.log(filteredAdvertisements);
     const minPrice = parseInt(filters.min_price);
     const maxPrice = parseInt(filters.max_price);
-    const typeProduct = filters.type_product;
+    const typeProduct = filters.product_type;
     const distanceFilter = filters.distanceFilter;
     const distanceFilterValue = filters.distanceFilterValue;
 
@@ -85,32 +86,34 @@ const Home = () => {
         );
       });
     }
+    console.log(filteredAdvertisements);
 
     //Do not apply filters if there is an error on the input
     if (typeProduct !== "") {
-      filteredAdvertisements = filteredAdvertisements.map(
-        (ad: any, idx: any) => {
-          if (ad.type === typeProduct) {
-            return ad;
-          }
+      const adsToShow: Advertisement[] = [];
+      console.log("typeProduct", typeProduct);
+      filteredAdvertisements.map((ad: any, idx: any) => {
+        if (ad.category === typeProduct) {
+          adsToShow.push(ad);
         }
-      );
+      });
+      filteredAdvertisements = adsToShow;
     }
+    console.log(filteredAdvertisements);
 
     //Do not apply filters if there is an error on the input
     if ((minPrice !== -1 || maxPrice !== 0) && minPrice <= maxPrice) {
-      filteredAdvertisements = filteredAdvertisements.map(
-        (ad: any, idx: any) => {
-          if (
-            ad.pricePerKilogram >= minPrice &&
-            ad.pricePerKilogram <= maxPrice
-          ) {
-            return ad;
-          }
+      const adsToShow: Advertisement[] = [];
+      filteredAdvertisements.map((ad: any, idx: any) => {
+        if (
+          ad.pricePerKilogram >= minPrice &&
+          ad.pricePerKilogram <= maxPrice
+        ) {
+          adsToShow.push(ad);
         }
-      );
+      });
+      filteredAdvertisements = adsToShow;
     }
-
     setAdvertisementsToShow(
       filteredAdvertisements.map((ad: Advertisement, idx: number) => {
         return <AdvertisementCard key={idx} advertisement={ad} />;
