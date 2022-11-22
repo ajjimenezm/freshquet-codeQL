@@ -68,6 +68,7 @@ const Home = () => {
     let filteredAdvertisements: Advertisement[] = advertisements;
     const minPrice = parseInt(filters.min_price);
     const maxPrice = parseInt(filters.max_price);
+    const typeProduct = filters.type_product;
     const distanceFilter = filters.distanceFilter;
     const distanceFilterValue = filters.distanceFilterValue;
 
@@ -83,6 +84,17 @@ const Home = () => {
           userLocs
         );
       });
+    }
+
+    //Do not apply filters if there is an error on the input
+    if (typeProduct !== "") {
+      filteredAdvertisements = filteredAdvertisements.map(
+        (ad: any, idx: any) => {
+          if (ad.type === typeProduct) {
+            return ad;
+          }
+        }
+      );
     }
 
     //Do not apply filters if there is an error on the input

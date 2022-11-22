@@ -3,7 +3,14 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Modal, Button } from "@mui/material";
+import {
+  Modal,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
 
@@ -86,6 +93,7 @@ export const ShopFilters = (props: any) => {
     min_price: -1,
     distanceFilter: true,
     distanceFilterValue: 0,
+    product_type: "",
   });
   const handleChangeFilters = (event: any) => {
     setFilters({
@@ -151,7 +159,22 @@ export const ShopFilters = (props: any) => {
           </div>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <Box className=" mb-2 block text-sm font-medium text-gray-900">
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Tipo de producto
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                name="product_type"
+                label="Tipo de usuario"
+                onChange={handleChangeFilters}
+              >
+                <MenuItem value="freshh">freshh</MenuItem>
+                <MenuItem value="miscellaneous">miscellaneous</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </TabPanel>
         <TabPanel value={value} index={2}>
           {/* Location filter */}
@@ -165,6 +188,15 @@ export const ShopFilters = (props: any) => {
             onChange={handleLocationFilters}
           />
         </TabPanel>
+        <Button
+          variant="contained"
+          onClick={() => {
+            console.log(filters);
+            props.handleClose(filters);
+          }}
+        >
+          Guardar
+        </Button>
       </Box>
     </Modal>
   );
