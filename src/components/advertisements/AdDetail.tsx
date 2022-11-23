@@ -271,9 +271,6 @@ function AdDetail() {
             >
               Comprar
             </Button>
-            <Button onClick={() => console.log(images)}>
-              Eliminame si me ves
-            </Button>
           </div>
           {edit}
         </div>
