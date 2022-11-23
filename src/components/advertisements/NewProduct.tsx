@@ -43,7 +43,7 @@ export default function NewProducts() {
     name: "",
     description: "",
     pricePerKilogram: 0,
-    category: Category.Fresh,
+    category: Category.Fruta,
     averageReviewScore: 0.0,
     sellerId: localStorage.getItem("userId") || "",
     images: [],

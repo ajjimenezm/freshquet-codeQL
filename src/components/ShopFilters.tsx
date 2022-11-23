@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
+import { Category } from "../types/Category";
 
 const style = {
   position: "absolute",
@@ -160,8 +161,12 @@ export const ShopFilters = (props: any) => {
                 label="Tipo de usuario"
                 onChange={handleChangeFilters}
               >
-                <MenuItem value="freshh">freshh</MenuItem>
-                <MenuItem value="miscellaneous">miscellaneous</MenuItem>
+                <MenuItem value={Category.Fruta}>{Category.Fruta}</MenuItem>
+                <MenuItem value={Category.Verdura}>{Category.Verdura}</MenuItem>
+                <MenuItem value={Category.Legumbres}>
+                  {Category.Legumbres}
+                </MenuItem>
+                <MenuItem value={Category.Otros}>{Category.Otros}</MenuItem>
               </Select>
             </FormControl>
           </Box>
