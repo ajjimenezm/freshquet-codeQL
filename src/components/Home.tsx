@@ -37,7 +37,7 @@ const Home = () => {
   ) => {
     const adsToShow: Advertisement[] = [];
     axios
-      .put(
+      .post(
         `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/coordinates`,
         sellerIds,
         {
