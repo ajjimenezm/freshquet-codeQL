@@ -54,6 +54,7 @@ const Home = () => {
             userLocs.latitude,
             userLocs.longitude
           );
+          console.log(seller, distance, userLocs);
           if (distance < filterValue) {
             const ad = ads.find((ad) => ad.sellerId === seller._id);
             if (ad) adsToShow.push(ad);
@@ -73,10 +74,10 @@ const Home = () => {
     const distanceFilterValue = filters.distanceFilterValue;
 
     if (distanceFilter) {
-      navigator.geolocation.getCurrentPosition((position) => {
+      await navigator.geolocation.getCurrentPosition(async (position) => {
         const userLocs = {
-          lat: position.coords.latitude,
-          lon: position.coords.longitude,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
         };
         filteredAdvertisements = filterByDistance(
           distanceFilterValue,
@@ -85,7 +86,7 @@ const Home = () => {
         );
       });
     }
-
+    console.log("eoooooo");
     //Do not apply filters if there is an error on the input
     if (typeProduct !== "") {
       const adsToShow: Advertisement[] = [];

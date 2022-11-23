@@ -93,7 +93,7 @@ export const ShopFilters = (props: any) => {
     max_price: 0,
     min_price: -1,
     distanceFilter: false,
-    distanceFilterValue: 0,
+    distanceFilterValue: 10,
     product_type: "",
   });
   const handleChangeFilters = (event: any) => {
@@ -126,7 +126,7 @@ export const ShopFilters = (props: any) => {
           >
             <Tab label="Precio" {...a11yProps(0)} />
             <Tab label="Producto" {...a11yProps(1)} />
-            <Tab label="Distancia" {...a11yProps(2)} />
+            {/* <Tab label="Distancia" {...a11yProps(2)} /> */}
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -171,8 +171,8 @@ export const ShopFilters = (props: any) => {
             </FormControl>
           </Box>
         </TabPanel>
-        <TabPanel value={value} index={2}>
-          {/* Location filter */}
+        {/* <TabPanel value={value} index={2}>
+          {// Location filter //}
           <Slider
             aria-label="Custom marks"
             defaultValue={10}
@@ -182,7 +182,7 @@ export const ShopFilters = (props: any) => {
             marks={marks}
             onChange={handleLocationFilters}
           />
-        </TabPanel>
+        </TabPanel> */}
         <Button
           variant="contained"
           onClick={() => {
