@@ -1,4 +1,5 @@
 import { ReactComponent as SearchIcon } from "../../assets/icons/SearchIcon.svg";
+import { ReactComponent as FilterIcon } from "../../assets/icons/FilterIcon.svg";
 
 interface SearchFieldProps {
     id: string;
@@ -25,7 +26,14 @@ function SearchField(props: SearchFieldProps) {
                 onFocus={props.onFocus}
                 onBlur={props.onBlur}
             />
-            <div className="absolute inset-y-0 right-0 flex items-center"></div>
+            <div
+                className="absolute inset-y-0 right-4 flex items-center"
+                onClick={() => {
+                    console.log("Filter clicked");
+                }}
+            >
+                <FilterIcon className="stroke-fresh-morado" />
+            </div>
         </div>
     );
 }
