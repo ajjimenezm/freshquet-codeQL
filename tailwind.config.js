@@ -30,6 +30,10 @@ module.exports = {
             borderRadius: {
                 fresh: "16px",
             },
+            transitionProperty: {
+                height: "height",
+                width: "width",
+            },
         },
     },
     plugins: [],
