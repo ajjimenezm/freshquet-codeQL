@@ -2,21 +2,21 @@ import {
     getSearchHistory,
     addSearchHistory,
     checkIfSearchHistoryExists,
-} from "../libs/SearchHistory";
-import TextField from "@mui/material/TextField";
+    removeSearchHistory,
+} from "../../libs/SearchHistory";
 import React from "react";
-import { IconButton } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import AdvertisementCard from "./AdvertisementCard";
-import AdvertisementCardSkeleton from "./AdvertisementCardSkeleton";
-import Heading from "./Heading";
-import Advertisement from "../types/Advertisement";
-import SearchHistoryElement from "./search/SearchHistoryElement";
-import SearchHistoryElementSkeleton from "./search/SearchHistoryElementSkeleton";
-import AdvertisementManagement from "../libs/AdvertisementManagement";
+import AdvertisementCard from "../AdvertisementCard";
+import AdvertisementCardSkeleton from "../AdvertisementCardSkeleton";
+import Advertisement from "../../types/Advertisement";
+import SearchHistoryElement from "./SearchHistoryElement";
+import AdvertisementManagement from "../../libs/AdvertisementManagement";
+import SearchField from "./SearchField";
+import SearchPlaceHolder from "./SearchPlaceHolder";
+import { ReactComponent as BackArrow } from "../../assets/icons/BackArrow.svg";
 
 function Search() {
+    const [searchFocused, setSearchFocused] = React.useState(false);
     const [dataLoaded, setDataLoaded] = React.useState(false);
     const [dataRequested, setDataRequested] = React.useState(false);
     const [minimumTimeElapsed, setMinimumTimeElapsed] = React.useState(false);
@@ -26,7 +26,6 @@ function Search() {
     const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
         []
     );
-    const [localStorageLoaded, setLocalStorageLoaded] = React.useState(false);
     const waitingTimeSkeletonLoader = 500;
     const [searchHistoryElements, setSearchHistoryElements] =
         React.useState<JSX.Element[]>();
@@ -70,7 +69,6 @@ function Search() {
             navigate("/login");
         }
         setSearchHistoryElements(loadSearchHistory());
-        setLocalStorageLoaded(true);
 
         if (searchParams.get("search") && searchParams.get("search") !== "") {
             setTimeout(() => {
@@ -124,44 +122,61 @@ function Search() {
                 onHistoryClick={(historyString: string) => {
                     setSearchParams({ search: historyString });
                 }}
+                onDeleteEntryClick={handleDeleteHistory}
             />
         ));
     };
 
+    const handleFocus = () => {
+        setSearchFocused(true);
+    };
+
+    const handleBackClick = () => {
+        navigate("/search");
+        setSearchParams({ search: "" });
+        setSearchFocused(false);
+    };
+
+    const handleDeleteHistory = (query: string) => {
+        removeSearchHistory(query);
+        setSearchHistoryElements(loadSearchHistory());
+    };
+
     return (
-        <div>
-            <Heading text="Buscar productos" />
-            <div className="ml-5 mr-5">
-                <TextField
-                    InputProps={{
-                        startAdornment: (
-                            <IconButton
-                                type="button"
-                                sx={{ p: "10px" }}
-                                aria-label="search"
-                            >
-                                <SearchIcon />
-                            </IconButton>
-                        ),
-                    }}
-                    fullWidth
-                    id="searchField"
-                    value={searchParams.get("search") || ""}
-                    onChange={handleSearch}
-                ></TextField>
+        <div className="h-screen w-screen bg-fresh-fondo-azul">
+            <div className="relative flex w-screen flex-row items-center pr-4 pl-4 pt-16">
+                {(searchFocused ||
+                    (searchParams.get("search") !== null &&
+                        searchParams.get("search") !== "")) && (
+                    <div className="ml-1.5 mr-4">
+                        <BackArrow
+                            className="stroke-fresh-morado"
+                            onClick={handleBackClick}
+                        />
+                    </div>
+                )}
+                <div
+                    className="w-full
+                "
+                >
+                    <SearchField
+                        id="searchField"
+                        value={searchParams.get("search") || ""}
+                        onChange={handleSearch}
+                        onFocus={handleFocus}
+                    />
+                </div>
             </div>
-            <div className="mt-3 ml-5 mr-5 divide-y-2 pb-20">
-                {!localStorageLoaded ? (
-                    <>
-                        <SearchHistoryElementSkeleton />
-                        <SearchHistoryElementSkeleton />
-                        <SearchHistoryElementSkeleton />
-                        <SearchHistoryElementSkeleton />
-                    </>
-                ) : !searchParams.get("search") ||
-                  searchParams.get("search")?.length == 0 ? (
-                    searchHistoryElements
-                ) : dataLoaded ? (
+            {searchFocused &&
+                (!searchParams.get("search") ||
+                    searchParams.get("search") === "") && (
+                    <div className="ml-16 mr-10 mt-5">
+                        {searchHistoryElements}
+                    </div>
+                )}
+            {searchParams.get("search") &&
+                searchParams.get("search") !== "" &&
+                (dataLoaded ? (
                     advertisementsToShow
                 ) : dataRequested && minimumTimeElapsed ? (
                     <>
@@ -172,8 +187,14 @@ function Search() {
                     </>
                 ) : (
                     <></>
+                ))}
+            {!searchFocused &&
+                (searchParams.get("search") === null ||
+                    searchParams.get("search") === "") && (
+                    <div className="absolute left-0 right-0 mt-16 ml-auto mr-auto h-max w-screen flex-row items-center">
+                        <SearchPlaceHolder />
+                    </div>
                 )}
-            </div>
         </div>
     );
 }

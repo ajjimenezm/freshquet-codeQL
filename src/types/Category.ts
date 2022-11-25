@@ -1,4 +1,6 @@
 export enum Category {
-  Fresh = 'freshh',
-  Miscellaneous = 'miscellaneous',
+  Fruta = "Fruta",
+  Verdura = "Verdura",
+  Legumbres = "Legumbres",
+  Otros = "Otros",
 }

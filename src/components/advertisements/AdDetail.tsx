@@ -201,19 +201,21 @@ function AdDetail() {
         <Skeleton
           variant="rectangular"
           animation="wave"
-          sx={{ width: 400, height: 400 }}
+          sx={{ width: 300, height: 300 }}
         />
       );
     }
 
     return (
-      <SimpleImageSlider
-        width={400}
-        height={400}
-        showBullets={moreThanOne}
-        showNavs={moreThanOne}
-        images={images}
-      />
+      <div>
+        <SimpleImageSlider
+          width={300}
+          height={300}
+          showBullets={moreThanOne}
+          showNavs={moreThanOne}
+          images={images}
+        />
+      </div>
     );
   }
 
@@ -268,9 +270,6 @@ function AdDetail() {
               }}
             >
               Comprar
-            </Button>
-            <Button onClick={() => console.log(images)}>
-              Eliminame si me ves
             </Button>
           </div>
           {edit}

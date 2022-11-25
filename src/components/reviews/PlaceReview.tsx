@@ -14,10 +14,12 @@ const PlaceReview = (props: PlaceReviewProps) => {
   const { purchaseId } = useParams<{ purchaseId: string }>();
   const navigate = useNavigate();
 
-  const [rating, setRating] = React.useState<number | null>(0);
+  const [rating, setRating] = React.useState<number | null>(null);
   const [hover, setHover] = React.useState(-1);
   const [comment, setComment] = React.useState<string>('');
   const [confcode, setConfcode] = React.useState<string>('');
+  const [confCodeHelperText, setConfCodeHelperText] =
+    React.useState<string>('');
 
   React.useEffect(() => {
     if (!purchaseId) {
@@ -35,12 +37,18 @@ const PlaceReview = (props: PlaceReviewProps) => {
       rating || 0,
       comment,
       confcode
-    ).then((res) => {
-      console.log(res);
-      //Esto ha de cambiar pero no sé como hacerlo bonito :)
-      alert('¡Gracias por tu opinión!');
-      navigate('/advertisementHistory');
-    });
+    )
+      .then((res) => {
+        console.log(res);
+        //Esto ha de cambiar pero no sé como hacerlo bonito :)
+        alert('¡Gracias por tu opinión!');
+        navigate('/advertisementHistory');
+      })
+      .catch((err) => {
+        if (err.response.status === 418) {
+          setConfCodeHelperText('Código de confirmación incorrecto');
+        }
+      });
   };
 
   return (
@@ -72,12 +80,14 @@ const PlaceReview = (props: PlaceReviewProps) => {
         }}
       />
       <TextField
+        error={confCodeHelperText !== ''}
         required
         id="conf-code"
         label="Código de confirmación de compra"
         onChange={(event) => {
           setConfcode(event.target.value);
         }}
+        helperText={confCodeHelperText}
       />
       <div className="flex-row justify-end space-x-2">
         <Button
@@ -88,7 +98,11 @@ const PlaceReview = (props: PlaceReviewProps) => {
         >
           Cancelar
         </Button>
-        <Button variant="outlined" onClick={() => sendReview()}>
+        <Button
+          variant="outlined"
+          onClick={() => sendReview()}
+          disabled={!rating || !confcode}
+        >
           Enviar
         </Button>
       </div>
