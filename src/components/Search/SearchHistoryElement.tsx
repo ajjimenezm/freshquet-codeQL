@@ -15,7 +15,7 @@ function SearchHistoryElement(props: SearchHistoryElementProps) {
         props.onDeleteEntryClick(props.historyString);
     };
     return (
-        <div className="flex w-full cursor-default flex-row items-center justify-between pb-4">
+        <div className="flex w-full cursor-default select-none flex-row items-center justify-between pb-4">
             <div
                 className="flex grow flex-row items-center"
                 onClick={handleClick}
