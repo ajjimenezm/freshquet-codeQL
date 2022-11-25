@@ -4,14 +4,10 @@ import {
     checkIfSearchHistoryExists,
     removeSearchHistory,
 } from "../../libs/SearchHistory";
-import TextField from "@mui/material/TextField";
 import React from "react";
-import { IconButton } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AdvertisementCard from "../AdvertisementCard";
 import AdvertisementCardSkeleton from "../AdvertisementCardSkeleton";
-import TuneIcon from "@mui/icons-material/Tune";
 import Advertisement from "../../types/Advertisement";
 import SearchHistoryElement from "./SearchHistoryElement";
 import AdvertisementManagement from "../../libs/AdvertisementManagement";
@@ -30,7 +26,6 @@ function Search() {
     const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
         []
     );
-    const [localStorageLoaded, setLocalStorageLoaded] = React.useState(false);
     const waitingTimeSkeletonLoader = 500;
     const [searchHistoryElements, setSearchHistoryElements] =
         React.useState<JSX.Element[]>();
@@ -74,7 +69,6 @@ function Search() {
             navigate("/login");
         }
         setSearchHistoryElements(loadSearchHistory());
-        setLocalStorageLoaded(true);
 
         if (searchParams.get("search") && searchParams.get("search") !== "") {
             setTimeout(() => {
@@ -133,12 +127,8 @@ function Search() {
         ));
     };
 
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const handleFocus = () => {
         setSearchFocused(true);
-    };
-
-    const handleUnfocus = (e: React.FocusEvent<HTMLInputElement>) => {
-        // setSearchFocused(false);
     };
 
     const handleBackClick = () => {
@@ -174,7 +164,6 @@ function Search() {
                         value={searchParams.get("search") || ""}
                         onChange={handleSearch}
                         onFocus={handleFocus}
-                        onBlur={handleUnfocus}
                     />
                 </div>
             </div>
@@ -199,23 +188,6 @@ function Search() {
                 ) : (
                     <></>
                 ))}
-
-            {/* <div className="mt-3 ml-5 mr-5 divide-y-2 pb-20">
-                {!localStorageLoaded ? (
-                    <>
-                        <SearchHistoryElementSkeleton />
-                        <SearchHistoryElementSkeleton />
-                        <SearchHistoryElementSkeleton />
-                        <SearchHistoryElementSkeleton />
-                    </>
-                ) : !searchParams.get("search") ||
-                  searchParams.get("search")?.length == 0 ? (
-                    searchHistoryElements
-                ) : 
-                ) : (
-                    <></>
-                )}
-            </div> */}
             {!searchFocused &&
                 (searchParams.get("search") === null ||
                     searchParams.get("search") === "") && (
