@@ -1,6 +1,7 @@
 import Advertisement from '../types/Advertisement';
 import axios, { AxiosResponse } from 'axios';
 import { Buffer } from 'buffer';
+import { Compra } from '../types/Compra';
 
 async function GetAdvertisementById(id: string): Promise<Advertisement> {
   const response = await axios.get(
@@ -58,9 +59,31 @@ async function PlacePurchaseReview(
   return axios(config);
 }
 
+async function GetOrdersFromUser(
+  userId: string,
+  userRole: string
+): Promise<Compra[]> {
+  const config = {
+    method: 'get',
+    url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/all/${
+      userRole === 'seller' ? 'sell' : 'buy'
+    }/${userId}`,
+    headers: {},
+  };
+
+  return axios(config)
+    .then((res) => {
+      return res.data;
+    })
+    .catch(() => {
+      return [];
+    });
+}
+
 export default {
   GetAdvertisementById,
   GetAllAdvertisements,
   GetImageAdvertisment,
   PlacePurchaseReview,
+  GetOrdersFromUser,
 };

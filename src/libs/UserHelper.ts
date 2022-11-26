@@ -18,6 +18,8 @@ const retrieveProfilePicture = async (imgname: string): Promise<string> => {
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   let img: string = '';
 
+  if (!imgname || imgname === '') return '';
+
   await axios
     .get(
       `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile-picture/${imgname}`,
@@ -40,6 +42,7 @@ const retrieveProfilePicture = async (imgname: string): Promise<string> => {
 
 async function getOwnProfile(): Promise<User> {
   let returnUser: User = {
+    _id: '',
     name: 'empty',
     username: '',
     password: '',
@@ -62,21 +65,10 @@ async function getOwnProfile(): Promise<User> {
     }
   );
 
-  const getuserTypeRequest = axios.get(
-    `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`,
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-      },
-    }
-  );
-
-  await axios.all([getUserRequest, getuserTypeRequest]).then(
-    axios.spread((...responses) => {
-      const responseOne = responses[0];
-      const responseTwo = responses[1];
-      returnUser = responseOne.data;
-      returnUser.userType = responseTwo.data;
+  await axios.all([getUserRequest]).then(
+    axios.spread((res1) => {
+      console.log(res1.data[0]);
+      returnUser = res1.data[0];
     })
   );
 
