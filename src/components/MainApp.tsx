@@ -16,6 +16,7 @@ import AdvertismentHistory from './advertismentHistory/advertismentHistory';
 import BuyerProfile from './Profile/BuyerProfile';
 import Search from './search/Search';
 import OrderCard from './Profile/OrderCard';
+import EditProfile from './Profile/EditProfile';
 
 function MainApp() {
   //localStorage.clear();
@@ -39,6 +40,7 @@ function MainApp() {
         <Route path="chatmenu" element={<ChatMenu />} />
         {/* <Route path="profile" element={<Profile />} /> */}
         <Route path="profile" element={<BuyerProfile />} />
+        <Route path="editprofile" element={<EditProfile />} />
         <Route path="products/detail/:id" element={<AdDetail />} />
         <Route path="seller/:id" element={<SellerPage />} />
         <Route path="products/edit/:id" element={<EditAdDetail />} />
