@@ -52,6 +52,7 @@ async function getOwnProfile(): Promise<User> {
     profile_picture: '',
     address: '',
     biography: '',
+
     latitude: 0,
     longitude: 0,
     userType: '',
@@ -117,6 +118,7 @@ export default {
   uploadProfilePicture,
   retrieveProfilePicture,
   getOwnProfile,
+
   Logout,
   StringAvatar,
   UpdateUserData,

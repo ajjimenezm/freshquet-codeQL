@@ -2,7 +2,7 @@ import PlaceReview from './reviews/PlaceReview';
 import BottomNav from './BottomNav';
 import { useNavigate } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom';
-import Home from './Home';
+import Home from './Home/Home';
 import Map from './map/Map';
 import Chat from './Chat/Chat';
 import AdDetail from './advertisements/AdDetail';
@@ -17,6 +17,7 @@ import BuyerProfile from './Profile/BuyerProfile';
 import Search from './search/Search';
 import OrderCard from './Profile/OrderCard';
 import EditProfile from './Profile/EditProfile';
+import NearbyProducts from './Home/NearbyProducts';
 
 function MainApp() {
   //localStorage.clear();
@@ -46,6 +47,7 @@ function MainApp() {
         <Route path="products/edit/:id" element={<EditAdDetail />} />
         <Route path="advertisementHistory" element={<AdvertismentHistory />} />
         <Route path="review/:purchaseId" element={<PlaceReview />} />
+        <Route path="nearbyProducts" element={<NearbyProducts />} />
         <Route
           path="testest"
           element={
