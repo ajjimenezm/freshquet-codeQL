@@ -3,25 +3,25 @@
 @tailwind utilities;
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    font-style: normal;
+  font-family: "Outfit", "sans-serif";
+  font-weight: 300;
+  font-style: normal;
 }
 
 html,
 body {
-    height: 100%;
-    margin: 0;
+  height: 100%;
+  margin: 0;
 }
 
 .leaflet-container {
-    z-index: 0;
-    width: 100%;
-    height: 100vh;
+  z-index: 0;
+  width: 100%;
+  height: 100vh;
 }

@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { User } from '../types/User';
+import axios from "axios";
+import { User } from "../types/User";
 
 const uploadProfilePicture = (file: any) => {
   axios.post(
@@ -7,8 +7,8 @@ const uploadProfilePicture = (file: any) => {
     file,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        "Content-Type": "multipart/form-data",
       },
     }
   );
@@ -16,25 +16,25 @@ const uploadProfilePicture = (file: any) => {
 
 const retrieveProfilePicture = async (imgname: string): Promise<string> => {
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-  let img: string = '';
+  let img: string = "";
 
-  if (!imgname || imgname === '') return '';
+  if (!imgname || imgname === "") return "";
 
   await axios
     .get(
       `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile-picture/${imgname}`,
       {
-        responseType: 'arraybuffer',
+        responseType: "arraybuffer",
       }
     )
     .then((res) => {
-      img = `data:;base64,${Buffer.from(res.data, 'binary').toString(
-        'base64'
+      img = `data:;base64,${Buffer.from(res.data, "binary").toString(
+        "base64"
       )}`;
     })
     .catch((err) => {
       console.log(err);
-      img = '';
+      img = "";
     });
 
   return img;
@@ -42,25 +42,25 @@ const retrieveProfilePicture = async (imgname: string): Promise<string> => {
 
 async function getOwnProfile(): Promise<User> {
   let returnUser: User = {
-    _id: '',
-    name: 'empty',
-    username: '',
-    password: '',
-    phoneNumber: '',
-    email: '',
-    profilePicture: '',
-    address: '',
-    biography: '',
+    _id: "",
+    name: "empty",
+    username: "",
+    password: "",
+    phoneNumber: "",
+    email: "",
+    profilePicture: "",
+    address: "",
+    biography: "",
     latitude: 0,
     longitude: 0,
-    userType: '',
+    userType: "",
   };
 
   const getUserRequest = axios.get(
     `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       },
     }
   );
@@ -75,4 +75,8 @@ async function getOwnProfile(): Promise<User> {
   return returnUser;
 }
 
-export default { uploadProfilePicture, retrieveProfilePicture, getOwnProfile };
+export default {
+  uploadProfilePicture,
+  retrieveProfilePicture,
+  getOwnProfile,
+};

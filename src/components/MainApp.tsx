@@ -1,21 +1,22 @@
-import PlaceReview from './reviews/PlaceReview';
-import BottomNav from './BottomNav';
-import { useNavigate } from 'react-router-dom';
-import { Routes, Route } from 'react-router-dom';
-import Home from './Home';
-import Map from './map/Map';
-import Chat from './Chat/Chat';
-import AdDetail from './advertisements/AdDetail';
-import Profile from './Profile/Profile';
-import SellerPage from './seller-page/SellerPage';
-import EditAdDetail from './advertisements/EditAdDetail';
-import { useEffect } from 'react';
-import ChatMenu from './Chat/ChatMenu';
+import PlaceReview from "./reviews/PlaceReview";
+import BottomNav from "./BottomNav";
+import { useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Home/Home";
+import Map from "./map/Map";
+import Chat from "./Chat/Chat";
+import AdDetail from "./advertisements/AdDetail";
+import Profile from "./Profile/Profile";
+import SellerPage from "./seller-page/SellerPage";
+import EditAdDetail from "./advertisements/EditAdDetail";
+import { useEffect } from "react";
+import ChatMenu from "./Chat/ChatMenu";
 
-import AdvertismentHistory from './advertismentHistory/advertismentHistory';
-import BuyerProfile from './Profile/BuyerProfile';
-import Search from './search/Search';
-import OrderCard from './Profile/OrderCard';
+import AdvertismentHistory from "./advertismentHistory/advertismentHistory";
+import BuyerProfile from "./Profile/BuyerProfile";
+import Search from "./Search/Search";
+import OrderCard from "./Profile/OrderCard";
+import NearbyProducts from "./Home/NearbyProducts";
 
 function MainApp() {
   //localStorage.clear();
@@ -23,9 +24,9 @@ function MainApp() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem('userToken');
+    const user = localStorage.getItem("userToken");
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, []);
 
@@ -44,6 +45,7 @@ function MainApp() {
         <Route path="products/edit/:id" element={<EditAdDetail />} />
         <Route path="advertisementHistory" element={<AdvertismentHistory />} />
         <Route path="review/:purchaseId" element={<PlaceReview />} />
+        <Route path="nearbyProducts" element={<NearbyProducts />} />
         <Route
           path="testest"
           element={
