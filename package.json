@@ -24,6 +24,7 @@
         "react-router-dom": "^6.4.2",
         "react-scripts": "5.0.1",
         "react-simple-image-slider": "^2.4.1",
+        "react-slideshow-image": "^4.0.5",
         "react-tabs": "^5.1.0",
         "react-tabs-css": "^1.4.3",
         "react-widgets": "^5.8.4",
