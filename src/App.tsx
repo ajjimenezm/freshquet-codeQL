@@ -36,7 +36,6 @@ function App() {
           <Route path="*" element={<MainApp />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="newproduct" element={<NewProduct />} />
           <Route path="products/buy/:id" element={<BuyAd />} />
           <Route path="advertismentHistory" element={<AdvertismentHistory />} />
         </Routes>
