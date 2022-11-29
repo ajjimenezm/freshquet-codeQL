@@ -9,8 +9,7 @@ import Register from "./components/users/Register";
 import { AuthContext } from "./chatContext/AuthContext";
 import BuyAd from "./components/advertisements/BuyAdvertisement/BuyAdDialog";
 import AdvertismentHistory from "./components/advertismentHistory/advertismentHistory";
-import AdDetailBuyer from "./components/advertisements/AdDetailBuyer";
-import AdDetailBuyerList from "./components/advertisements/AdDetailBuyerList";
+import NearbyProducts from "./components/Home/NearbyProducts";
 
 function App() {
     // useContext user authcontext
@@ -44,7 +43,7 @@ function App() {
                         path="advertismentHistory"
                         element={<AdvertismentHistory />}
                     />
-                    <Route path="ojsdhfsdoiu" element={<AdDetailBuyerList />} />
+                    <Route path="nearbyProducts" element={<NearbyProducts />} />
                 </Routes>
             </ThemeProvider>
         </div>

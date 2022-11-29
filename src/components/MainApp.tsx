@@ -50,7 +50,7 @@ function MainApp() {
                     element={<AdvertismentHistory />}
                 />
                 <Route path="review/:purchaseId" element={<PlaceReview />} />
-                <Route path="nearbyProducts" element={<NearbyProducts />} />
+
                 <Route
                     path="testest"
                     element={

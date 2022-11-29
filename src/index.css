@@ -20,13 +20,6 @@ body {
     height: 100%;
     margin: 0;
 }
-html {
-    overflow: hidden;
-}
-
-body {
-    overflow: hidden;
-}
 
 .leaflet-container {
     z-index: 0;

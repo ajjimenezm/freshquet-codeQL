@@ -1,48 +1,35 @@
 import AdDetailBuyer from "./AdDetailBuyer";
 import { ReactComponent as NegativeBack } from "../../assets/icons/NegativeBack.svg";
+import Advertisement from "../../types/Advertisement";
 
-function AdDetailBuyerList() {
+interface AdDetailBuyerListProps {
+    category: string;
+    products: Advertisement[];
+}
+
+function AdDetailBuyerList(props: AdDetailBuyerListProps) {
+    const cards = props.products.map((product, index) => (
+        <AdDetailBuyer
+            key={index}
+            productId={product._id}
+            productName={product.name}
+            productPrice={product.pricePerKilogram}
+            sellerName={product.sellerId.name}
+            sellerId={product.sellerId._id}
+            productRating={product.averageReviewScore}
+        />
+    ));
     return (
         <div className="flex h-screen w-screen snap-y snap-mandatory flex-col overflow-scroll">
-            <div className="absolute top-0 left-0 z-20 flex w-screen flex-row bg-gradient-to-b from-black pt-16 pb-12">
+            <div className="absolute top-0 left-0 z-30 flex w-screen flex-row items-center bg-gradient-to-b from-black pt-16 pb-16 ">
                 <NegativeBack className="ml-6 h-5 w-3" />
+                <h1 className="absolute w-screen flex-grow text-center font-outfit text-lg font-medium text-white">
+                    {props.category}
+                </h1>
             </div>
-            <AdDetailBuyer
-                productName="Tomato"
-                productPrice={1.2}
-                sellerName="Venedor"
-                sellerPicture="https://play-lh.googleusercontent.com/8ID9RW2dLGPxai5r5W_c-JESdD2a_lyAfX0hncKq0bqLuFcC-qfstgTPfmtynR9jYg"
-                sellerId="test"
-                productRating={4.9}
-                productImages={[
-                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg",
-                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg",
-                ]}
-            />
-            <AdDetailBuyer
-                productName="Tomato"
-                productPrice={1.2}
-                sellerName="Venedor"
-                sellerPicture="https://play-lh.googleusercontent.com/8ID9RW2dLGPxai5r5W_c-JESdD2a_lyAfX0hncKq0bqLuFcC-qfstgTPfmtynR9jYg"
-                sellerId="test"
-                productRating={4.9}
-                productImages={[
-                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg",
-                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg",
-                ]}
-            />
-            <AdDetailBuyer
-                productName="Tomato"
-                productPrice={1.2}
-                sellerName="Venedor"
-                sellerPicture="https://play-lh.googleusercontent.com/8ID9RW2dLGPxai5r5W_c-JESdD2a_lyAfX0hncKq0bqLuFcC-qfstgTPfmtynR9jYg"
-                sellerId="test"
-                productRating={4.9}
-                productImages={[
-                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg",
-                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg",
-                ]}
-            />
+            {}
+
+            {cards}
         </div>
     );
 }
