@@ -75,8 +75,39 @@ async function getOwnProfile(): Promise<User> {
   return returnUser;
 }
 
+async function getUserById(id: string): Promise<User> {
+  let returnUser: User = {
+    _id: "",
+    name: "empty",
+    username: "",
+    password: "",
+    phoneNumber: "",
+    email: "",
+    profilePicture: "",
+    address: "",
+    biography: "",
+    latitude: 0,
+    longitude: 0,
+    userType: "",
+  };
+
+  const getUserRequest = await axios.get(
+    `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${id}/profile`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+      },
+    }
+  );
+
+  returnUser = getUserRequest.data;
+
+  return returnUser;
+}
+
 export default {
   uploadProfilePicture,
   retrieveProfilePicture,
   getOwnProfile,
+  getUserById,
 };
