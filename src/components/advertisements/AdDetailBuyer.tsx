@@ -23,13 +23,14 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
     const [sellerImage, setSellerImage] = useState<string>("");
 
     React.useEffect(() => {
-        AdvertisementManagement.GetImageAdvertisment(props.productId).then(
-            (res) => {
-                setProductImages([
-                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg",
-                ]);
-            }
+        const images = AdvertisementManagement.GetProductPictures(
+            props.productId
         );
+
+        images.then((res) => {
+            console.log("Images are fetched");
+            setProductImages(res);
+        });
     }, []);
 
     React.useEffect(() => {

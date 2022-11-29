@@ -5,6 +5,7 @@ import Advertisement from "../../types/Advertisement";
 interface AdDetailBuyerListProps {
     category: string;
     products: Advertisement[];
+    onBack: () => void;
 }
 
 function AdDetailBuyerList(props: AdDetailBuyerListProps) {
@@ -21,7 +22,10 @@ function AdDetailBuyerList(props: AdDetailBuyerListProps) {
     ));
     return (
         <div className="flex h-screen w-screen snap-y snap-mandatory flex-col overflow-scroll">
-            <div className="absolute top-0 left-0 z-30 flex w-screen flex-row items-center bg-gradient-to-b from-black pt-16 pb-16 ">
+            <div
+                className="absolute top-0 left-0 z-30 flex w-screen flex-row items-center bg-gradient-to-b from-black pt-16 pb-16 "
+                onClick={props.onBack}
+            >
                 <NegativeBack className="ml-6 h-5 w-3" />
                 <h1 className="absolute w-screen flex-grow text-center font-outfit text-lg font-medium text-white">
                     {props.category}

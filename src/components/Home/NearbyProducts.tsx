@@ -71,6 +71,9 @@ const NearbyProducts = () => {
                 <AdDetailBuyerList
                     category="Productos cercanos"
                     products={advertisements}
+                    onBack={() => {
+                        setShowProductDetail(false);
+                    }}
                 />
             )}
             {!showProductDetail && (
