@@ -9,101 +9,105 @@ import AdvertisementManagement from "../../libs/AdvertisementManagement";
 import { useNavigate } from "react-router-dom";
 
 interface SellerCardProps {
-  seller: User;
+    seller: User;
 }
 
 function stringAvatar(name: string) {
-  return {
-    sx: {
-      "border-width": 1,
-      "border-color": "#976D9C",
-      bgcolor: "#976D9C",
-      width: 48,
-      height: 48,
-      fontSize: 20,
-      fontWeight: "bold",
-    },
-    children: `${name.split(" ")[0][0]}`,
-  };
+    return {
+        sx: {
+            "border-width": 1,
+            "border-color": "#976D9C",
+            bgcolor: "#976D9C",
+            width: 48,
+            height: 48,
+            fontSize: 20,
+            fontWeight: "bold",
+        },
+        children: `${name.split(" ")[0][0]}`,
+    };
 }
 
 const SellerCard = (props: SellerCardProps) => {
-  const navigate = useNavigate();
-  const [imageProfile, setImageProfile] = useState<string>("");
-  const [imageLeft, setImageLeft] = useState<string>("");
-  const [imageRight, setImageRight] = useState<string>("");
+    const navigate = useNavigate();
+    const [imageProfile, setImageProfile] = useState<string>("");
+    const [imageLeft, setImageLeft] = useState<string>("");
+    const [imageRight, setImageRight] = useState<string>("");
 
-  const navigateFunction = (id: string) => {
-    navigate(`/seller/${id}`);
-  };
+    const navigateFunction = (id: string) => {
+        navigate(`/seller/${id}`);
+    };
 
-  useEffect(() => {
-    UserHelper.retrieveProfilePicture(props.seller.profilePicture).then(
-      (res) => {
-        setImageProfile(res);
-      }
-    );
+    useEffect(() => {
+        UserHelper.retrieveProfilePicture(props.seller.profile_picture).then(
+            (res) => {
+                setImageProfile(res);
+            }
+        );
 
-    AdvertisementManagement.GetAllAdvertisementsFromSeller(
-      props.seller._id
-    ).then((res) => {
-      AdvertisementManagement.GetImageAdvertisment(res[0]._id).then((res) => {
-        setImageLeft(res);
-      });
-      AdvertisementManagement.GetImageAdvertisment(res[1]._id).then((res) => {
-        setImageRight(res);
-      });
-    });
-  }, []);
+        AdvertisementManagement.GetAllAdvertisementsFromSeller(
+            props.seller._id
+        ).then((res) => {
+            AdvertisementManagement.GetImageAdvertisment(res[0]._id).then(
+                (res) => {
+                    setImageLeft(res);
+                }
+            );
+            AdvertisementManagement.GetImageAdvertisment(res[1]._id).then(
+                (res) => {
+                    setImageRight(res);
+                }
+            );
+        });
+    }, []);
 
-  function getAvatar(avatar: string | undefined, dataUser: User) {
-    return avatar ? (
-      <Avatar
-        src={avatar}
-        sx={{
-          width: 48,
-          height: 48,
-          "border-width": 1,
-          "border-color": "#976D9C",
-        }}
-        alt={dataUser.username}
-      />
-    ) : (
-      <Avatar {...stringAvatar(dataUser.name)} />
-    );
-  }
-
-  return (
-    <div
-      onClick={navigateFunction.bind(null, props.seller._id)}
-      className="text-semibold w-[160px] flex-shrink-0 overflow-hidden rounded-xl  border-[1px] border-fresh-morado text-fresh-morado"
-    >
-      <div className="flex flex-col items-center justify-center space-y-2 border-b-[1px] border-fresh-morado pt-4 pb-4 text-center">
-        {getAvatar(imageProfile, props.seller)}
-        <p className=" text-[12px] font-medium">{props.seller.name}</p>
-      </div>
-      <div className="flex h-[80px]">
-        {imageLeft ? (
-          <img src={imageLeft} alt={"test"} className="w-1/2" />
+    function getAvatar(avatar: string | undefined, dataUser: User) {
+        return avatar ? (
+            <Avatar
+                src={avatar}
+                sx={{
+                    width: 48,
+                    height: 48,
+                    "border-width": 1,
+                    "border-color": "#976D9C",
+                }}
+                alt={dataUser.username}
+            />
         ) : (
-          <Skeleton
-            variant="rectangular"
-            animation={false}
-            sx={{ width: 112, height: 112, bgcolor: "#976D9C" }}
-          />
-        )}
-        {imageRight ? (
-          <img src={imageRight} alt={"test"} className="w-1/2" />
-        ) : (
-          <Skeleton
-            variant="rectangular"
-            animation={false}
-            sx={{ width: 112, height: 112, bgcolor: "#976D9C" }}
-          />
-        )}
-      </div>
-    </div>
-  );
+            <Avatar {...stringAvatar(dataUser.name)} />
+        );
+    }
+
+    return (
+        <div
+            onClick={navigateFunction.bind(null, props.seller._id)}
+            className="text-semibold w-[160px] flex-shrink-0 overflow-hidden rounded-xl  border-[1px] border-fresh-morado text-fresh-morado"
+        >
+            <div className="flex flex-col items-center justify-center space-y-2 border-b-[1px] border-fresh-morado pt-4 pb-4 text-center">
+                {getAvatar(imageProfile, props.seller)}
+                <p className=" text-[12px] font-medium">{props.seller.name}</p>
+            </div>
+            <div className="flex h-[80px]">
+                {imageLeft ? (
+                    <img src={imageLeft} alt={"test"} className="w-1/2" />
+                ) : (
+                    <Skeleton
+                        variant="rectangular"
+                        animation={false}
+                        sx={{ width: 112, height: 112, bgcolor: "#976D9C" }}
+                    />
+                )}
+                {imageRight ? (
+                    <img src={imageRight} alt={"test"} className="w-1/2" />
+                ) : (
+                    <Skeleton
+                        variant="rectangular"
+                        animation={false}
+                        sx={{ width: 112, height: 112, bgcolor: "#976D9C" }}
+                    />
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default SellerCard;
