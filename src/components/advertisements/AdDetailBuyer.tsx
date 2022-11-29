@@ -61,6 +61,8 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                     canSwipe={true}
                     transitionDuration={300}
                     arrows={false}
+                    infinite={productImages.length > 1}
+                    autoplay={productImages.length > 1}
                 >
                     {productImagesSlides}
                 </Slide>
