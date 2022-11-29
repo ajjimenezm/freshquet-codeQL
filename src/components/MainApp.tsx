@@ -2,7 +2,7 @@ import PlaceReview from "./reviews/PlaceReview";
 import BottomNav from "./BottomNav";
 import { useNavigate } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
-import Home from "./Home";
+import Home from "./Home/Home";
 import Map from "./map/Map";
 import Search from "./Search/Search";
 import Chat from "./Chat/Chat";
