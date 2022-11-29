@@ -17,9 +17,11 @@ interface BottomNavProps {
 function BottomNav(props: BottomNavProps) {
     const [isBuyer, setIsBuyer] = useState<boolean>(false);
 
+    const [color, setColor] = useState<string>("#976D9C");
+
     React.useEffect(() => {
         getUserType();
-    }, [isBuyer]);
+    }, []);
 
     const getUserType = () => {
         axios
@@ -54,18 +56,16 @@ function BottomNav(props: BottomNavProps) {
     return (
         <Paper
             sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-            elevation={3}
+            elevation={0}
         >
-            <BottomNavigation showLabels value={value} onChange={handleChange}>
+            <BottomNavigation value={value} onChange={handleChange}>
                 <BottomNavigationAction
-                    label="Inicio"
                     icon={<HomeIcon />}
                     value="/home"
                     onClick={() => props.navigateFunction("/home")}
                 />
                 {isBuyer && (
                     <BottomNavigationAction
-                        label="Buscar"
                         icon={<SearchIcon />}
                         value="/search"
                         onClick={() => props.navigateFunction("/search")}
@@ -73,25 +73,23 @@ function BottomNav(props: BottomNavProps) {
                 )}
                 {isBuyer && (
                     <BottomNavigationAction
-                        label="Mapa"
                         icon={<MapIcon />}
                         value="/map"
                         onClick={() => props.navigateFunction("/map")}
                     />
                 )}
                 <BottomNavigationAction
-                    label="Chat"
                     icon={<ChatIcon />}
                     value="/chatmenu"
                     onClick={() => props.navigateFunction("/chatmenu")}
                 />
                 <BottomNavigationAction
-                    label="Perfil"
                     icon={<ProfileIcon />}
                     onClick={() => {
                         props.navigateFunction("profile");
                     }}
                     value="/profile"
+                    color={color}
                 />
             </BottomNavigation>
         </Paper>

@@ -31,7 +31,6 @@ function AdDetailBuyerList(props: AdDetailBuyerListProps) {
                     {props.category}
                 </h1>
             </div>
-            {}
 
             {cards}
         </div>

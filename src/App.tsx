@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import MainApp from "./components/MainApp";
 import "./styles/App.css";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme, Theme } from "@mui/material/styles";
 import NewProduct from "./components/advertisements/NewProduct";
 import Login from "./components/users/Login";
 import Register from "./components/users/Register";
@@ -12,21 +12,31 @@ import AdvertismentHistory from "./components/advertismentHistory/advertismentHi
 import NearbyProducts from "./components/Home/NearbyProducts";
 
 function App() {
-    // useContext user authcontext
-
+    const [theme, setTheme] = React.useState<Theme>(
+        createTheme({
+            palette: {
+                primary: {
+                    main: "#63d4a1",
+                },
+            },
+        })
+    );
     const user = React.useContext(AuthContext);
-    console.log(user);
 
-    const theme = createTheme({
-        palette: {
-            primary: {
-                main: "#63d4a1",
-            },
-            secondary: {
-                main: "#D46496",
-            },
-        },
-    });
+    if (
+        localStorage.getItem("userRole") &&
+        localStorage.getItem("userRole") === "seller"
+    ) {
+        setTheme(
+            createTheme({
+                palette: {
+                    primary: {
+                        main: "#976D9C",
+                    },
+                },
+            })
+        );
+    }
 
     return (
         <div className="App">

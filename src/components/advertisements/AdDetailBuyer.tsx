@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from "axios";
 import React from "react";
 import { useState } from "react";
 import { Slide } from "react-slideshow-image";
@@ -23,18 +22,23 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
     const [sellerImage, setSellerImage] = useState<string>("");
 
     React.useEffect(() => {
-        const images = AdvertisementManagement.GetProductPictures(
+        const productImagesGet = AdvertisementManagement.GetProductPictures(
             props.productId
         );
 
-        images.then((res) => {
-            console.log("Images are fetched");
+        const sellerImageGet = UserHelper.getProfilePicture(props.sellerId);
+
+        productImagesGet.then((res) => {
             setProductImages(res);
+        });
+
+        sellerImageGet.then((res) => {
+            console.log("Seller profile picture" + res);
+            setSellerImage(res);
         });
     }, []);
 
     React.useEffect(() => {
-        console.log(productImages);
         setProductImagesSlides(
             productImages.map((image, index) => {
                 return (
@@ -42,7 +46,7 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                         <div
                             style={{
                                 backgroundImage: `url(${image})`,
-                                backgroundSize: "contain",
+                                backgroundSize: "cover",
                                 backgroundRepeat: "no-repeat",
                                 backgroundPosition: "center",
                                 height: "100vh",
@@ -60,8 +64,9 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                 <Slide
                     easing="ease"
                     canSwipe={true}
-                    transitionDuration={300}
+                    transitionDuration={500}
                     arrows={false}
+                    duration={2000}
                     infinite={productImages.length > 1}
                     autoplay={productImages.length > 1}
                 >
