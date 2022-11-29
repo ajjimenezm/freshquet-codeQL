@@ -1,9 +1,9 @@
-import Advertisement from "../types/Advertisement";
-import axios, { AxiosResponse } from "axios";
-import { Buffer } from "buffer";
-import { Compra } from "../types/Compra";
-import { getDistanceFromLatLonInKm } from "./DistanceCalc";
-import { User } from "../types/User";
+import Advertisement from '../types/Advertisement';
+import axios, { AxiosResponse } from 'axios';
+import { Buffer } from 'buffer';
+import { Compra } from '../types/Compra';
+import { getDistanceFromLatLonInKm } from './DistanceCalc';
+import { User } from '../types/User';
 
 async function GetAdvertisementById(id: string): Promise<Advertisement> {
   const response = await axios.get(
@@ -52,7 +52,7 @@ async function GetDistanceFormSeller(
     [id],
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
       },
     }
   );
@@ -78,12 +78,12 @@ async function GetImageAdvertisment(id: string): Promise<string> {
     .get(
       `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images/${imageName}`,
       {
-        responseType: "arraybuffer",
+        responseType: 'arraybuffer',
       }
     )
     .catch();
 
-  return `data:;base64,${Buffer.from(image.data, "binary").toString("base64")}`;
+  return `data:;base64,${Buffer.from(image.data, 'binary').toString('base64')}`;
 }
 
 async function PlacePurchaseReview(
@@ -93,10 +93,10 @@ async function PlacePurchaseReview(
   confcode: string
 ): Promise<AxiosResponse<any, any>> {
   const config = {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`,
     },
     data: {
       review: rating,
@@ -114,9 +114,9 @@ async function GetOrdersFromUser(
   userRole: string
 ): Promise<Compra[]> {
   const config = {
-    method: "get",
+    method: 'get',
     url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/all/${
-      userRole === "seller" ? "sell" : "buy"
+      userRole === 'seller' ? 'sell' : 'buy'
     }/${userId}`,
     headers: {},
   };
@@ -130,6 +130,62 @@ async function GetOrdersFromUser(
     });
 }
 
+async function GetProductPicturesNames(id: string): Promise<string[]> {
+  return await axios
+    .get(
+      `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images`
+    )
+    .then((res) => {
+      if (res.data.length > 0) return res.data;
+    })
+    .catch(() => {
+      return [];
+    });
+}
+
+/**
+ * @param id Id of the advertisement
+ * @returns A promise that resolves to the array of all the images of the advertisement in base64, ready to be used as the source of an image component
+ */
+async function GetProductPictures(id: string): Promise<string[]> {
+  const imgnames: string[] = await GetProductPicturesNames(id);
+
+  if (!imgnames || imgnames.length === 0) return []; // no images
+
+  for (let i = 0; i < imgnames.length; i++) {
+    if (!imgnames[i] || imgnames[i] === '') return []; //if any of the images are not found, return empty array
+  }
+
+  let requests: Promise<AxiosResponse<any, any>>[] = [];
+  for (let i = 0; i < imgnames.length; i++) {
+    if (!imgnames[i] || imgnames[i] === '') continue; //if any image is empty, skip it. it is redundant, but just in case
+    requests = requests.concat(
+      axios.get(
+        `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images/${imgnames[i]}`,
+        {
+          responseType: 'arraybuffer',
+        }
+      )
+    );
+  }
+
+  const resImages: string[] = [];
+
+  await axios.all(requests).then(
+    axios.spread((...responses) => {
+      for (let i = 0; i < responses.length; i++) {
+        resImages.concat(
+          `data:;base64,${Buffer.from(responses[i].data, 'binary').toString(
+            'base64'
+          )}`
+        );
+      }
+    })
+  );
+
+  return resImages;
+}
+
 export default {
   GetAdvertisementById,
   GetAllAdvertisements,
@@ -140,4 +196,6 @@ export default {
   GetDistanceFormSeller,
   GetAllSellers,
   GetAllAdvertisementsFromSeller,
+  GetProductPictures,
+  GetProductPicturesNames,
 };
