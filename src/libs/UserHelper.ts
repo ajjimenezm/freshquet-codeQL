@@ -106,10 +106,38 @@ async function getOwnProfile(): Promise<User> {
     return returnUser;
 }
 
+async function getUserById(id: string): Promise<User> {
+    let returnUser: User = {
+        _id: "",
+        name: "empty",
+        username: "",
+        password: "",
+        phoneNumber: "",
+        email: "",
+        profile_picture: "",
+        address: "",
+        biography: "",
+        latitude: 0,
+        longitude: 0,
+        userType: "",
+    };
+
+    const getUserRequest = await axios.get(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${id}/profile`,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            },
+        }
+    );
+
+    returnUser = getUserRequest.data;
+
+    return returnUser;
+}
 function Logout() {
     localStorage.removeItem("userToken");
     localStorage.removeItem("userId");
-    localStorage.removeItem("userRole");
     alert("La sesion se ha cerrado correctamente");
 }
 
@@ -128,8 +156,8 @@ function StringAvatar(name: string) {
 }
 
 async function UpdateUserData(user: User) {
-    await LocationManagement.GetCoordinatesFromAddress(user.address)
-        .then(async (coordinates) => {
+    await LocationManagement.GetCoordinatesFromAddress(user.address).then(
+        async (coordinates) => {
             user.latitude = coordinates.lat;
             user.longitude = coordinates.lng;
             await axios
@@ -150,18 +178,15 @@ async function UpdateUserData(user: User) {
                 .catch(() => {
                     return false;
                 });
-        })
-        .catch(() => {
-            return false;
-        });
+        }
+    );
 }
 
 export default {
     uploadProfilePicture,
     retrieveProfilePicture,
     getOwnProfile,
-    getProfilePicture,
-    getProfile,
+    getUserById,
     Logout,
     StringAvatar,
     UpdateUserData,

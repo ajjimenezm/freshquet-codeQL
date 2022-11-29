@@ -26,15 +26,8 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
             props.productId
         );
 
-        const sellerImageGet = UserHelper.getProfilePicture(props.sellerId);
-
         productImagesGet.then((res) => {
             setProductImages(res);
-        });
-
-        sellerImageGet.then((res) => {
-            console.log("Seller profile picture" + res);
-            setSellerImage(res);
         });
     }, []);
 
