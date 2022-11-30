@@ -102,6 +102,26 @@ export const ShopFilters = (props: any) => {
       [event.target.name]: event.target.value,
     });
   };
+  
+  const setMinPriceInput = () => {
+    if(filters.min_price !== -1) return filters.min_price;
+    else return "";
+  }
+  
+  const setMaxPriceInput = () => {
+    if(filters.max_price !== 0) return filters.max_price;
+    else return "";
+  }
+  
+  const setProductTypeValue = () => {
+    if(filters.product_type !== "") return filters.product_type;
+    else return "";
+  }
+  
+  const setDistanceSlider = () => {
+    if(filters.distanceFilter === true) return filters.distanceFilterValue;
+    else return 0;
+  }
 
   const handleLocationFilters = (event: any) => {
     setFilters({
@@ -126,7 +146,7 @@ export const ShopFilters = (props: any) => {
           >
             <Tab label="Precio" {...a11yProps(0)} />
             <Tab label="Producto" {...a11yProps(1)} />
-            {/* <Tab label="Distancia" {...a11yProps(2)} /> */}
+            <Tab label="Distancia" {...a11yProps(2)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -137,6 +157,7 @@ export const ShopFilters = (props: any) => {
                 name="min_price"
                 className="focus:ring-primary-600 focus:border-primary-600 block w-full max-w-[40%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
                 onChange={handleChangeFilters}
+                value = {setMinPriceInput()}
                 placeholder="Precio Minimo"
               />
               <input
@@ -144,6 +165,7 @@ export const ShopFilters = (props: any) => {
                 name="max_price"
                 className="focus:ring-primary-600 focus:border-primary-600 block w-full max-w-[40%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
                 onChange={handleChangeFilters}
+                value = {setMaxPriceInput()}
                 placeholder="Precio Maximo"
               />
             </div>
@@ -159,6 +181,7 @@ export const ShopFilters = (props: any) => {
                 labelId="demo-simple-select-label"
                 name="product_type"
                 label="Tipo de usuario"
+                value={setProductTypeValue()}
                 onChange={handleChangeFilters}
               >
                 <MenuItem value={Category.Fruta}>{Category.Fruta}</MenuItem>
@@ -171,18 +194,18 @@ export const ShopFilters = (props: any) => {
             </FormControl>
           </Box>
         </TabPanel>
-        {/* <TabPanel value={value} index={2}>
-          {// Location filter //}
+        <TabPanel value={value} index={2}>
           <Slider
             aria-label="Custom marks"
             defaultValue={10}
             getAriaValueText={valuetext}
             step={5}
+            value={setDistanceSlider()}
             valueLabelDisplay="auto"
             marks={marks}
             onChange={handleLocationFilters}
           />
-        </TabPanel> */}
+        </TabPanel>
         <Button
           variant="contained"
           onClick={() => {

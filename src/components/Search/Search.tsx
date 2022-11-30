@@ -14,6 +14,7 @@ import AdvertisementManagement from '../../libs/AdvertisementManagement';
 import SearchField from './SearchField';
 import SearchPlaceHolder from './SearchPlaceHolder';
 import { ReactComponent as BackArrow } from '../../assets/icons/BackArrow.svg';
+import { AnyRecord } from 'dns';
 
 function Search() {
   const [searchFocused, setSearchFocused] = React.useState(false);
@@ -26,11 +27,13 @@ function Search() {
   const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
     []
   );
+  const [filters, setFilters] = React.useState("");
   const waitingTimeSkeletonLoader = 500;
   const [searchHistoryElements, setSearchHistoryElements] =
     React.useState<JSX.Element[]>();
 
   const navigate = useNavigate();
+
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams({ search: event.target.value });
@@ -111,6 +114,10 @@ function Search() {
     });
   };
 
+  const getfilters = (minPrice: number, maxPrice: number, typeProduct: string, distanceFilter: string, distanceFilterValue: number) => {
+      console.log(minPrice, maxPrice, typeProduct, distanceFilter, distanceFilterValue);
+    };
+
   const loadSearchHistory = () => {
     const searchHistory = getSearchHistory();
     return searchHistory.map((historyString: string) => (
@@ -158,6 +165,7 @@ function Search() {
                 "
         >
           <SearchField
+            getFilters={getfilters}
             id="searchField"
             value={searchParams.get('search') || ''}
             onChange={handleSearch}
