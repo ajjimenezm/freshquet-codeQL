@@ -77,7 +77,6 @@ function Chat() {
           <div>{user ? getAvatar(imageProfile, user) : <div />}</div>
           <div className="text-[14px] font-bold">{user?.name}</div>
         </div>
-        <div className=" mr-36 ml-4 border-b-2 border-black pb-4" />
       </div>
       <div className="m-20" />
       <div className="fixed -z-40 mx-8 mt-24 opacity-30">
