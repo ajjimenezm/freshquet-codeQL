@@ -13,6 +13,8 @@
     font-family: "Outfit", "sans-serif";
     font-weight: 300;
     font-style: normal;
+
+    -webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -29,7 +31,7 @@ body {
 
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-  background: transparent;
-  color: #333;
-  /* box-shadow: 0 3px 14px rgb(0 0 0 / 40%); */
+    background: transparent;
+    color: #333;
+    /* box-shadow: 0 3px 14px rgb(0 0 0 / 40%); */
 }

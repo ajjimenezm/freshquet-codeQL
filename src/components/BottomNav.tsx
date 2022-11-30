@@ -3,6 +3,7 @@ import { ReactComponent as SearchIcon } from "../assets/icons/BottomNavSearchIco
 import { ReactComponent as HomeIcon } from "../assets/icons/BottomNavHomeIcon.svg";
 import { ReactComponent as NotificationIcon } from "../assets/icons/BottomNavNotificationIcon.svg";
 import { ReactComponent as UploadIcon } from "../assets/icons/BottomNavUploadIcon.svg";
+import { ReactComponent as MapIcon } from "../assets/icons/BottomNavMapIcon.svg";
 import { SetStateAction, useState } from "react";
 import useReactPath from "../hooks/useReactPath";
 import React from "react";
@@ -14,16 +15,20 @@ interface BottomNavProps {
 }
 
 function BottomNav(props: BottomNavProps) {
+    const pathname = window.location.pathname; // in case user visits the path directly. The BottomNavBar is able to follow suit.
     const path = useReactPath();
+    const [value, setValue] = useState<string>(pathname);
     const navigate = props.navigateFunction;
     const [isSearch, setIsSearch] = useState<boolean>(false);
     const [navbarStyle, setNavbarStyle] = useState<string>(
         "flex h-16 flex-row items-center justify-evenly"
     );
     const [selectedIcon, setSelectedIcon] = useState("");
-    const selectedIconBase = "mt-1 h-1 w-6 transition-width rounded-full";
+    const selectedIconBase =
+        "mt-1 h-1 w-6 transition-width rounded-full duration-500 ease-in-out";
     const [notSelectedIcon, setNotSelectedIcon] = useState("");
-    const notselectedIconBase = "mt-1 h-1 w-0 transition-width rounded-full";
+    const notselectedIconBase =
+        "mt-1 h-1 w-0 transition-width rounded-full duration-300 ease-in-out";
     const individualIconStyle =
         "h-6 w-6 transition-all active:mt-1 active:h-5 active:w-5";
     const navbarDivStyle =
@@ -39,6 +44,7 @@ function BottomNav(props: BottomNavProps) {
     const [iconStyle, setIconStyle] = useState({
         home: notSelectedIcon,
         search: notSelectedIcon,
+        map: notSelectedIcon,
         chat: notSelectedIcon,
         newproduct: notSelectedIcon,
         profile: notSelectedIcon,
@@ -75,12 +81,11 @@ function BottomNav(props: BottomNavProps) {
     }, [location]);
 
     React.useEffect(() => {
+        setValue(window.location.pathname);
         updateSelectedIcon();
     }, [path]);
 
     function updateSelectedIcon() {
-        const pathname = location.pathname; // in case user visits the path directly. The BottomNavBar is able to follow suit.
-
         if (pathname === "/search") {
             setIsSearch(true);
         } else {
@@ -90,6 +95,7 @@ function BottomNav(props: BottomNavProps) {
             setIconStyle({
                 home: selectedIcon,
                 search: notSelectedIcon,
+                map: notSelectedIcon,
                 chat: notSelectedIcon,
                 newproduct: notSelectedIcon,
                 profile: notSelectedIcon,
@@ -98,6 +104,16 @@ function BottomNav(props: BottomNavProps) {
             setIconStyle({
                 home: notSelectedIcon,
                 search: selectedIcon,
+                map: notSelectedIcon,
+                chat: notSelectedIcon,
+                newproduct: notSelectedIcon,
+                profile: notSelectedIcon,
+            });
+        } else if (pathname === "/map") {
+            setIconStyle({
+                home: notSelectedIcon,
+                search: notSelectedIcon,
+                map: selectedIcon,
                 chat: notSelectedIcon,
                 newproduct: notSelectedIcon,
                 profile: notSelectedIcon,
@@ -106,6 +122,7 @@ function BottomNav(props: BottomNavProps) {
             setIconStyle({
                 home: notSelectedIcon,
                 search: notSelectedIcon,
+                map: notSelectedIcon,
                 chat: selectedIcon,
                 newproduct: notSelectedIcon,
                 profile: notSelectedIcon,
@@ -114,6 +131,7 @@ function BottomNav(props: BottomNavProps) {
             setIconStyle({
                 home: notSelectedIcon,
                 search: notSelectedIcon,
+                map: notSelectedIcon,
                 chat: notSelectedIcon,
                 newproduct: selectedIcon,
                 profile: notSelectedIcon,
@@ -122,6 +140,7 @@ function BottomNav(props: BottomNavProps) {
             setIconStyle({
                 home: notSelectedIcon,
                 search: notSelectedIcon,
+                map: notSelectedIcon,
                 chat: notSelectedIcon,
                 newproduct: notSelectedIcon,
                 profile: selectedIcon,
@@ -168,6 +187,17 @@ function BottomNav(props: BottomNavProps) {
                             }}
                         />
                         <div className={iconStyle.search}></div>
+                    </div>
+                )}
+                {isBuyer && (
+                    <div className={navbarDivStyle}>
+                        <MapIcon
+                            className={individualIconStyle}
+                            onClick={() => {
+                                navigate("/map");
+                            }}
+                        />
+                        <div className={iconStyle.map}></div>
                     </div>
                 )}
 
