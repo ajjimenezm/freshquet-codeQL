@@ -190,4 +190,5 @@ export default {
     Logout,
     StringAvatar,
     UpdateUserData,
+    getProfilePicture,
 };

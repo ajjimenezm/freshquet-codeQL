@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Slide } from "react-slideshow-image";
 import { ReactComponent as SmallStar } from "../../assets/icons/SmallStar.svg";
 import AdvertisementManagement from "../../libs/AdvertisementManagement";
@@ -20,14 +21,28 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
         JSX.Element[]
     >([]);
     const [sellerImage, setSellerImage] = useState<string>("");
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         const productImagesGet = AdvertisementManagement.GetProductPictures(
             props.productId
         );
 
+        const sellerImageGet = UserHelper.getProfilePicture(props.sellerId);
+
         productImagesGet.then((res) => {
             setProductImages(res);
+        });
+
+        sellerImageGet.then((res) => {
+            if (res !== "") {
+                setSellerImage(res);
+            } else {
+                setSellerImage(
+                    "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
+                );
+            }
+            console.log("sellerImage: " + sellerImage);
         });
     }, []);
 
@@ -76,11 +91,30 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                     </div>
                 </div>
                 <div className="flex-rows mt-3 flex w-screen items-start pl-4 pr-4 font-outfit text-white">
-                    <img
-                        src={sellerImage}
-                        className="h-6 w-6 rounded-full border border-solid border-white"
-                    />
-                    <div className="ml-2 text-sm font-light">
+                    {sellerImage !== "" && (
+                        <img
+                            src={sellerImage}
+                            className="h-6 w-6 rounded-full border border-solid border-white"
+                            onClick={() => {
+                                navigate("/seller/" + props.sellerId);
+                            }}
+                        />
+                    )}
+                    {sellerImage === "" && (
+                        <div
+                            className="h-6 w-6 animate-pulse rounded-full border border-solid border-white bg-white"
+                            onClick={() => {
+                                navigate("/seller/" + props.sellerId);
+                            }}
+                        ></div>
+                    )}
+
+                    <div
+                        className="ml-2 text-sm font-light"
+                        onClick={() => {
+                            navigate("/seller/" + props.sellerId);
+                        }}
+                    >
                         {props.sellerName}
                     </div>
                     <div className="ml-2 mr-2 text-sm font-bold">·</div>

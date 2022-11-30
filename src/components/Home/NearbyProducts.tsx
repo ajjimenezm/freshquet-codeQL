@@ -19,6 +19,7 @@ const NearbyProducts = () => {
 
     useEffect(() => {
         AdvertisementManagement.GetAllAdvertisements().then((res) => {
+            console.log("Res: ", res);
             setAdvertisements(res);
         });
 
@@ -38,7 +39,8 @@ const NearbyProducts = () => {
     }, []);
 
     React.useEffect(() => {
-        console.log(advertisements);
+        console.log("Advertisements: ");
+        console.log("is array: ", Array.isArray(advertisements));
         setAdvertisementsToShow(
             advertisements.map((ad) => {
                 return (

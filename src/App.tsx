@@ -12,35 +12,33 @@ import AdvertismentHistory from "./components/advertismentHistory/advertismentHi
 import NearbyProducts from "./components/Home/NearbyProducts";
 
 function App() {
-    const [theme, setTheme] = React.useState<Theme>(
-        createTheme({
-            palette: {
-                primary: {
-                    main: "#63d4a1",
-                },
+    const [isBuyer, setIsBuyer] = React.useState<boolean>(false);
+
+    const buyerTheme = createTheme({
+        palette: {
+            primary: {
+                main: "#63d4a1",
             },
-        })
-    );
+        },
+    });
+
+    const sellerTheme = createTheme({
+        palette: {
+            primary: {
+                main: "#976D9C",
+            },
+        },
+    });
+
+    React.useEffect(() => {
+        setIsBuyer(localStorage.getItem("userRole") === "buyer");
+    }, []);
+
     const user = React.useContext(AuthContext);
 
-    if (
-        localStorage.getItem("userRole") &&
-        localStorage.getItem("userRole") === "seller"
-    ) {
-        setTheme(
-            createTheme({
-                palette: {
-                    primary: {
-                        main: "#976D9C",
-                    },
-                },
-            })
-        );
-    }
-
     return (
-        <div className="App">
-            <ThemeProvider theme={theme}>
+        <ThemeProvider theme={isBuyer ? buyerTheme : sellerTheme}>
+            <div className="App">
                 <Routes>
                     {/* <Route path="/" element={<InitialScreen setRole={setRole} />} /> */}
                     <Route path="/" element={<MainApp />} />
@@ -55,8 +53,8 @@ function App() {
                     />
                     <Route path="nearbyProducts" element={<NearbyProducts />} />
                 </Routes>
-            </ThemeProvider>
-        </div>
+            </div>
+        </ThemeProvider>
     );
 }
 
