@@ -14,13 +14,14 @@ import {
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
 import { Category } from "../types/Category";
+import Slide from '@mui/material/Slide';
 
 const style = {
   position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
+  bottom: "00",
+  left: "0",
+  width: "100%",
+  height: "95%",
   display: "flex",
   flexDirection: "column",
   bgcolor: "background.paper",
@@ -137,85 +138,87 @@ export const ShopFilters = (props: any) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={{ ...style, width: 400 }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Precio" {...a11yProps(0)} />
-            <Tab label="Producto" {...a11yProps(1)} />
-            <Tab label="Distancia" {...a11yProps(2)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <div className="flex flex-col text-right">
-            <div className="flex flex-row justify-around py-4">
-              <input
-                type="number"
-                name="min_price"
-                className="focus:ring-primary-600 focus:border-primary-600 block w-full max-w-[40%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
-                onChange={handleChangeFilters}
-                value = {setMinPriceInput()}
-                placeholder="Precio Minimo"
-              />
-              <input
-                type="number"
-                name="max_price"
-                className="focus:ring-primary-600 focus:border-primary-600 block w-full max-w-[40%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
-                onChange={handleChangeFilters}
-                value = {setMaxPriceInput()}
-                placeholder="Precio Maximo"
-              />
-            </div>
-          </div>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Box className=" mb-2 block text-sm font-medium text-gray-900">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Tipo de producto
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                name="product_type"
-                label="Tipo de usuario"
-                value={setProductTypeValue()}
-                onChange={handleChangeFilters}
-              >
-                <MenuItem value={Category.Fruta}>{Category.Fruta}</MenuItem>
-                <MenuItem value={Category.Verdura}>{Category.Verdura}</MenuItem>
-                <MenuItem value={Category.Legumbres}>
-                  {Category.Legumbres}
-                </MenuItem>
-                <MenuItem value={Category.Otros}>{Category.Otros}</MenuItem>
-              </Select>
-            </FormControl>
+      <Slide direction="up" in={props.open} mountOnEnter unmountOnExit>
+        <Box sx={{ ...style}}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Precio" {...a11yProps(0)} />
+              <Tab label="Producto" {...a11yProps(1)} />
+              <Tab label="Distancia" {...a11yProps(2)} />
+            </Tabs>
           </Box>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <Slider
-            aria-label="Custom marks"
-            defaultValue={10}
-            getAriaValueText={valuetext}
-            step={5}
-            value={setDistanceSlider()}
-            valueLabelDisplay="auto"
-            marks={marks}
-            onChange={handleLocationFilters}
-          />
-        </TabPanel>
-        <Button
-          variant="contained"
-          onClick={() => {
-            console.log(filters);
-            props.handleClose(filters);
-          }}
-        >
-          Guardar
-        </Button>
-      </Box>
+          <TabPanel value={value} index={0}>
+            <div className="flex flex-col text-right">
+              <div className="flex flex-row justify-around py-4">
+                <input
+                  type="number"
+                  name="min_price"
+                  className="focus:ring-primary-600 focus:border-primary-600 block w-full max-w-[40%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
+                  onChange={handleChangeFilters}
+                  value = {setMinPriceInput()}
+                  placeholder="Precio Minimo"
+                />
+                <input
+                  type="number"
+                  name="max_price"
+                  className="focus:ring-primary-600 focus:border-primary-600 block w-full max-w-[40%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
+                  onChange={handleChangeFilters}
+                  value = {setMaxPriceInput()}
+                  placeholder="Precio Maximo"
+                />
+              </div>
+            </div>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Box className=" mb-2 block text-sm font-medium text-gray-900">
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Tipo de producto
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  name="product_type"
+                  label="Tipo de usuario"
+                  value={setProductTypeValue()}
+                  onChange={handleChangeFilters}
+                >
+                  <MenuItem value={Category.Fruta}>{Category.Fruta}</MenuItem>
+                  <MenuItem value={Category.Verdura}>{Category.Verdura}</MenuItem>
+                  <MenuItem value={Category.Legumbres}>
+                    {Category.Legumbres}
+                  </MenuItem>
+                  <MenuItem value={Category.Otros}>{Category.Otros}</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <Slider
+              aria-label="Custom marks"
+              defaultValue={10}
+              getAriaValueText={valuetext}
+              step={5}
+              value={setDistanceSlider()}
+              valueLabelDisplay="auto"
+              marks={marks}
+              onChange={handleLocationFilters}
+            />
+          </TabPanel>
+          <Button
+            variant="contained"
+            onClick={() => {
+              console.log(filters);
+              props.handleClose(filters);
+            }}
+          >
+            Guardar
+          </Button>
+        </Box>
+      </Slide>
     </Modal>
   );
 };
