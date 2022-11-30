@@ -189,7 +189,10 @@ async function GetProductPictures(id: string): Promise<string[]> {
 const filterByDistance = async (
   filterValue: number,
   advertisements: Advertisement[],
-  userLocs: any
+  userLocs: {
+    latitude: number;
+    longitude: number;
+  }
 ) => {
   const sellerIds = new Set();
   advertisements.forEach((ad: Advertisement) => {
