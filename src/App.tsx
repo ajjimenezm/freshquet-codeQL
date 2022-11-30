@@ -19,10 +19,16 @@ function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#63d4a1",
+        main: "#4C987B",
       },
       secondary: {
         main: "#D46496",
+      },
+      success: {
+        main: "#4C987B",
+      },
+      error: {
+        main: "#F4511D",
       },
     },
   });

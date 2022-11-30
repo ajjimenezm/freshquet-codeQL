@@ -7,7 +7,6 @@ import Advertisement from "../../types/Advertisement";
 
 interface NearbyAdCardProps {
   advertisement: any;
-  removeAd: any;
 }
 
 const NearbyAdCard = (props: NearbyAdCardProps) => {
@@ -41,7 +40,6 @@ const NearbyAdCard = (props: NearbyAdCardProps) => {
         userLocs.longitude
       ).then((res) => {
         const num = Number.parseFloat(res);
-        if (num > 10) props.removeAd(props.advertisement);
         setDistance(res);
       });
     });

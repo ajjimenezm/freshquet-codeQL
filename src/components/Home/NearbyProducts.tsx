@@ -14,12 +14,16 @@ const NearbyProducts = () => {
   const [advertisementsToShow, setAdvertisementsToShow] =
     React.useState<JSX.Element[]>();
   const [address, setAddress] = React.useState("");
+  const [areAdvertisementsSet, setAreAdvertisementsSet] = React.useState(false);
 
   useEffect(() => {
     AdvertisementManagement.GetAllAdvertisements().then((res) => {
       setAdvertisements(res);
+      setAreAdvertisementsSet(true);
     });
+  }, []);
 
+  React.useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const userLocs = {
         latitude: position.coords.latitude,
@@ -32,29 +36,20 @@ const NearbyProducts = () => {
       ).then((res) => {
         setAddress(`${res[1]}, ${res[2]}`);
       });
-    });
-  }, []);
 
-  React.useEffect(() => {
-    console.log(advertisements);
-    setAdvertisementsToShow(
-      advertisements.map((ad) => {
-        return (
-          <NearbyAdCard key={ad._id} advertisement={ad} removeAd={removeAd} />
+      AdvertisementManagement.filterByDistance(
+        25,
+        advertisements,
+        userLocs
+      ).then((res) => {
+        setAdvertisementsToShow(
+          res.map((ad) => {
+            return <NearbyAdCard key={ad._id} advertisement={ad} />;
+          })
         );
-      })
-    );
-  }, [advertisements]);
-
-  const removeAd = (ad: Advertisement) => {
-    const index = advertisements.indexOf(ad);
-    if (index > -1) {
-      const array = [...advertisements];
-      array.splice(index, 1);
-      setAdvertisements(array);
-    }
-    console.log(advertisements);
-  };
+      });
+    });
+  }, [areAdvertisementsSet]);
 
   return (
     <div className=" absolute z-50 h-screen w-screen bg-[#F7DBAD]">
