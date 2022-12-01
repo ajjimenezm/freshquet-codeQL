@@ -17,7 +17,6 @@ import BuyerProfile from "./Profile/BuyerProfile";
 import Search from "./Search/Search";
 import OrderCard from "./Profile/OrderCard";
 import EditProfile from "./Profile/EditProfile";
-import NearbyProducts from "./Home/NearbyProducts";
 
 function MainApp() {
     //localStorage.clear();
