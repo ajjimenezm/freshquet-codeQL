@@ -56,6 +56,7 @@ async function getOwnProfile(): Promise<User> {
     latitude: 0,
     longitude: 0,
     userType: "",
+    adsInSeeLater: [],
   };
 
   await axios
@@ -85,6 +86,7 @@ async function getUserById(id: string): Promise<User> {
     latitude: 0,
     longitude: 0,
     userType: "",
+    adsInSeeLater: [],
   };
 
   const getUserRequest = await axios.get(

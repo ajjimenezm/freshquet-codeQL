@@ -1,13 +1,13 @@
-import { Button, Avatar, Divider, TextField, Skeleton } from '@mui/material';
-import InputAdornment from '@mui/material/InputAdornment';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import CallIcon from '@mui/icons-material/Call';
-import EmailIcon from '@mui/icons-material/Email';
-import React, { useState } from 'react';
-import ProfilePictureUpload from './ProfilePictureUpload';
-import UserHelper from '../../libs/UserHelper';
-import { useNavigate } from 'react-router-dom';
-import { User, UserEdit } from '../../types/User';
+import { Button, Avatar, Divider, TextField, Skeleton } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CallIcon from "@mui/icons-material/Call";
+import EmailIcon from "@mui/icons-material/Email";
+import React, { useState } from "react";
+import ProfilePictureUpload from "./ProfilePictureUpload";
+import UserHelper from "../../libs/UserHelper";
+import { useNavigate } from "react-router-dom";
+import { User, UserEdit } from "../../types/User";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -44,10 +44,11 @@ const EditProfile = () => {
       latitude: state?.latitude ? state.latitude : (user as User).latitude,
       longitude: state?.longitude ? state.longitude : (user as User).longitude,
       userType: (user as User).userType,
+      adsInSeeLater: (user as User).adsInSeeLater,
     };
     UserHelper.UpdateUserData(userAux).then(() => {
-      alert('Datos actualizados');
-      navigate('/profile');
+      alert("Datos actualizados");
+      navigate("/profile");
     });
   };
 
@@ -69,7 +70,7 @@ const EditProfile = () => {
           variant="circular"
           width={75}
           height={75}
-          animation={'wave'}
+          animation={"wave"}
         />
       );
     }
@@ -208,7 +209,7 @@ const EditProfile = () => {
         <Button
           variant="outlined"
           color="error"
-          onClick={() => navigate('/profile')}
+          onClick={() => navigate("/profile")}
         >
           Cancel
         </Button>
@@ -221,25 +222,25 @@ const EditProfile = () => {
           variant="circular"
           width={75}
           height={75}
-          animation={'wave'}
+          animation={"wave"}
         />
         <div className=" flex-col space-y-4 text-4xl">
-          <Skeleton variant="text" width={200} height={75} animation={'wave'} />
-          <Skeleton variant="text" width={200} height={75} animation={'wave'} />
-          <Skeleton variant="text" width={200} height={75} animation={'wave'} />
-          <Skeleton variant="text" width={200} height={75} animation={'wave'} />
+          <Skeleton variant="text" width={200} height={75} animation={"wave"} />
+          <Skeleton variant="text" width={200} height={75} animation={"wave"} />
+          <Skeleton variant="text" width={200} height={75} animation={"wave"} />
+          <Skeleton variant="text" width={200} height={75} animation={"wave"} />
         </div>
       </div>
       <Divider />
-      <Skeleton variant="text" width={200} height={75} animation={'wave'} />
-      <Skeleton variant="text" width={200} height={75} animation={'wave'} />
-      <Skeleton variant="text" width={200} height={75} animation={'wave'} />
-      <Skeleton variant="text" width={200} height={75} animation={'wave'} />
-      <Skeleton variant="text" width={200} height={75} animation={'wave'} />
+      <Skeleton variant="text" width={200} height={75} animation={"wave"} />
+      <Skeleton variant="text" width={200} height={75} animation={"wave"} />
+      <Skeleton variant="text" width={200} height={75} animation={"wave"} />
+      <Skeleton variant="text" width={200} height={75} animation={"wave"} />
+      <Skeleton variant="text" width={200} height={75} animation={"wave"} />
       <Divider />
       <div className=" space-x-10 text-right">
-        <Skeleton variant="text" width={200} height={75} animation={'wave'} />
-        <Skeleton variant="text" width={200} height={75} animation={'wave'} />
+        <Skeleton variant="text" width={200} height={75} animation={"wave"} />
+        <Skeleton variant="text" width={200} height={75} animation={"wave"} />
       </div>
     </div>
   );
