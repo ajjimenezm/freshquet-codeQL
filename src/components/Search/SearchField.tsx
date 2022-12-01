@@ -17,6 +17,11 @@ function SearchField(props: SearchFieldProps) {
     const handleOpen = () => {
     setOpen(true);
   };
+
+  const handleCancel = () => {
+    setOpen(false);
+  }
+
   const handleClose = async (filters: any) => {
     setOpen(false);
     const minPrice = parseInt(filters.min_price);
@@ -44,7 +49,7 @@ function SearchField(props: SearchFieldProps) {
                 onFocus={props.onFocus}
                 onBlur={props.onBlur}
             />
-            <ShopFilters open={openModal} handleClose={handleClose} />
+            <ShopFilters open={openModal} handleClose={handleClose} handleCancel={handleCancel}/>
             <div
                 className="absolute inset-y-0 right-4 mr-1 flex items-center"
                 onClick={() => {
