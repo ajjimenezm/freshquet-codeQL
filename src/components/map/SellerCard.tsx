@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import Tomates from "../../assets/illustrations/Tomates.jpg";
 import AvatarPhoto from "../../assets/illustrations/Avatar.jpg";
 import { User } from "../../types/User";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 interface SellerCardProps {
   seller: User;
+  openOnMaps: () => void;
 }
 
 function stringAvatar(name: string) {
@@ -74,14 +75,21 @@ const SellerCard = (props: SellerCardProps) => {
   }
 
   return (
-    <div
-      onClick={navigateFunction.bind(null, props.seller._id)}
-      className="text-semibold w-[160px] flex-shrink-0 overflow-hidden rounded-xl  border-[1px] border-fresh-morado bg-white text-fresh-morado"
-    >
+    <div className="text-semibold w-[160px] flex-shrink-0 overflow-hidden rounded-xl  border-[1px] border-fresh-morado bg-white text-fresh-morado">
       <div className="flex flex-col items-center justify-center space-y-2 border-b-[1px] border-fresh-morado pt-4 pb-4 text-center">
-        {getAvatar(imageProfile, props.seller)}
+        <div onClick={navigateFunction.bind(null, props.seller._id)}>
+          {getAvatar(imageProfile, props.seller)}
+        </div>
+
         <p className=" text-[12px] font-medium">{props.seller.name}</p>
+        <div
+          className=" rounded bg-fresh-morado p-1 text-[10px] text-white"
+          onClick={props.openOnMaps}
+        >
+          Cómo llegar
+        </div>
       </div>
+
       <div className="flex h-[80px]">
         {imageLeft ? (
           <img src={imageLeft} alt={"test"} className="w-1/2 object-cover" />
@@ -93,11 +101,7 @@ const SellerCard = (props: SellerCardProps) => {
           />
         )}
         {imageRight ? (
-          <img
-            src={imageRight}
-            alt={"test"}
-            className="w-1/2 bg-cover object-cover"
-          />
+          <img src={imageRight} alt={"test"} className="w-1/2 object-cover" />
         ) : (
           <Skeleton
             variant="rectangular"

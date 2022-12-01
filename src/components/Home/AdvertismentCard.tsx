@@ -56,7 +56,11 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
     >
       <div className="w-[150px]">
         <div className="flex flex-col items-start space-y-2 border-b-[1px] border-dashed border-fresh-naranja pl-4 pt-2 pb-4 text-left">
-          <p className=" text-[16px] font-medium">{props.advertisement.name}</p>
+          <p className=" text-[16px] font-medium">
+            {props.advertisement.name.length < 15
+              ? props.advertisement.name
+              : props.advertisement.name.substring(0, 12) + "..."}
+          </p>
           <p className=" text-[12px] font-medium">
             {props.advertisement.pricePerKilogram}€/Kg
           </p>
@@ -71,7 +75,7 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
           <img
             src={image}
             alt={props.advertisement.name}
-            className="aspect-square h-full w-full"
+            className="aspect-square h-full w-full object-cover"
           />
         ) : (
           <div className="aspect-square h-full w-full">
