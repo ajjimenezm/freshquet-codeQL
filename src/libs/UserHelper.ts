@@ -204,4 +204,5 @@ export default {
     StringAvatar,
     UpdateUserData,
     getUserByUsername,
+    getProfilePicture,
 };

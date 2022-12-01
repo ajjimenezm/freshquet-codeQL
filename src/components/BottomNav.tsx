@@ -239,7 +239,14 @@ function BottomNav(props: BottomNavProps) {
                             }}
                         />
                     )}
-                    {ProfileIcon === "" && <div className={profileStyle}></div>}
+                    {ProfileIcon === "" && (
+                        <div
+                            className={profileStyle}
+                            onClick={() => {
+                                navigate("/profile");
+                            }}
+                        ></div>
+                    )}
                     <div className={iconStyle.profile}></div>
                 </div>
             </div>
