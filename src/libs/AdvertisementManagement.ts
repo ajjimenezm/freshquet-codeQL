@@ -191,6 +191,49 @@ async function GetProductPictures(id: string): Promise<string[]> {
     return resImages;
 }
 
+const filterByDistance = async (
+    filterValue: number,
+    advertisements: Advertisement[],
+    userLocs: {
+        latitude: number;
+        longitude: number;
+    }
+) => {
+    const sellerIds = new Set();
+    advertisements.forEach((ad: Advertisement) => {
+        sellerIds.add(ad.sellerId);
+    });
+    const sellerIdsArray = Array.from(sellerIds);
+
+    const adsToShow: Advertisement[] = [];
+    const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/coordinates`,
+        sellerIdsArray,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            },
+        }
+    );
+
+    response.data.map((seller: any) => {
+        const distance = getDistanceFromLatLonInKm(
+            seller.latitude,
+            seller.longitude,
+            userLocs.latitude,
+            userLocs.longitude
+        );
+        if (distance < filterValue) {
+            const ads = advertisements.filter(
+                (ad) => ad.sellerId === seller._id
+            );
+            if (ads) ads.forEach((ad) => adsToShow.push(ad));
+        }
+    });
+
+    return adsToShow;
+};
+
 export default {
     GetAdvertisementById,
     GetAllAdvertisements,
@@ -203,4 +246,5 @@ export default {
     GetAllAdvertisementsFromSeller,
     GetProductPictures,
     GetProductPicturesNames,
+    filterByDistance,
 };

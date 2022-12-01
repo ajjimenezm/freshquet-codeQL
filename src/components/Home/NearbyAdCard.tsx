@@ -41,8 +41,6 @@ const NearbyAdCard = (props: NearbyAdCardProps) => {
                 userLocs.latitude,
                 userLocs.longitude
             ).then((res) => {
-                const num = Number.parseFloat(res);
-                if (num > 10) props.removeAd(props.advertisement);
                 setDistance(res);
             });
         });

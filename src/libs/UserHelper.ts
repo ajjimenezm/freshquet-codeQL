@@ -141,6 +141,19 @@ function Logout() {
     alert("La sesion se ha cerrado correctamente");
 }
 
+async function getUserByUsername(username: string): Promise<User> {
+    const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${username}/profilebyUsername`,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            },
+        }
+    );
+
+    return response.data[0];
+}
+
 function StringAvatar(name: string) {
     return {
         sx: {
@@ -190,5 +203,5 @@ export default {
     Logout,
     StringAvatar,
     UpdateUserData,
-    getProfilePicture,
+    getUserByUsername,
 };

@@ -18,7 +18,6 @@ import OrderCard from './OrderCard';
 
 import { ReactComponent as HamburgerIcon } from '../../assets/icons/HamburgerIcon.svg';
 import { useNavigate } from 'react-router-dom';
-import { log } from 'console';
 
 const BuyerProfile = () => {
   const navigate = useNavigate();
@@ -97,7 +96,7 @@ const BuyerProfile = () => {
               is_ended={order.is_ended}
               price={order.price}
               quantity={order.quantity}
-              key={i}
+              key={order.adv_id + order.buyer_id + i}
               productName={order.adv_id.name}
               sellerUsername={order.seller_id.username}
               sellerAddress={order.seller_id.direction}
@@ -202,6 +201,7 @@ const BuyerProfile = () => {
                     onKeyDown={handleListKeyDownHamburgerMenu}
                   >
                     <MenuItem
+                      key="qua01"
                       onClick={handleEditProfile}
                       className="font-space-mono text-[14px]"
                     >
@@ -211,6 +211,7 @@ const BuyerProfile = () => {
                     </MenuItem>
                     {/* <MenuItem onClick={handleCloseHamburgerMenu}>Mis estadísticas</MenuItem> */}
                     <MenuItem
+                      key="qua02"
                       onClick={handleLogout}
                       className="font-space-mono text-[14px]"
                     >

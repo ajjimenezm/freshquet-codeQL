@@ -6,17 +6,17 @@ import Home from "./Home/Home";
 import Map from "./map/Map";
 import Chat from "./Chat/Chat";
 import AdDetail from "./advertisements/AdDetail";
-import Profile from "./Profile/Profile";
-import SellerPage from "./seller-page/SellerPage";
 import EditAdDetail from "./advertisements/EditAdDetail";
 import { useEffect } from "react";
 import ChatMenu from "./Chat/ChatMenu";
-
 import AdvertismentHistory from "./advertismentHistory/advertismentHistory";
 import BuyerProfile from "./Profile/BuyerProfile";
+import EditProfile from "./Profile/EditProfile";
+import NewProduct from "./advertisements/NewProduct";
+import SellerProfile from "./Profile/SellerProfile";
 import Search from "./Search/Search";
 import OrderCard from "./Profile/OrderCard";
-import EditProfile from "./Profile/EditProfile";
+import NearbyProducts from "./Home/NearbyProducts";
 
 function MainApp() {
     //localStorage.clear();
@@ -40,16 +40,18 @@ function MainApp() {
                 <Route path="chatmenu" element={<ChatMenu />} />
                 {/* <Route path="profile" element={<Profile />} /> */}
                 <Route path="profile" element={<BuyerProfile />} />
+                <Route path="newproduct" element={<NewProduct />} />
                 <Route path="editprofile" element={<EditProfile />} />
                 <Route path="products/detail/:id" element={<AdDetail />} />
-                <Route path="seller/:id" element={<SellerPage />} />
+                <Route path="seller/:seller_id" element={<SellerProfile />} />
+                {/* <Route path="seller/:seller_id/products" element={<SellerProducts />} />
+        <Route path="seller/:seller_id/reviews" element={<SellerReviews />} /> */}
                 <Route path="products/edit/:id" element={<EditAdDetail />} />
                 <Route
                     path="advertisementHistory"
                     element={<AdvertismentHistory />}
                 />
                 <Route path="review/:purchaseId" element={<PlaceReview />} />
-
                 <Route
                     path="testest"
                     element={
@@ -64,8 +66,8 @@ function MainApp() {
                         />
                     }
                 />
+                <Route path="nearbyProducts" element={<NearbyProducts />} />
             </Routes>
-
             <BottomNav navigateFunction={navigate} />
         </>
     );
