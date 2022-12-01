@@ -4,7 +4,7 @@ import { ReactComponent as HomeIcon } from "../assets/icons/BottomNavHomeIcon.sv
 import { ReactComponent as NotificationIcon } from "../assets/icons/BottomNavNotificationIcon.svg";
 import { ReactComponent as UploadIcon } from "../assets/icons/BottomNavUploadIcon.svg";
 import { ReactComponent as MapIcon } from "../assets/icons/BottomNavMapIcon.svg";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import useReactPath from "../hooks/useReactPath";
 import React from "react";
 import { useLocation } from "react-router-dom";
@@ -85,12 +85,17 @@ function BottomNav(props: BottomNavProps) {
         updateSelectedIcon();
     }, [path]);
 
+    React.useEffect(() => {
+        updateSelectedIcon();
+    }, [value]);
+
     function updateSelectedIcon() {
         if (pathname === "/search") {
             setIsSearch(true);
         } else {
             setIsSearch(false);
         }
+
         if (pathname === "/home") {
             setIconStyle({
                 home: selectedIcon,
