@@ -7,25 +7,22 @@ import Login from "./components/users/Login";
 import Register from "./components/users/Register";
 import BuyAd from "./components/advertisements/BuyAdvertisement/BuyAdDialog";
 import AdvertismentHistory from "./components/advertismentHistory/advertismentHistory";
+import { AuthContext } from "./chatContext/AuthContext";
 
 function App() {
-    const theme = createTheme({
-        palette: {
-            primary: {
-                main: "#4C987B",
-            },
-            secondary: {
-                main: "#D46496",
-            },
-            success: {
-                main: "#4C987B",
-            },
-            error: {
-                main: "#F4511D",
-            },
-        },
-    });
+  const user = React.useContext(AuthContext);
+  console.log(user);
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#63d4a1",
+      },
+      secondary: {
+        main: "#976D9C",
+      },
+    },
+  });
     return (
         <div className="App">
             <ThemeProvider theme={theme}>
