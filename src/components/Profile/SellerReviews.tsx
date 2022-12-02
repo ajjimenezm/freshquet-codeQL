@@ -1,5 +1,5 @@
 const SellerReviews = () => {
-  return <p>Seller reviews</p>;
+  return <h1>Seller reviews</h1>;
 };
 
 export default SellerReviews;

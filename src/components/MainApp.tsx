@@ -18,9 +18,9 @@ import EditProfile from './Profile/EditProfile';
 import NearbyProducts from './Home/NearbyProducts';
 import NewProduct from './advertisements/NewProduct';
 import SellerProfile from './Profile/SellerProfile';
-import Search from './search/Search';
 import SellerProducts from './Profile/SellerProducts';
 import SellerReviews from './Profile/SellerReviews';
+import Search from './Search/Search';
 
 function MainApp() {
   //localStorage.clear();
@@ -48,8 +48,6 @@ function MainApp() {
         <Route path="editprofile" element={<EditProfile />} />
         <Route path="products/detail/:id" element={<AdDetail />} />
         <Route path="seller/:seller_id" element={<SellerProfile />} />
-        {/* <Route path="seller/:seller_id/products" element={<SellerProducts />} />
-        <Route path="seller/:seller_id/reviews" element={<SellerReviews />} /> */}
         <Route path="products/edit/:id" element={<EditAdDetail />} />
         <Route path="advertisementHistory" element={<AdvertismentHistory />} />
         <Route path="review/:purchaseId" element={<PlaceReview />} />

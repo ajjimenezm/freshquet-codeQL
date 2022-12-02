@@ -1,17 +1,27 @@
-import { Avatar, Skeleton, Tab, Tabs } from '@mui/material';
-import { useEffect, useState } from 'react';
 import {
-  Link,
-  matchPath,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+  Avatar,
+  Box,
+  ClickAwayListener,
+  Grow,
+  IconButton,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+  Skeleton,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { User } from '../../types/User';
+import { ReactComponent as HamburgerIcon } from '../../assets/icons/HamburgerIcon.svg';
 
 import UserHelper from '../../libs/UserHelper';
 import SellerProducts from './SellerProducts';
+import SellerReviews from './SellerReviews';
 
 const createAvatar = (avatar: string, seller: User | undefined) => {
   if (seller && seller?.username && seller?.name) {
@@ -45,6 +55,54 @@ const SellerProfile = () => {
   };
   //#endregion
 
+  //#region HamburgerMenu
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef<HTMLButtonElement>(null);
+
+  const handleToggleHamburgerMenu = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleCloseHamburgerMenu = (event: Event | React.SyntheticEvent) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDownHamburgerMenu(event: React.KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === 'Escape') {
+      setOpen(false);
+    }
+  }
+
+  const prevOpen = useRef(open);
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      anchorRef.current!.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
+  const handleLogout = () => {
+    UserHelper.Logout();
+    navigate('/login');
+  };
+
+  const handleEditProfile = () => {
+    navigate('/editprofile');
+  };
+  //#endregion
+
   useEffect(() => {
     if (!seller) return;
     UserHelper.retrieveProfilePicture(seller.profile_picture).then(
@@ -73,7 +131,7 @@ const SellerProfile = () => {
       <div className="h-screen w-screen flex-col space-y-10 bg-white">
         <div className="flex w-full flex-col items-center justify-center space-y-1 pr-4 pl-4 pt-16">
           {createAvatar(avatar ? avatar : '', seller ? seller : undefined)}
-          <div className="font-outfit text-[18px] font-semibold">
+          <div className="font-outfit text-[18px] font-semibold text-fresh-morado">
             {seller?.name}
           </div>
           <div className="font-space-mono text-[14px]">
@@ -81,11 +139,99 @@ const SellerProfile = () => {
           </div>
         </div>
         <div className="pr-4 pl-4 pb-16">
-          <Tabs value={currentTab} onChange={handleTabChange} centered>
-            <LinkTab label="Productos" href="/asas" />
-            <LinkTab label="Reseñas" href="/reviews" />
+          <Tabs
+            value={currentTab}
+            onChange={handleTabChange}
+            textColor="secondary"
+            indicatorColor="secondary"
+            variant="fullWidth"
+            sx={{
+              fontFamily: 'Outfit',
+              fontSize: '14px',
+              fontWeight: 'semibold',
+            }}
+            centered
+          >
+            <Tab
+              label={
+                <span className="text-[14x] font-outfit font-semibold">
+                  Productos
+                </span>
+              }
+            />
+            <Tab
+              label={
+                <span className="text-[14x] font-outfit font-semibold">
+                  Reseñas
+                </span>
+              }
+            />
           </Tabs>
+          <TabPanel value={currentTab} index={0}>
+            <SellerProducts seller_id={seller_id as string} />
+          </TabPanel>
+          <TabPanel value={currentTab} index={1}>
+            <SellerReviews />
+          </TabPanel>
         </div>
+      </div>
+      <div>
+        <IconButton
+          ref={anchorRef}
+          onClick={handleToggleHamburgerMenu}
+          sx={{
+            position: 'fixed',
+            top: 20,
+            right: 20,
+            backgroundColor: 'white',
+            border: '0',
+            boxShadow: 'none',
+          }}
+        >
+          <HamburgerIcon />
+        </IconButton>
+        <Popper open={open} anchorEl={anchorRef.current} transition>
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              style={{
+                transformOrigin:
+                  placement === 'bottom-start' ? 'left top' : 'left bottom',
+              }}
+            >
+              <Paper className="mr-2">
+                <ClickAwayListener onClickAway={handleCloseHamburgerMenu}>
+                  <MenuList
+                    autoFocusItem={open}
+                    id="composition-menu"
+                    aria-labelledby="composition-button"
+                    onKeyDown={handleListKeyDownHamburgerMenu}
+                  >
+                    <MenuItem
+                      key="qua01"
+                      onClick={handleEditProfile}
+                      className="font-space-mono text-[14px]"
+                    >
+                      <div className="font-space-mono text-[14px]">
+                        Editar perfil
+                      </div>
+                    </MenuItem>
+                    {/* <MenuItem onClick={handleCloseHamburgerMenu}>Mis estadísticas</MenuItem> */}
+                    <MenuItem
+                      key="qua02"
+                      onClick={handleLogout}
+                      className="font-space-mono text-[14px]"
+                    >
+                      <div className="font-space-mono text-[14px]">
+                        Cerrar sesión
+                      </div>
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
       </div>
     </div>
   );
@@ -93,19 +239,28 @@ const SellerProfile = () => {
 
 export default SellerProfile;
 
-interface LinkTabProps {
-  label?: string;
-  href?: string;
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
 }
 
-function LinkTab(props: LinkTabProps) {
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
   return (
-    <Tab
-      component="a"
-      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        event.preventDefault();
-      }}
-      {...props}
-    />
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
   );
 }
