@@ -8,17 +8,17 @@ import {
   Paper,
   Popper,
   Skeleton,
-} from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import AdvertisementManagement from '../../libs/AdvertisementManagement';
-import UserHelper from '../../libs/UserHelper';
-import { Compra } from '../../types/Compra';
-import { User } from '../../types/User';
-import OrderCard from './OrderCard';
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import AdvertisementManagement from "../../libs/AdvertisementManagement";
+import UserHelper from "../../libs/UserHelper";
+import { Compra } from "../../types/Compra";
+import { User } from "../../types/User";
+import OrderCard from "./OrderCard";
 
-import { ReactComponent as HamburgerIcon } from '../../assets/icons/HamburgerIcon.svg';
-import { useNavigate } from 'react-router-dom';
-import { log } from 'console';
+import { ReactComponent as HamburgerIcon } from "../../assets/icons/HamburgerIcon.svg";
+import { useNavigate } from "react-router-dom";
+import { log } from "console";
 
 const BuyerProfile = () => {
   const navigate = useNavigate();
@@ -47,10 +47,10 @@ const BuyerProfile = () => {
   };
 
   function handleListKeyDownHamburgerMenu(event: React.KeyboardEvent) {
-    if (event.key === 'Tab') {
+    if (event.key === "Tab") {
       event.preventDefault();
       setOpen(false);
-    } else if (event.key === 'Escape') {
+    } else if (event.key === "Escape") {
       setOpen(false);
     }
   }
@@ -68,12 +68,12 @@ const BuyerProfile = () => {
   //#endregion
 
   React.useEffect(() => {
-    console.log('set avatar: ');
+    console.log("set avatar: ");
     console.log(avatar);
   }, [avatar]);
 
   React.useEffect(() => {
-    console.log('set user');
+    console.log("set user");
     console.log(user);
 
     if (!user) return;
@@ -93,7 +93,7 @@ const BuyerProfile = () => {
         ordersToShowAux.push(
           <div>
             <OrderCard
-              date={'0 MES 0000'}
+              date={"0 MES 0000"}
               is_ended={order.is_ended}
               price={order.price}
               quantity={order.quantity}
@@ -127,7 +127,7 @@ const BuyerProfile = () => {
           variant="circular"
           width={75}
           height={75}
-          animation={'wave'}
+          animation={"wave"}
         />
       );
     }
@@ -142,11 +142,15 @@ const BuyerProfile = () => {
 
   const handleLogout = () => {
     UserHelper.Logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   const handleEditProfile = () => {
-    navigate('/editprofile');
+    navigate("/editprofile");
+  };
+
+  const handleSeeLater = () => {
+    navigate("/seeLater");
   };
 
   return (
@@ -159,7 +163,7 @@ const BuyerProfile = () => {
             {user?.name}
           </div>
           <div className="font-space-mono text-[14px]">
-            {user?.address ? user.address : 'Dirección no especificada'}
+            {user?.address ? user.address : "Dirección no especificada"}
           </div>
         </div>
         <div className="pr-4 pl-4 pb-16">
@@ -174,12 +178,12 @@ const BuyerProfile = () => {
           ref={anchorRef}
           onClick={handleToggleHamburgerMenu}
           sx={{
-            position: 'fixed',
+            position: "fixed",
             top: 20,
             right: 20,
-            backgroundColor: 'white',
-            border: '0',
-            boxShadow: 'none',
+            backgroundColor: "white",
+            border: "0",
+            boxShadow: "none",
           }}
         >
           <HamburgerIcon />
@@ -190,7 +194,7 @@ const BuyerProfile = () => {
               {...TransitionProps}
               style={{
                 transformOrigin:
-                  placement === 'bottom-start' ? 'left top' : 'left bottom',
+                  placement === "bottom-start" ? "left top" : "left bottom",
               }}
             >
               <Paper className="mr-2">
@@ -210,6 +214,14 @@ const BuyerProfile = () => {
                       </div>
                     </MenuItem>
                     {/* <MenuItem onClick={handleCloseHamburgerMenu}>Mis estadísticas</MenuItem> */}
+                    <MenuItem
+                      onClick={handleSeeLater}
+                      className="font-space-mono text-[14px]"
+                    >
+                      <div className="font-space-mono text-[14px]">
+                        Ver más tarde
+                      </div>
+                    </MenuItem>
                     <MenuItem
                       onClick={handleLogout}
                       className="font-space-mono text-[14px]"

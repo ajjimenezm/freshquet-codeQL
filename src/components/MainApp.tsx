@@ -19,6 +19,7 @@ import EditProfile from "./Profile/EditProfile";
 import NearbyProducts from "./Home/NearbyProducts";
 import NewProduct from "./advertisements/NewProduct";
 import OrderCard from "./Profile/OrderCard";
+import SeeLater from "./Profile/SeeLater";
 
 function MainApp() {
   //localStorage.clear();
@@ -44,6 +45,7 @@ function MainApp() {
         <Route path="profile" element={<BuyerProfile />} />
         <Route path="newproduct" element={<NewProduct />} />
         <Route path="editprofile" element={<EditProfile />} />
+        <Route path="seeLater" element={<SeeLater />} />
         <Route path="products/detail/:id" element={<AdDetail />} />
         <Route path="seller/:id" element={<SellerPage />} />
         <Route path="products/edit/:id" element={<EditAdDetail />} />
