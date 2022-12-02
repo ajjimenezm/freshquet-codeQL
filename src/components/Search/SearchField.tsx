@@ -1,5 +1,7 @@
 import { ReactComponent as SearchIcon } from "../../assets/icons/SearchIcon.svg";
 import { ReactComponent as FilterIcon } from "../../assets/icons/FilterIcon.svg";
+import React from "react";
+import { ShopFilters } from "../ShopFilters";
 
 interface SearchFieldProps {
     id: string;
@@ -7,9 +9,30 @@ interface SearchFieldProps {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    getFilters: (minPrice: number, maxPrice: number, typeProduct: string, distanceFilter: string, distanceFilterValue: number) => void;
 }
 
 function SearchField(props: SearchFieldProps) {
+    const [openModal, setOpen] = React.useState(false);
+    const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  }
+
+  const handleClose = async (filters: any) => {
+    setOpen(false);
+    const minPrice = parseInt(filters.min_price);
+    const maxPrice = parseInt(filters.max_price);
+    const typeProduct = filters.product_type;
+    const distanceFilter = filters.distanceFilter;
+    const distanceFilterValue = filters.distanceFilterValue;
+    console.log(minPrice, maxPrice, typeProduct, distanceFilter, distanceFilterValue);
+    props.getFilters(minPrice, maxPrice, typeProduct, distanceFilter, distanceFilterValue);
+  };
+
     return (
         <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 pt-0.5">
@@ -26,10 +49,11 @@ function SearchField(props: SearchFieldProps) {
                 onFocus={props.onFocus}
                 onBlur={props.onBlur}
             />
+            <ShopFilters open={openModal} handleClose={handleClose} handleCancel={handleCancel}/>
             <div
                 className="absolute inset-y-0 right-4 mr-1 flex items-center"
                 onClick={() => {
-                    console.log("Filter clicked");
+                    handleOpen();
                 }}
             >
                 <FilterIcon className="stroke-fresh-morado" />

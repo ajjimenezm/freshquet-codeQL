@@ -4,7 +4,7 @@ import {
   checkIfSearchHistoryExists,
   removeSearchHistory,
 } from '../../libs/SearchHistory';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import AdvertisementCard from '../AdvertisementCard';
 import AdvertisementCardSkeleton from '../AdvertisementCardSkeleton';
@@ -14,9 +14,13 @@ import AdvertisementManagement from '../../libs/AdvertisementManagement';
 import SearchField from './SearchField';
 import SearchPlaceHolder from './SearchPlaceHolder';
 import { ReactComponent as BackArrow } from '../../assets/icons/BackArrow.svg';
+import { AnyRecord } from 'dns';
+import { getDistanceFromLatLonInKm } from "../../libs/DistanceCalc";
+import axios from "axios";
 
 function Search() {
   const [searchFocused, setSearchFocused] = React.useState(false);
+  const [sellerIds, setSellerIds] = React.useState<string[]>([]);
   const [dataLoaded, setDataLoaded] = React.useState(false);
   const [dataRequested, setDataRequested] = React.useState(false);
   const [minimumTimeElapsed, setMinimumTimeElapsed] = React.useState(false);
@@ -26,11 +30,19 @@ function Search() {
   const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
     []
   );
+  const [filteredAds, setFilteredAds] = React.useState<Advertisement[]>([]);
+  const [min_price, setMinPrice] = React.useState<any>(-1);
+  const [max_price, setMaxPrice] = React.useState<any>(0);
+  const [typeProduct, setTypeProduct] = React.useState<any>("");
+  const [distanceFilter, setDistanceFilter] = React.useState<any>(false);
+  const [distanceFilterValue, setDistanceFilterValue] = React.useState<any>();
+  const [filters, setFilters] = React.useState("");
   const waitingTimeSkeletonLoader = 500;
   const [searchHistoryElements, setSearchHistoryElements] =
     React.useState<JSX.Element[]>();
 
   const navigate = useNavigate();
+
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams({ search: event.target.value });
@@ -83,26 +95,30 @@ function Search() {
     if (!dataRequested) {
       getAds();
     } else {
-      const filteredAds = advertisements.filter((advertisement) => {
+      const searchedAdsArray = advertisements.filter((advertisement) => {
         if (
           advertisement.name
             .toLowerCase()
             .includes(searchParams.get('search')?.toLowerCase() || '')
         ) {
-          return advertisement;
-        }
+            return advertisement;
+          }
       });
-      setAdvertisementsToShow(
-        filteredAds.map((advertisement) => (
-          <AdvertisementCard
-            key={advertisement._id}
-            advertisement={advertisement}
-          />
-        ))
+        filterWithFilters(searchedAdsArray).then((filteredAds) => {
+        setFilteredAds(filteredAds);}
       );
     }
-  }, [advertisements, searchParams]);
+  }, [advertisements, searchParams, typeProduct, min_price, max_price, distanceFilter, distanceFilterValue]);
 
+
+  useEffect(() => {
+    setAdvertisementsToShow(
+    filteredAds.map((advertisement: any) => (
+      <AdvertisementCard
+        key={advertisement._id}
+        advertisement={advertisement}
+      />
+    )))}, [filteredAds]);
   const getAds = () => {
     setDataRequested(true);
     AdvertisementManagement.GetAllAdvertisements().then((ads) => {
@@ -110,6 +126,96 @@ function Search() {
       setDataLoaded(true);
     });
   };
+
+  const filterByDistance = (
+    filterValue: number,
+    ads: Advertisement[],
+    userLocs: any
+  ) => {
+    const adsToShow: Advertisement[] = [];
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/coordinates`,
+        sellerIds,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        res.data.map((seller: any) => {
+          const distance = getDistanceFromLatLonInKm(
+            seller.latitude,
+            seller.longitude,
+            userLocs.latitude,
+            userLocs.longitude
+          );
+          console.log(seller, distance, userLocs);
+          if (distance < filterValue) {
+            const ad = ads.find((ad) => ad.sellerId === seller._id);
+            if (ad) adsToShow.push(ad);
+          }
+        });
+      });
+    return advertisements;
+  };
+
+  const filterWithFilters = async (ads: Advertisement[]) => {
+    console.log(ads);
+    let filteredAdvertisements: Advertisement[] = ads;
+
+    if (distanceFilter) {
+      await navigator.geolocation.getCurrentPosition(async (position) => {
+        const userLocs = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        filteredAdvertisements = filterByDistance(
+          distanceFilterValue,
+          advertisements,
+          userLocs
+        );
+      });
+    }
+    console.log("eoooooo");
+    //Do not apply filters if there is an error on the input
+    if (typeProduct !== "") {
+      const adsToShow: Advertisement[] = [];
+      console.log("typeProduct", typeProduct);
+      filteredAdvertisements.map((ad: any, idx: any) => {
+        if (ad.category === typeProduct) {
+          adsToShow.push(ad);
+        }
+      });
+      filteredAdvertisements = adsToShow;
+    }
+
+    //Do not apply filters if there is an error on the input
+    if ((min_price !== -1 || max_price !== 0) && min_price <= max_price) {
+      const adsToShow: Advertisement[] = [];
+      filteredAdvertisements.map((ad: any, idx: any) => {
+        if (
+          ad.pricePerKilogram >= min_price &&
+          ad.pricePerKilogram <= max_price
+        ) {
+          adsToShow.push(ad);
+        }
+      });
+      filteredAdvertisements = adsToShow;
+    }
+    console.log(filteredAdvertisements)
+    return filteredAdvertisements
+  };
+
+  const getfilters = (minPrice: number, maxPrice: number, typeProduct: string, distanceFilter: string, distanceFilterValue: number) => {
+      console.log(minPrice, maxPrice, typeProduct, distanceFilter, distanceFilterValue);
+      setMinPrice(minPrice);
+      setMaxPrice(maxPrice);
+      setTypeProduct(typeProduct);
+      setDistanceFilter(distanceFilter);
+      setDistanceFilterValue(distanceFilterValue);
+    };
 
   const loadSearchHistory = () => {
     const searchHistory = getSearchHistory();
@@ -158,6 +264,7 @@ function Search() {
                 "
         >
           <SearchField
+            getFilters={getfilters}
             id="searchField"
             value={searchParams.get('search') || ''}
             onChange={handleSearch}

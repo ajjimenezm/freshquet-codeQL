@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import PlaceReview from './reviews/PlaceReview';
 import BottomNav from './BottomNav';
 import { useNavigate } from 'react-router-dom';
@@ -21,19 +22,41 @@ import SellerProfile from './Profile/SellerProfile';
 import SellerProducts from './Profile/SellerProducts';
 import SellerReviews from './Profile/SellerReviews';
 import Search from './Search/Search';
+=======
+import PlaceReview from "./reviews/PlaceReview";
+import BottomNav from "./BottomNav";
+import { useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Home/Home";
+import Map from "./map/Map";
+import Chat from "./Chat/Chat";
+import AdDetail from "./advertisements/AdDetail";
+import EditAdDetail from "./advertisements/EditAdDetail";
+import { useEffect } from "react";
+import ChatMenu from "./Chat/ChatMenu";
+import AdvertismentHistory from "./advertismentHistory/advertismentHistory";
+import BuyerProfile from "./Profile/BuyerProfile";
+import EditProfile from "./Profile/EditProfile";
+import NewProduct from "./advertisements/NewProduct";
+import SellerProfile from "./Profile/SellerProfile";
+import Search from "./Search/Search";
+import OrderCard from "./Profile/OrderCard";
+import NearbyProducts from "./Home/NearbyProducts";
+>>>>>>> 59028c8ce265e5396f29a3d3a58f4d4a38aa244d
 
 function MainApp() {
-  //localStorage.clear();
+    //localStorage.clear();
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const user = localStorage.getItem('userToken');
-    if (!user) {
-      navigate('/login');
-    }
-  }, []);
+    useEffect(() => {
+        const user = localStorage.getItem("userToken");
+        if (!user) {
+            navigate("/login");
+        }
+    }, []);
 
+<<<<<<< HEAD
   return (
     <>
       <Routes>
@@ -56,6 +79,49 @@ function MainApp() {
       <BottomNav navigateFunction={navigate} />
     </>
   );
+=======
+    return (
+        <>
+            <Routes>
+                <Route path="home" element={<Home />} />
+                <Route path="map" element={<Map />} />
+                <Route path="search" element={<Search />} />
+                <Route path="chat" element={<Chat />} />
+                <Route path="chatmenu" element={<ChatMenu />} />
+                {/* <Route path="profile" element={<Profile />} /> */}
+                <Route path="profile" element={<BuyerProfile />} />
+                <Route path="newproduct" element={<NewProduct />} />
+                <Route path="editprofile" element={<EditProfile />} />
+                <Route path="products/detail/:id" element={<AdDetail />} />
+                <Route path="seller/:seller_id" element={<SellerProfile />} />
+                {/* <Route path="seller/:seller_id/products" element={<SellerProducts />} />
+        <Route path="seller/:seller_id/reviews" element={<SellerReviews />} /> */}
+                <Route path="products/edit/:id" element={<EditAdDetail />} />
+                <Route
+                    path="advertisementHistory"
+                    element={<AdvertismentHistory />}
+                />
+                <Route path="review/:purchaseId" element={<PlaceReview />} />
+                <Route
+                    path="testest"
+                    element={
+                        <OrderCard
+                            date="12/12/12"
+                            is_ended={false}
+                            price={1.66}
+                            productName="Pimientos Verdes"
+                            quantity={1}
+                            sellerAddress="Casa"
+                            sellerUsername="vendedor"
+                        />
+                    }
+                />
+                <Route path="nearbyProducts" element={<NearbyProducts />} />
+            </Routes>
+            <BottomNav navigateFunction={navigate} />
+        </>
+    );
+>>>>>>> 59028c8ce265e5396f29a3d3a58f4d4a38aa244d
 }
 
 export default MainApp;

@@ -9,10 +9,9 @@ import Register from './components/users/Register';
 import { AuthContext } from './chatContext/AuthContext';
 import BuyAd from './components/advertisements/BuyAdvertisement/BuyAdDialog';
 import AdvertismentHistory from './components/advertismentHistory/advertismentHistory';
+import './styles/App.css';
 
 function App() {
-  // useContext user authcontext
-
   const user = React.useContext(AuthContext);
   console.log(user);
 
@@ -32,7 +31,6 @@ function App() {
       },
     },
   });
-
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
