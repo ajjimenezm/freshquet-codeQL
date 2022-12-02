@@ -27,22 +27,16 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
         const productImagesGet = AdvertisementManagement.GetProductPictures(
             props.productId
         );
-
-        const sellerImageGet = UserHelper.getProfilePicture(props.sellerId);
+        UserHelper.getUserById(props.sellerId).then((res) => {
+            UserHelper.retrieveProfilePicture(res.profile_picture).then(
+                (res) => {
+                    setSellerImage(res);
+                }
+            );
+        });
 
         productImagesGet.then((res) => {
             setProductImages(res);
-        });
-
-        sellerImageGet.then((res) => {
-            if (res !== "") {
-                setSellerImage(res);
-            } else {
-                setSellerImage(
-                    "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
-                );
-            }
-            console.log("sellerImage: " + sellerImage);
         });
     }, []);
 
@@ -67,7 +61,7 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
     }, [productImages]);
 
     return (
-        <div className="relative h-screen w-screen shrink-0 snap-center snap-always bg-black">
+        <div className="relative z-10 h-screen w-screen shrink-0 snap-center snap-always bg-black">
             {productImagesSlides.length > 0 && (
                 <Slide
                     easing="ease"
