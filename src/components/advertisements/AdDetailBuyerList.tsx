@@ -52,5 +52,4 @@ function AdDetailBuyerList(props: AdDetailBuyerListProps) {
         </div>
     );
 }
-
 export default AdDetailBuyerList;
