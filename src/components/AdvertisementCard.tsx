@@ -1,21 +1,16 @@
 import Advertisement from "../types/Advertisement";
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AdvertisementManagement from "../libs/AdvertisementManagement";
 import { Skeleton } from "@mui/material";
 
 interface AdvertisementCardProps {
     advertisement: Advertisement;
+    onClick: () => void;
 }
 
 function AdvertisementCard(props: AdvertisementCardProps) {
-    const navigate = useNavigate();
     const [imageLoaded, setImageLoaded] = useState(false);
     const [image, setImage] = useState<string>("");
-
-    const navigateFunction = (id: string) => {
-        navigate(`/products/detail/${id}`);
-    };
 
     useEffect(() => {
         AdvertisementManagement.GetImageAdvertisment(
@@ -29,7 +24,7 @@ function AdvertisementCard(props: AdvertisementCardProps) {
     return (
         <div
             className="h-25 mt-1 mb-1 flex flex-row items-center"
-            onClick={navigateFunction.bind(null, props.advertisement._id)}
+            onClick={props.onClick}
         >
             {imageLoaded ? (
                 <img

@@ -6,6 +6,7 @@ import Advertisement from "../../types/Advertisement";
 
 interface AdvertisementCardProps {
   advertisement: any;
+  onClick: () => void;
 }
 
 const AdvertisementCard = (props: AdvertisementCardProps) => {
@@ -14,10 +15,6 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
   const [image, setImage] = useState<string>("");
   const [distance, setDistance] = useState<string>("");
   const [seller, setSeller] = useState<string>("");
-
-  const navigateFunction = (id: string) => {
-    navigate(`/products/detail/${id}`);
-  };
 
   useEffect(() => {
     AdvertisementManagement.GetImageAdvertisment(props.advertisement._id).then(
@@ -52,7 +49,7 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
   return (
     <div
       className="text-semibold  flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-fresh-naranja  text-fresh-naranja"
-      onClick={navigateFunction.bind(null, props.advertisement._id)}
+      onClick={props.onClick}
     >
       <div className="w-[150px]">
         <div className="flex flex-col items-start space-y-2 border-b-[1px] border-dashed border-fresh-naranja pl-4 pt-2 pb-4 text-left">
@@ -82,7 +79,11 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
             <Skeleton
               variant="rectangular"
               animation="wave"
-              sx={{ width: "100%", height: "100%", bgcolor: "#F4511D" }}
+              sx={{
+                width: "100%",
+                height: "100%",
+                bgcolor: "#F4511D",
+              }}
             />
           </div>
         )}
