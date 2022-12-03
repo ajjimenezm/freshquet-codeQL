@@ -42,11 +42,11 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
       });
     });
 
-    AdvertisementManagement.GetSellerName(props.advertisement.sellerId).then(
-      (res) => {
-        setSeller(res);
-      }
-    );
+    AdvertisementManagement.GetSellerName(
+      props.advertisement.sellerId._id
+    ).then((res) => {
+      setSeller(res);
+    });
   }, []);
 
   return (
