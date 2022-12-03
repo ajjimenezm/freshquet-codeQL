@@ -27,6 +27,7 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const ref = useRef<BottomSheetRef>(null);
+    const [distance, setDistance] = useState<string>("");
 
     React.useEffect(() => {
         const productImagesGet = AdvertisementManagement.GetProductPictures(
@@ -42,6 +43,21 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
 
         productImagesGet.then((res) => {
             setProductImages(res);
+        });
+
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const userLocs = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+            };
+
+            AdvertisementManagement.GetDistanceFormSeller(
+                props.sellerId,
+                userLocs.latitude,
+                userLocs.longitude
+            ).then((res) => {
+                setDistance(res);
+            });
         });
     }, []);
 
@@ -139,7 +155,14 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                         </span>
                     </div>
                     <div className="ml-2 mr-2 text-sm font-bold">·</div>
-                    <div className="text-sm font-light">A 2km de ti</div>
+                    {distance === "" && (
+                        <div className="mt-1 h-4 w-24 animate-pulse bg-neutral-400 align-middle"></div>
+                    )}
+                    {distance !== "" && (
+                        <div className="text-sm font-light">
+                            A {distance}km de ti
+                        </div>
+                    )}
                 </div>
                 <div className="mt-6 flex w-screen flex-row items-center justify-center pb-7 font-outfit text-white">
                     <button
