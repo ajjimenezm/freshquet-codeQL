@@ -129,7 +129,12 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                     <div className="text-sm font-light">A 2km de ti</div>
                 </div>
                 <div className="mt-6 flex w-screen flex-row items-center justify-center pb-7 font-outfit text-white">
-                    <button className="w-44 rounded-full bg-fresh-verde py-2 px-4 text-xl font-medium text-white">
+                    <button
+                        className="h-11 w-44 rounded-full bg-fresh-verde py-2 px-4 text-xl font-medium text-white active:bg-fresh-verde-oscuro"
+                        onClick={() => {
+                            navigate("/products/buy/" + props.productId);
+                        }}
+                    >
                         Comprar
                     </button>
                 </div>
