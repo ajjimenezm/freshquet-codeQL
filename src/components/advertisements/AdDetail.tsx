@@ -38,6 +38,7 @@ function AdDetail() {
   const [images, setImages] = useState<string[]>([]);
   const [imagenames, setImagenames] = useState<string[]>([]);
   const [imagesLoaded, setImagesLoaded] = useState<number>(0);
+  const [addSeeLater, setAddSeeLater] = useState("AÑADIR VER MÁS TARDE");
 
   const currentUser = React.useContext(AuthContext);
 
@@ -248,11 +249,13 @@ function AdDetail() {
     if (!user?.adsInSeeLater.includes(advertisement?._id)) {
       user?.adsInSeeLater.push(advertisement._id);
       UserHelper.UpdateUserData(user!);
+      setAddSeeLater("ELIMINAR VER MÁS TARDE");
       alert("GUARDADO");
     } else {
       const idRemove = user?.adsInSeeLater.indexOf(advertisement._id);
       user?.adsInSeeLater.splice(idRemove, 1);
       UserHelper.UpdateUserData(user!);
+      setAddSeeLater("AÑADIR VER MÁS TARDE");
       alert("BORRADO");
     }
   };
@@ -264,7 +267,7 @@ function AdDetail() {
           <h1 className="mb-4 text-3xl font-bold uppercase">
             {advertisement.name}
           </h1>
-          <Button onClick={storeProd}>VER MÁS TARDE</Button>
+          <Button onClick={storeProd}>{addSeeLater}</Button>
           {
             //console.log(usersInSeeLater);
             /* <img

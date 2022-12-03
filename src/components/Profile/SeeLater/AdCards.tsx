@@ -57,6 +57,9 @@ const AdCards = (props: NearbyAdCardProps) => {
             {advertisement?.pricePerKilogram}€/Kg
           </p>
         </div>
+        <div className=" pl-4 pt-1">
+          <p className=" text-[12px] font-medium">{seller}</p>
+        </div>
       </div>
       <div className="w-5/12 border-l-[1px] border-black align-middle">
         {imageLoaded ? (

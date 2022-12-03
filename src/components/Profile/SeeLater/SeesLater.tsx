@@ -42,10 +42,13 @@ function SeesLater() {
 
   return (
     <>
-      <h1>PRODUCTOS VER MÁS TARDE DE {user?.name}</h1>
-      {advertisementsToShow?.length}
-      <div className=" m-4 space-y-4">{advertisementsToShow}</div>
-      <p>{user?.adsInSeeLater.length}</p>
+      <div className="mt-5 ml-4">
+        <div className="mb-6 grid place-items-center">
+          <h1 className="font-space-mono">PRODUCTOS VER MÁS TARDE DE</h1>
+          <h1 className="font-space-mono">{user?.name}</h1>
+        </div>
+        <div className="mt-4 mr-4 mb-4 space-y-4">{advertisementsToShow}</div>
+      </div>
     </>
   );
 }
