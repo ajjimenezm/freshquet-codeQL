@@ -14,17 +14,21 @@ import {
 import { useState } from "react";
 import Slider from "@mui/material/Slider";
 import { Category } from "../types/Category";
+import Slide from '@mui/material/Slide';
+import { Divider } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton } from '@mui/material';
 
 const style = {
   position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
+  bottom: "00",
+  left: "0",
+  width: "100%",
+  height: "95%",
   display: "flex",
   flexDirection: "column",
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  top: "4px solid #976D9C",
   boxShadow: 24,
   pt: 2,
   px: 4,
@@ -55,32 +59,6 @@ const marks = [
   },
 ];
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
 
 export const ShopFilters = (props: any) => {
   const [value, setValue] = React.useState(0);
@@ -102,6 +80,26 @@ export const ShopFilters = (props: any) => {
       [event.target.name]: event.target.value,
     });
   };
+  
+  const setMinPriceInput = () => {
+    if(filters.min_price !== -1) return filters.min_price;
+    else return "";
+  }
+  
+  const setMaxPriceInput = () => {
+    if(filters.max_price !== 0) return filters.max_price;
+    else return "";
+  }
+  
+  const setProductTypeValue = () => {
+    if(filters.product_type !== "") return filters.product_type;
+    else return "";
+  }
+  
+  const setDistanceSlider = () => {
+    if(filters.distanceFilter === true) return filters.distanceFilterValue;
+    else return 0;
+  }
 
   const handleLocationFilters = (event: any) => {
     setFilters({
@@ -117,82 +115,93 @@ export const ShopFilters = (props: any) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={{ ...style, width: 400 }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Precio" {...a11yProps(0)} />
-            <Tab label="Producto" {...a11yProps(1)} />
-            {/* <Tab label="Distancia" {...a11yProps(2)} /> */}
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <div className="flex flex-col text-right">
-            <div className="flex flex-row justify-around py-4">
-              <input
-                type="number"
-                name="min_price"
-                className="focus:ring-primary-600 focus:border-primary-600 block w-full max-w-[40%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
-                onChange={handleChangeFilters}
-                placeholder="Precio Minimo"
-              />
-              <input
-                type="number"
-                name="max_price"
-                className="focus:ring-primary-600 focus:border-primary-600 block w-full max-w-[40%] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
-                onChange={handleChangeFilters}
-                placeholder="Precio Maximo"
-              />
+      <Slide direction="up" in={props.open} mountOnEnter unmountOnExit>
+        <Box sx={{ ...style}}>
+          <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+              <div className="w-40 select-none font-outfit text-4xl font-semibold text-fresh-morado">
+                  Filtros
+              </div>
+              <IconButton onClick={props.handleCancel}>
+                <CloseIcon color="secondary"/>
+              </IconButton>
             </div>
-          </div>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Box className=" mb-2 block text-sm font-medium text-gray-900">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Tipo de producto
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                name="product_type"
-                label="Tipo de usuario"
-                onChange={handleChangeFilters}
+            <div className="mb-4 mt-4">
+              <a className="w-40 select-none font-outfit text-m font-semibold text-fresh-morado">Precios</a>
+              <div className="flex flex-col text-right">
+                <div className="flex flex-row justify-around py-4">
+                  <input
+                    type="number"
+                    name="min_price"
+                    className="block h-10 w-full max-w-[40%] rounded-full border-2 border-solid border-fresh-morado bg-transparent py-2 pl-3 pr-3 font-outfit leading-5 text-fresh-morado selection:bg-fresh-azul placeholder:font-light placeholder:text-fresh-morado focus:outline-none"
+                    onChange={handleChangeFilters}
+                    value = {setMinPriceInput()}
+                    placeholder="Minimo"
+                  />
+                  <input
+                    type="number"
+                    name="max_price"
+                    className="block h-10 w-full max-w-[40%] rounded-full border-2 border-solid border-fresh-morado bg-transparent py-2 pl-3 pr-3 font-outfit leading-5 text-fresh-morado selection:bg-fresh-azul placeholder:font-light placeholder:text-fresh-morado focus:outline-none"
+                    onChange={handleChangeFilters}
+                    value = {setMaxPriceInput()}
+                    placeholder="Maximo"
+                  />
+                </div>
+              </div>
+            </div>
+            <Divider/>
+            <div className="mb-4 mt-4">
+              <a className="w-40 select-none font-outfit text-m font-semibold text-fresh-morado">Categoría de producto</a>
+              <Box className=" mb-2 block text-sm font-medium text-gray-900 mt-4 mr-6 ml-6">
+                <FormControl fullWidth color="secondary">
+                <InputLabel id="demo-simple-select-label">
+                  Categoría
+                </InputLabel>
+                  <Select
+                  labelId="demo-simple-select-label"
+                  name="product_type"
+                  label="Categoría"
+                  value={setProductTypeValue()}
+                  onChange={handleChangeFilters}
+                  color="secondary"
+                  >
+                  <MenuItem value={Category.Fruta}>{Category.Fruta}</MenuItem>
+                  <MenuItem value={Category.Verdura}>{Category.Verdura}</MenuItem>
+                  <MenuItem value={Category.Legumbres}>
+                      {Category.Legumbres}
+                  </MenuItem>
+                  <MenuItem value={Category.Otros}>{Category.Otros}</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </div>
+            <Divider className="mb-4"/>
+            <div className="mt-4">
+              <a className="w-40 select-none font-outfit text-m font-semibold text-fresh-morado mb-6">Distancia</a>
+              <Slider
+                aria-label="Custom marks"
+                defaultValue={10}
+                getAriaValueText={valuetext}
+                step={5}
+                value={setDistanceSlider()}
+                valueLabelDisplay="auto"
+                marks={marks}
+                onChange={handleLocationFilters}
+                color="secondary"
+                />
+            </div>
+          <div className="absolute inset-x-0 bottom-0 mb-4 mr-4 ml-4">
+            <button
+              className="w-full h-12 rounded-full bg-fresh-morado text-white font-outfit font-semibold text-m"
+              onClick={() => {
+                console.log(filters);
+                props.handleClose(filters);
+              }}
               >
-                <MenuItem value={Category.Fruta}>{Category.Fruta}</MenuItem>
-                <MenuItem value={Category.Verdura}>{Category.Verdura}</MenuItem>
-                <MenuItem value={Category.Legumbres}>
-                  {Category.Legumbres}
-                </MenuItem>
-                <MenuItem value={Category.Otros}>{Category.Otros}</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </TabPanel>
-        {/* <TabPanel value={value} index={2}>
-          {// Location filter //}
-          <Slider
-            aria-label="Custom marks"
-            defaultValue={10}
-            getAriaValueText={valuetext}
-            step={5}
-            valueLabelDisplay="auto"
-            marks={marks}
-            onChange={handleLocationFilters}
-          />
-        </TabPanel> */}
-        <Button
-          variant="contained"
-          onClick={() => {
-            console.log(filters);
-            props.handleClose(filters);
-          }}
-        >
-          Guardar
-        </Button>
-      </Box>
+              Guardar
+            </button>
+          </div>
+        </Box>
+      </Slide>
     </Modal>
   );
 };

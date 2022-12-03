@@ -38,7 +38,7 @@ function AdDetail() {
   const [images, setImages] = useState<string[]>([]);
   const [imagenames, setImagenames] = useState<string[]>([]);
   const [imagesLoaded, setImagesLoaded] = useState<number>(0);
-  const [addSeeLater, setAddSeeLater] = useState("AÑADIR VER MÁS TARDE");
+  const [addSeeLater, setAddSeeLater] = useState("");
 
   const currentUser = React.useContext(AuthContext);
 
@@ -267,7 +267,17 @@ function AdDetail() {
           <h1 className="mb-4 text-3xl font-bold uppercase">
             {advertisement.name}
           </h1>
-          <Button onClick={storeProd}>{addSeeLater}</Button>
+          {addSeeLater === "" &&
+            user?.adsInSeeLater.includes(advertisement._id) && (
+              <Button onClick={storeProd}>ELIMINAR VER MÁS TARDE</Button>
+            )}
+          {addSeeLater === "" &&
+            !user?.adsInSeeLater.includes(advertisement._id) && (
+              <Button onClick={storeProd}>AÑADIR VER MÁS TARDE</Button>
+            )}
+          {addSeeLater !== "" && (
+            <Button onClick={storeProd}>{addSeeLater}</Button>
+          )}
           {
             //console.log(usersInSeeLater);
             /* <img

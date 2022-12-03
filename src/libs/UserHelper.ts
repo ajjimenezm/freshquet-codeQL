@@ -41,6 +41,42 @@ const retrieveProfilePicture = async (imgname: string): Promise<string> => {
     });
 };
 
+async function getProfile(userId: string): Promise<User> {
+  let returnUser: User = {
+    _id: "",
+    name: "empty",
+    username: "",
+    password: "",
+    phoneNumber: "",
+    email: "",
+    profile_picture: "",
+    address: "",
+    biography: "",
+
+    latitude: 0,
+    longitude: 0,
+    userType: "",
+    adsInSeeLater: [],
+  };
+
+  await axios
+    .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+      },
+    })
+    .then((res1) => {
+      returnUser = res1.data[0];
+    });
+
+  return returnUser;
+}
+
+async function getProfilePicture(userId: string): Promise<string> {
+  const user = await getProfile(userId);
+  return user.profile_picture;
+}
+
 async function getOwnProfile(): Promise<User> {
   let returnUser: User = {
     _id: "",
@@ -108,6 +144,19 @@ function Logout() {
   alert("La sesion se ha cerrado correctamente");
 }
 
+async function getUserByUsername(username: string): Promise<User> {
+  const response = await axios.get(
+    `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${username}/profilebyUsername`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+      },
+    }
+  );
+
+  return response.data[0];
+}
+
 function StringAvatar(name: string) {
   return {
     sx: {
@@ -123,8 +172,8 @@ function StringAvatar(name: string) {
 }
 
 async function UpdateUserData(user: User) {
-  await LocationManagement.GetCoordinatesFromAddress(user.address)
-    .then(async (coordinates) => {
+  await LocationManagement.GetCoordinatesFromAddress(user.address).then(
+    async (coordinates) => {
       user.latitude = coordinates.lat;
       user.longitude = coordinates.lng;
       await axios
@@ -139,10 +188,8 @@ async function UpdateUserData(user: User) {
         .catch(() => {
           return false;
         });
-    })
-    .catch(() => {
-      return false;
-    });
+    }
+  );
 }
 
 export default {
@@ -153,4 +200,6 @@ export default {
   Logout,
   StringAvatar,
   UpdateUserData,
+  getUserByUsername,
+  getProfilePicture,
 };

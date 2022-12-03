@@ -1,19 +1,18 @@
-import { Skeleton } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import AdvertisementManagement from "../../libs/AdvertisementManagement";
-import Advertisement from "../../types/Advertisement";
+import { Skeleton } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AdvertisementManagement from '../../libs/AdvertisementManagement';
 
 interface AdvertisementCardProps {
   advertisement: any;
 }
 
-const AdvertisementCard = (props: AdvertisementCardProps) => {
+const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [image, setImage] = useState<string>("");
-  const [distance, setDistance] = useState<string>("");
-  const [seller, setSeller] = useState<string>("");
+  const [image, setImage] = useState<string>('');
+  const [distance, setDistance] = useState<string>('');
+  const [seller, setSeller] = useState<string>('');
 
   const navigateFunction = (id: string) => {
     navigate(`/products/detail/${id}`);
@@ -51,15 +50,15 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
 
   return (
     <div
-      className="text-semibold  flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-fresh-naranja  text-fresh-naranja"
+      className="text-semibold  flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-black  text-black"
       onClick={navigateFunction.bind(null, props.advertisement._id)}
     >
       <div className="w-[150px]">
-        <div className="flex flex-col items-start space-y-2 border-b-[1px] border-dashed border-fresh-naranja pl-4 pt-2 pb-4 text-left">
+        <div className="flex flex-col items-start space-y-2 border-b-[1px] border-dashed border-black pl-4 pt-2 pb-4 text-left">
           <p className=" text-[16px] font-medium">
             {props.advertisement.name.length < 15
               ? props.advertisement.name
-              : props.advertisement.name.substring(0, 12) + "..."}
+              : props.advertisement.name.substring(0, 12) + '...'}
           </p>
           <p className=" text-[12px] font-medium">
             {props.advertisement.pricePerKilogram}€/Kg
@@ -70,7 +69,7 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
           <p className=" text-[10px]">A {distance} Km de ti</p>
         </div>
       </div>
-      <div className="w-[125px] border-l-[1px] border-fresh-naranja align-middle">
+      <div className="w-[125px] border-l-[1px] border-black align-middle">
         {imageLoaded ? (
           <img
             src={image}
@@ -82,7 +81,7 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
             <Skeleton
               variant="rectangular"
               animation="wave"
-              sx={{ width: "100%", height: "100%", bgcolor: "#F4511D" }}
+              sx={{ width: '100%', height: '100%' }}
             />
           </div>
         )}
@@ -91,4 +90,4 @@ const AdvertisementCard = (props: AdvertisementCardProps) => {
   );
 };
 
-export default AdvertisementCard;
+export default AdvertisementCardStandard;

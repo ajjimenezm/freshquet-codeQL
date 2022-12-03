@@ -1,32 +1,36 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import MainApp from "./components/MainApp";
-import "./styles/App.css";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import NewProduct from "./components/advertisements/NewProduct";
-import Login from "./components/users/Login";
-import Register from "./components/users/Register";
-import { AuthContext } from "./chatContext/AuthContext";
-import BuyAd from "./components/advertisements/BuyAdvertisement/BuyAdDialog";
-import AdvertismentHistory from "./components/advertismentHistory/advertismentHistory";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import MainApp from './components/MainApp';
+import './styles/App.css';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import NewProduct from './components/advertisements/NewProduct';
+import Login from './components/users/Login';
+import Register from './components/users/Register';
+import { AuthContext } from './chatContext/AuthContext';
+import BuyAd from './components/advertisements/BuyAdvertisement/BuyAdDialog';
+import AdvertismentHistory from './components/advertismentHistory/advertismentHistory';
+import './styles/App.css';
 
 function App() {
-  // useContext user authcontext
-
   const user = React.useContext(AuthContext);
   console.log(user);
 
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#63d4a1",
+        main: '#4C987B',
       },
       secondary: {
-        main: "#D46496",
+        main: '#976D9C',
+      },
+      success: {
+        main: '#4C987B',
+      },
+      error: {
+        main: '#F4511D',
       },
     },
   });
-
   return (
     <div className="App">
       <ThemeProvider theme={theme}>

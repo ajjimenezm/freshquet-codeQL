@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import Home from "./Home/Home";
 import Map from "./map/Map";
-import Search from "./Search/Search";
 import Chat from "./Chat/Chat";
 import AdDetail from "./advertisements/AdDetail";
 import Profile from "./Profile/Profile";
@@ -18,7 +17,12 @@ import BuyerProfile from "./Profile/BuyerProfile";
 import EditProfile from "./Profile/EditProfile";
 import NearbyProducts from "./Home/NearbyProducts";
 import NewProduct from "./advertisements/NewProduct";
+import SellerProfile from "./Profile/SellerProfile";
+import SellerProducts from "./Profile/SellerProducts";
+import SellerReviews from "./Profile/SellerReviews";
+
 import OrderCard from "./Profile/OrderCard";
+import Search from "./Search/Search";
 import SeesLater from "./Profile/SeeLater/SeesLater";
 
 function MainApp() {
@@ -47,11 +51,12 @@ function MainApp() {
         <Route path="editprofile" element={<EditProfile />} />
         <Route path="seeLater" element={<SeesLater />} />
         <Route path="products/detail/:id" element={<AdDetail />} />
-        <Route path="seller/:id" element={<SellerPage />} />
+        <Route path="seller/:seller_id" element={<SellerProfile />} />
+        {/* <Route path="seller/:seller_id/products" element={<SellerProducts />} />
+        <Route path="seller/:seller_id/reviews" element={<SellerReviews />} /> */}
         <Route path="products/edit/:id" element={<EditAdDetail />} />
         <Route path="advertisementHistory" element={<AdvertismentHistory />} />
         <Route path="review/:purchaseId" element={<PlaceReview />} />
-        <Route path="nearbyProducts" element={<NearbyProducts />} />
         <Route
           path="testest"
           element={
@@ -66,6 +71,7 @@ function MainApp() {
             />
           }
         />
+        <Route path="nearbyProducts" element={<NearbyProducts />} />
       </Routes>
       <BottomNav navigateFunction={navigate} />
     </>
