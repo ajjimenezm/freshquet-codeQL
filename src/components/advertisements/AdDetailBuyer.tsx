@@ -75,6 +75,13 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                     {productImagesSlides}
                 </Slide>
             )}
+            {productImagesSlides.length == 0 && (
+                <div className="flex h-screen w-screen flex-col items-center justify-center bg-black">
+                    <div className="animate-pulse text-center font-outfit text-5xl font-bold text-neutral-400">
+                        freshquet
+                    </div>
+                </div>
+            )}
             <div className="absolute bottom-0 left-0 z-20 flex w-screen flex-col bg-gradient-to-t from-black pt-16">
                 <div className="flex-rows flex w-screen items-stretch pl-4 pr-4 font-outfit text-white">
                     <div className="flex-grow text-xl font-semibold">
@@ -127,6 +134,11 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                     </button>
                 </div>
             </div>
+            {productImages.length === 0 && (
+                <div className="absolute bottom-0 z-40 flex max-h-full w-screen flex-row items-center justify-center">
+                    <div className=" mb-2 h-1 w-36 max-w-full animate-ping bg-neutral-400"></div>
+                </div>
+            )}
         </div>
     );
 }
