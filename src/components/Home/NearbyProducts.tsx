@@ -16,6 +16,7 @@ const NearbyProducts = () => {
         React.useState<JSX.Element[]>();
     const [address, setAddress] = React.useState("");
     const [showProductDetail, setShowProductDetail] = React.useState(false);
+    const [productToOpen, setProductToOpen] = React.useState(0);
 
     useEffect(() => {
         AdvertisementManagement.GetAllAdvertisements().then((res) => {
@@ -42,13 +43,14 @@ const NearbyProducts = () => {
         console.log("Advertisements: ");
         console.log("is array: ", Array.isArray(advertisements));
         setAdvertisementsToShow(
-            advertisements.map((ad) => {
+            advertisements.map((ad, index) => {
                 return (
                     <NearbyAdCard
                         key={ad._id}
                         advertisement={ad}
                         removeAd={removeAd}
                         onClick={() => {
+                            setProductToOpen(index);
                             setShowProductDetail(true);
                         }}
                     />
@@ -76,6 +78,7 @@ const NearbyProducts = () => {
                     onBack={() => {
                         setShowProductDetail(false);
                     }}
+                    productToOpen={productToOpen}
                 />
             )}
             {!showProductDetail && (
