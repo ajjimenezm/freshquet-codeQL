@@ -251,7 +251,7 @@ function AdDetail() {
       alert("GUARDADO");
     } else {
       const idRemove = user?.adsInSeeLater.indexOf(advertisement._id);
-      user?.adsInSeeLater.splice(idRemove, idRemove);
+      user?.adsInSeeLater.splice(idRemove, 1);
       UserHelper.UpdateUserData(user!);
       alert("BORRADO");
     }
