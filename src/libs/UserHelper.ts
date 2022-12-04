@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { User, UserEdit } from "../types/User";
+import { User } from "../types/User";
 import LocationManagement from "./LocationManagement";
 import { Buffer } from "buffer";
+import { Review } from "../types/Compra";
 
-const uploadProfilePicture = (file: any) => {
+const uploadProfilePicture = async (file: any) => {
   axios.post(
     `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}users/upload`,
     { file: file },
@@ -30,7 +30,6 @@ const retrieveProfilePicture = async (imgname: string): Promise<string> => {
       }
     )
     .then((res) => {
-      console.log(res);
       return `data:;base64,${Buffer.from(res.data, "binary").toString(
         "base64"
       )}`;
@@ -157,13 +156,18 @@ async function getUserByUsername(username: string): Promise<User> {
   return response.data[0];
 }
 
-function StringAvatar(name: string) {
+function StringAvatar(
+  name: string,
+  width?: number,
+  height?: number,
+  fontSize?: number
+) {
   return {
     sx: {
       bgcolor: "#63d4a1",
-      width: 75,
-      height: 75,
-      fontSize: 45,
+      width: width || 75,
+      height: height || 75,
+      fontSize: fontSize || 45,
       fontWeight: "bold",
       fontFace: "Mono Space",
     },
@@ -190,6 +194,34 @@ async function UpdateUserData(user: User) {
         });
     }
   );
+}
+
+async function GetAverageRating(userId: string): Promise<number> {
+  return await axios
+    .get(
+      `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${userId}/averagerating`
+    )
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return -1;
+    });
+}
+
+async function GetReviews(userId: string): Promise<Review[]> {
+  return await axios
+    .get(
+      `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${userId}/review/all`
+    )
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return [];
+    });
 }
 
 export default {

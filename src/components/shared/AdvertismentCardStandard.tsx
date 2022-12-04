@@ -5,18 +5,14 @@ import AdvertisementManagement from '../../libs/AdvertisementManagement';
 
 interface AdvertisementCardProps {
   advertisement: any;
+  onClick: () => void;
 }
 
 const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
-  const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [image, setImage] = useState<string>('');
   const [distance, setDistance] = useState<string>('');
   const [seller, setSeller] = useState<string>('');
-
-  const navigateFunction = (id: string) => {
-    navigate(`/products/detail/${id}`);
-  };
 
   useEffect(() => {
     AdvertisementManagement.GetImageAdvertisment(props.advertisement._id).then(
@@ -51,7 +47,7 @@ const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
   return (
     <div
       className="text-semibold  flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-black  text-black"
-      onClick={navigateFunction.bind(null, props.advertisement._id)}
+      onClick={props.onClick}
     >
       <div className="w-[150px]">
         <div className="flex flex-col items-start space-y-2 border-b-[1px] border-dashed border-black pl-4 pt-2 pb-4 text-left">

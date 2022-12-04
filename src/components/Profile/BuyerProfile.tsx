@@ -67,14 +67,6 @@ const BuyerProfile = () => {
   //#endregion
 
   React.useEffect(() => {
-    console.log("set avatar: ");
-    console.log(avatar);
-  }, [avatar]);
-
-  React.useEffect(() => {
-    console.log("set user");
-    console.log(user);
-
     if (!user) return;
     UserHelper.retrieveProfilePicture(user.profile_picture).then(
       (res: string) => {
@@ -90,18 +82,16 @@ const BuyerProfile = () => {
       res.forEach((order) => {
         i++;
         ordersToShowAux.push(
-          <div>
-            <OrderCard
-              date={"0 MES 0000"}
-              is_ended={order.is_ended}
-              price={order.price}
-              quantity={order.quantity}
-              key={order.adv_id + order.buyer_id + i}
-              productName={order.adv_id.name}
-              sellerUsername={order.seller_id.username}
-              sellerAddress={order.seller_id.direction}
-            />
-          </div>
+          <OrderCard
+            key={order.adv_id + order.buyer_id + i}
+            date={"0 MES 0000"}
+            is_ended={order.is_ended}
+            price={order.price}
+            quantity={order.quantity}
+            productName={order.adv_id.name}
+            sellerUsername={order.seller_id.username}
+            sellerAddress={order.seller_id.direction}
+          />
         );
       });
       setOrdersToShow(ordersToShowAux);
@@ -109,7 +99,6 @@ const BuyerProfile = () => {
   }, [user]);
 
   const createAvatar = () => {
-    console.log(avatar);
     if (user?.username && user?.name) {
       return avatar ? (
         <Avatar
@@ -134,7 +123,6 @@ const BuyerProfile = () => {
 
   useEffect(() => {
     UserHelper.getOwnProfile().then((res: User) => {
-      console.log(res);
       setUser(res);
     });
   }, []);

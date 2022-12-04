@@ -18,12 +18,10 @@ const EditProfile = () => {
   const [state, setState] = useState<UserEdit>();
 
   const handleChange = (e: any) => {
-    console.log(e);
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
-    console.log(state);
   };
 
   const handleSave = () => {
@@ -53,7 +51,6 @@ const EditProfile = () => {
   };
 
   const createAvatar = () => {
-    console.log(avatar);
     if (loaded && user?.username && user?.name) {
       return avatar ? (
         <Avatar
@@ -77,7 +74,6 @@ const EditProfile = () => {
   };
 
   React.useEffect(() => {
-    console.log(user);
     if (user) {
       setLoaded(true);
       setState({

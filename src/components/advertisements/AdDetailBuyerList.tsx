@@ -39,7 +39,7 @@ function AdDetailBuyerList(props: AdDetailBuyerListProps) {
             ref={list}
         >
             <div
-                className="absolute top-0 left-0 z-30 flex w-screen flex-row items-center bg-gradient-to-b from-black pt-16 pb-16 "
+                className="absolute top-0 left-0 z-[2] flex w-screen flex-row items-center bg-gradient-to-b from-black pt-16 pb-16 "
                 onClick={props.onBack}
             >
                 <NegativeBack className="ml-6 h-5 w-3" />
@@ -52,5 +52,4 @@ function AdDetailBuyerList(props: AdDetailBuyerListProps) {
         </div>
     );
 }
-
 export default AdDetailBuyerList;

@@ -6,6 +6,7 @@ import AdvertisementCardStandard from '../shared/AdvertismentCardStandard';
 
 interface SellerProductProps {
   seller_id: string;
+  onProductClick: (ads: Advertisement[], index: number) => void;
 }
 
 const SellerProducts = (props: SellerProductProps) => {
@@ -24,10 +25,15 @@ const SellerProducts = (props: SellerProductProps) => {
 
   useEffect(() => {
     setAdvertisementsToShow(
-      advertisements.map((ad) => {
+      advertisements.map((ad, index) => {
         return (
           <div key={ad._id} className="mb-2">
-            <AdvertisementCardStandard advertisement={ad} />
+            <AdvertisementCardStandard
+              advertisement={ad}
+              onClick={() => {
+                props.onProductClick(advertisements, index);
+              }}
+            />
           </div>
         );
       })
@@ -35,14 +41,14 @@ const SellerProducts = (props: SellerProductProps) => {
   }, [advertisements]);
 
   return (
-    <div>
+    <div className="flex flex-wrap justify-center">
       {advertisementsToShow && advertisementsToShow.length > 0 ? (
         advertisementsToShow
       ) : (
         <div className="mt-1 text-center">
-          <h1 className="font-space-mono text-[14px] font-semibold">
+          <div className="font-space-mono text-[14px] font-semibold">
             No products found
-          </h1>
+          </div>
         </div>
       )}
     </div>
