@@ -3,6 +3,8 @@ import UserHelper from "../../../libs/UserHelper";
 import axios from "axios";
 import { User } from "../../../types/User";
 import AdCards from "./AdCards";
+import AdvertisementManagement from "../../../libs/AdvertisementManagement";
+import { error } from "console";
 
 function SeesLater() {
   const [userId, setId] = useState("");
@@ -20,14 +22,22 @@ function SeesLater() {
 
   useEffect(() => {
     UserHelper.getUserById(userId).then((res) => {
-      setAdvertisements(res.adsInSeeLater);
+      const aux = [""];
+      res.adsInSeeLater.forEach((ad) => {
+        const adAux = AdvertisementManagement.GetAdvertisementById(ad);
+        if (adAux != null) {
+          aux.push(ad);
+        }
+      });
+      setAdvertisements(aux);
     });
   }, []);
 
   React.useEffect(() => {
     setAdvertisementsToShow(
       allAdvertisements.map((ad) => {
-        return <AdCards key={ad} ad_id={ad} />;
+        const item = <AdCards key={ad} ad_id={ad} />;
+        return item;
       })
     );
   }, [allAdvertisements]);
