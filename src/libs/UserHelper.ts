@@ -224,6 +224,65 @@ async function GetReviews(userId: string): Promise<Review[]> {
     });
 }
 
+async function checkIsFavourite(
+  userId: string,
+  favouriteId: string
+): Promise<boolean> {
+  console.log("llamado");
+  return await axios
+    .get(
+      `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}favourites/${userId}/${favouriteId}`
+    )
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return false;
+    });
+}
+
+async function addFavourite(userId: string, favouriteId: string) {
+  await axios
+    .post(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}favourites/`, {
+      user_id: userId,
+      favourite_id: favouriteId,
+    })
+    .then((res) => {
+      return;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+async function removeFavourite(userId: string, favouriteId: string) {
+  await axios
+    .delete(
+      `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}favourites/${userId}/${favouriteId}`
+    )
+    .then((res) => {
+      return;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+async function getFavouriteProfiles(userId: string) {
+  return await axios
+    .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}favourites/${userId}`)
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return [];
+    });
+}
+
 export default {
   uploadProfilePicture,
   retrieveProfilePicture,
@@ -236,4 +295,8 @@ export default {
   getProfilePicture,
   GetAverageRating,
   GetReviews,
+  checkIsFavourite,
+  addFavourite,
+  removeFavourite,
+  getFavouriteProfiles,
 };

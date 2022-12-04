@@ -3,13 +3,14 @@ import AdvertisementCard from "./AdvertisementCard";
 import Heading from "./Heading";
 import SubHeading from "./SubHeading";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import AdvertisementCardSkeleton from "./AdvertisementCardSkeleton";
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Fab } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ShopFilters } from "./ShopFilters";
 import { getDistanceFromLatLonInKm } from "../libs/DistanceCalc";
+import UserHelper from "../libs/UserHelper";
 import AdDetailBuyerList from "./advertisements/AdDetailBuyerList";
 
 const Home = () => {
@@ -133,7 +134,13 @@ const Home = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        console.log('k onda ');
+        UserHelper.getFavouriteProfiles(localStorage.userId);
+    }, []);
+
     React.useEffect(() => {
+        console.log('k onda lelelelel');
         const user = localStorage.getItem("userToken");
         if (!user) {
             navigate("/login");
@@ -141,6 +148,7 @@ const Home = () => {
     }, []);
 
     React.useEffect(() => {
+        console.log('k onda ololodle');
         setTimeout(() => {
             setMinimumTimeElapsed(true);
         }, waitingTimeSkeletonLoader);
@@ -194,6 +202,8 @@ const Home = () => {
             })
         );
     }, [advertisements, dataLoaded]);
+
+
 
     return (
         <>
