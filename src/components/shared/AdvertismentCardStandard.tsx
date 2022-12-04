@@ -50,7 +50,7 @@ const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
 
   return (
     <div
-      className="text-semibold  flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-black  text-black"
+      className="text-semibold flex h-[125px] w-[275px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-black  text-black"
       onClick={navigateFunction.bind(null, props.advertisement._id)}
     >
       <div className="w-[150px]">

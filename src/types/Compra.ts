@@ -1,3 +1,5 @@
+import { User } from './User';
+
 export type Compra = {
   adv_id: any;
 
@@ -17,3 +19,5 @@ export type Compra = {
 
   review_text: string;
 };
+
+export type Review = { buyer: User; score: number; comment: string };
