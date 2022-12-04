@@ -5,9 +5,21 @@ import {
     removeSearchHistory,
     checkIfSearchHistoryExists,
 } from "../../src/libs/SearchHistory";
-import LocalStorageMock from "../../mocks/localStorageMock";
 
-const localStorageMock = new LocalStorageMock();
+const localStorageMock = (() => {
+    let store = {};
+    return {
+        getItem: (key: string) => {
+            return store[key] || null;
+        },
+        setItem: (key: string, value: string) => {
+            store[key] = value.toString();
+        },
+        clear: () => {
+            store = {};
+        },
+    };
+})();
 
 describe("SearchHistory", () => {
     beforeEach(() => {

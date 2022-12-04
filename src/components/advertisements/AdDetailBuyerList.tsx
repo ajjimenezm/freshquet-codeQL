@@ -2,6 +2,7 @@ import AdDetailBuyer from "./AdDetailBuyer";
 import { ReactComponent as NegativeBack } from "../../assets/icons/NegativeBack.svg";
 import Advertisement from "../../types/Advertisement";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface AdDetailBuyerListProps {
     category: string;
@@ -13,7 +14,14 @@ interface AdDetailBuyerListProps {
 function AdDetailBuyerList(props: AdDetailBuyerListProps) {
     const [cards, setCards] = React.useState<JSX.Element[]>();
     const list = React.useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
+
     React.useEffect(() => {
+        if (localStorage.getItem("userRole") === "seller") {
+            navigate(
+                "/products/detail/" + props.products[props.productToOpen]._id
+            );
+        }
         setCards(
             props.products.map((product, index) => (
                 <AdDetailBuyer
