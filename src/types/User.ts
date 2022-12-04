@@ -11,6 +11,7 @@ export type User = {
   latitude: number;
   longitude: number;
   userType: string;
+  adsInSeeLater: string[];
 };
 
 export type UserEdit = {
@@ -26,4 +27,5 @@ export type UserEdit = {
   latitude?: number;
   longitude?: number;
   userType?: string;
+  adsInSeeLater?: string[];
 };

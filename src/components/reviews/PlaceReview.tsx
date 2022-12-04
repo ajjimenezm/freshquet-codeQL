@@ -4,6 +4,8 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdvertisementManagement from '../../libs/AdvertisementManagement';
 import Heading from '../Heading';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton } from '@mui/material';
 
 interface PlaceReviewProps {
   purchaseId?: string;
@@ -52,10 +54,25 @@ const PlaceReview = (props: PlaceReviewProps) => {
   };
 
   return (
-    <div className="ml-8 mt-8 mb-8 mr-8 flex flex-col space-y-3">
-      <Heading text="Deja una reseña" />
-      <div className="content-center">
+    <div className="ml-8 mt-8 mb-8 mr-8 flex flex-col space-y-7">
+      <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}> 
+        <div className="w-40 select-none font-outfit text-4xl font-semibold text-fresh-verde-oscuro">
+          Deja una reseña
+        </div>
+        <IconButton onClick={() => {navigate('/advertisementHistory');}}>
+          <CloseIcon color="secondary"/>
+        </IconButton>
+      </div>
+      <div className="flex flex-col items-center">
         <Rating
+          sx={{
+          "& .MuiRating-iconFilled": {
+            color: "#976D9C"
+          },
+          "& .MuiRating-iconHover": {
+            color: "#976D9C"
+          }
+          }}
           name="rating"
           defaultValue={0}
           precision={0.5}
@@ -71,6 +88,7 @@ const PlaceReview = (props: PlaceReviewProps) => {
       </div>
       <TextField
         id="review-comment"
+        color='secondary'
         label="Comenta tu experiencia"
         multiline
         minRows={4}
@@ -81,6 +99,7 @@ const PlaceReview = (props: PlaceReviewProps) => {
       />
       <TextField
         error={confCodeHelperText !== ''}
+        color='secondary'
         required
         id="conf-code"
         label="Código de confirmación de compra"
@@ -89,22 +108,15 @@ const PlaceReview = (props: PlaceReviewProps) => {
         }}
         helperText={confCodeHelperText}
       />
-      <div className="flex-row justify-end space-x-2">
-        <Button
-          variant="text"
-          onClick={() => {
-            navigate('/advertisementHistory');
-          }}
-        >
-          Cancelar
-        </Button>
-        <Button
-          variant="outlined"
+      <div className="absolute bottom-20 inset-x-0 flex flex-col items-center">
+        <button
+          className='inline-block h-12 min-h-full w-3/6 rounded-3xl bg-fresh-morado-oscuro text-base  text-white ease-in-out hover:bg-fresh-morado-oscuro hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0'
+          color='secondary'
           onClick={() => sendReview()}
           disabled={!rating || !confcode}
         >
           Enviar
-        </Button>
+        </button>
       </div>
     </div>
   );

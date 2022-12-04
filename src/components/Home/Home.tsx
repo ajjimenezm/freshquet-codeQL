@@ -13,6 +13,7 @@ import { User } from "../../types/User";
 import LocationManagement from "../../libs/LocationManagement";
 import { useNavigate } from "react-router-dom";
 import AdDetailBuyerList from "../advertisements/AdDetailBuyerList";
+import UserHelper from "../../libs/UserHelper";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -24,12 +25,25 @@ const Home = () => {
 
     const [sellers, setSellers] = React.useState<User[]>([]);
     const [sellersToShow, setSellersToShow] = React.useState<JSX.Element[]>();
+    const [favSellers, setFavSellers] = React.useState<JSX.Element[]>();
 
     const [minimizeHeader, setMinimizeHeader] = React.useState(false);
     const ourRef = React.useRef<HTMLDivElement>(null);
     const [address, setAddress] = React.useState("");
     const [showProductDetails, setShowProductDetails] = React.useState(false);
     const [productToOpen, setProductToOpen] = React.useState(0);
+
+    useEffect(() => {
+        UserHelper.getFavouriteProfiles(localStorage.userId).then((res) => {
+            console.log(res);
+            setFavSellers(
+                res.map((seller: any) => {
+                    return <SellerCard key={seller._id} seller={seller} />;
+                })
+            );
+        });
+    }, []);
+
 
     useEffect(() => {
         AdvertisementManagement.GetAllAdvertisements().then((res) => {
@@ -211,6 +225,18 @@ const Home = () => {
                             <div />
                         </div>
                     </div>
+
+                    {favSellers && favSellers.length > 0 && (
+                        <div className="space-y-4 pt-4 pl-4">
+                            <p className=" font-outfit text-[18px] font-semibold">
+                                Tus Agricultores Favoritos
+                            </p>
+                            <div className="flex h-1/4 space-x-8 overflow-x-auto pb-4">
+                                {favSellers}
+                                <div />
+                            </div>
+                        </div>
+                    )}
 
                     <div className="space-y-4 p-4">
                         <p className=" font-outfit text-[18px] font-semibold">

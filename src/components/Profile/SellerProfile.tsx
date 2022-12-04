@@ -66,6 +66,7 @@ const SellerProfile = () => {
     const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
         []
     );
+    const [isFavourite, setIsFavourite] = React.useState(false);
 
     //#region tabs
     const [currentTab, setCurrentTab] = useState(0);
@@ -92,6 +93,30 @@ const SellerProfile = () => {
         }
 
         setOpen(false);
+    };
+
+    const checkIsFavourite = async () => {
+        if (seller_id) {
+            const isFavourite = await UserHelper.checkIsFavourite(
+                localStorage.userId,
+                seller_id
+            );
+            setIsFavourite(isFavourite);
+        }
+    };
+
+    const handleFavourite = async () => {
+        if (seller_id) {
+            if (!isFavourite) {
+                await UserHelper.addFavourite(localStorage.userId, seller_id);
+            } else {
+                await UserHelper.removeFavourite(
+                    localStorage.userId,
+                    seller_id
+                );
+            }
+        }
+        checkIsFavourite();
     };
 
     const handleBackButton = () => {
@@ -156,6 +181,7 @@ const SellerProfile = () => {
         UserHelper.getUserById(seller_id as string).then((res: User) => {
             setSeller(res);
         });
+        checkIsFavourite();
     }, []);
 
     return (
@@ -203,7 +229,16 @@ const SellerProfile = () => {
                                         boxShadow: "none",
                                     }}
                                 >
-                                    <NotFavouriteIcon />
+                                    {!isFavourite && (
+                                        <NotFavouriteIcon
+                                            onClick={handleFavourite}
+                                        />
+                                    )}
+                                    {isFavourite && (
+                                        <FavouriteIcon
+                                            onClick={handleFavourite}
+                                        />
+                                    )}
                                 </IconButton>
                             </div>
                             <div>

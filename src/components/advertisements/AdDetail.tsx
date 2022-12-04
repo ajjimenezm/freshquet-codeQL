@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import Advertisement from "../../types/Advertisement";
 import { Button, Rating } from "@mui/material";
 import { db } from "../../firebase";
-import { User } from "firebase/auth";
+//import { User } from "firebase/auth";
+import { User } from "../../types/User";
 import { AuthContext } from "../../chatContext/AuthContext";
 import {
     collection,
@@ -22,10 +23,12 @@ import SimpleImageSlider from "react-simple-image-slider";
 import { Buffer } from "buffer";
 import axios, { AxiosResponse } from "axios";
 import { Skeleton } from "@mui/material";
+import UserHelper from "../../libs/UserHelper";
 
 function AdDetail() {
     const { id } = useParams<{ id: string }>();
     const [advertisement, setProduct] = useState<Advertisement>();
+    const [user, setUser] = useState<User>();
     const [userId, setUserId] = useState<string>();
     const [userCategory, setUserCategory] = useState<string>();
     const [sellerId, setSellerId] = useState<string>();
@@ -35,6 +38,7 @@ function AdDetail() {
     const [images, setImages] = useState<string[]>([]);
     const [imagenames, setImagenames] = useState<string[]>([]);
     const [imagesLoaded, setImagesLoaded] = useState<number>(0);
+    const [addSeeLater, setAddSeeLater] = useState("");
 
     const currentUser = React.useContext(AuthContext);
 
@@ -68,8 +72,25 @@ function AdDetail() {
                 alert(err);
             }
         };
+        const getUser = async () => {
+            axios
+                .get(
+                    `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "userToken"
+                            )}`,
+                        },
+                    }
+                )
+                .then((res) => {
+                    setUser(res.data[0]);
+                });
+        };
         getProduct();
         getProductImagenames();
+        getUser();
     }, [id]);
 
     React.useEffect(() => {
@@ -220,6 +241,31 @@ function AdDetail() {
         );
     }
 
+    const storeProd = () => {
+        if (!userId) {
+            alert("Debes iniciar sesión para guardar productos");
+            return;
+        }
+
+        if (!advertisement?._id) {
+            alert("Error con el producto seleccionado");
+            return;
+        }
+
+        if (!user?.adsInSeeLater.includes(advertisement?._id)) {
+            user?.adsInSeeLater.push(advertisement._id);
+            UserHelper.UpdateUserData(user!);
+            setAddSeeLater("ELIMINAR VER MÁS TARDE");
+            alert("GUARDADO");
+        } else {
+            const idRemove = user?.adsInSeeLater.indexOf(advertisement._id);
+            user?.adsInSeeLater.splice(idRemove, 1);
+            UserHelper.UpdateUserData(user!);
+            setAddSeeLater("AÑADIR VER MÁS TARDE");
+            alert("BORRADO");
+        }
+    };
+
     return (
         <>
             {advertisement && (
@@ -227,11 +273,29 @@ function AdDetail() {
                     <h1 className="mb-4 text-3xl font-bold uppercase">
                         {advertisement.name}
                     </h1>
-                    {/* <img
+                    {addSeeLater === "" &&
+                        user?.adsInSeeLater.includes(advertisement._id) && (
+                            <Button onClick={storeProd}>
+                                ELIMINAR VER MÁS TARDE
+                            </Button>
+                        )}
+                    {addSeeLater === "" &&
+                        !user?.adsInSeeLater.includes(advertisement._id) && (
+                            <Button onClick={storeProd}>
+                                AÑADIR VER MÁS TARDE
+                            </Button>
+                        )}
+                    {addSeeLater !== "" && (
+                        <Button onClick={storeProd}>{addSeeLater}</Button>
+                    )}
+                    {
+                        //console.log(usersInSeeLater);
+                        /* <img
             src="https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Patata"
             className="max-w-[80%]"
-          /> */}
+          /> */
+                    }
                     {getAdPicturesSlider()}
                     <p className="py-4 text-2xl font-semibold">
                         {advertisement.pricePerKilogram} €/kg

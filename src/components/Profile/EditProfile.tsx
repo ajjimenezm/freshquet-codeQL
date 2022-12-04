@@ -42,6 +42,7 @@ const EditProfile = () => {
       latitude: state?.latitude ? state.latitude : (user as User).latitude,
       longitude: state?.longitude ? state.longitude : (user as User).longitude,
       userType: (user as User).userType,
+      adsInSeeLater: (user as User).adsInSeeLater,
     };
     UserHelper.UpdateUserData(userAux).then(() => {
       alert("Datos actualizados");

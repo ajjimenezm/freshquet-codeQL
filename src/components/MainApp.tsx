@@ -23,6 +23,7 @@ import SellerReviews from "./Profile/SellerReviews";
 
 import OrderCard from "./Profile/OrderCard";
 import Search from "./Search/Search";
+import SeesLater from "./Profile/SeeLater/SeesLater";
 
 function MainApp() {
     //localStorage.clear();
@@ -48,6 +49,7 @@ function MainApp() {
                 <Route path="profile" element={<BuyerProfile />} />
                 <Route path="newproduct" element={<NewProduct />} />
                 <Route path="editprofile" element={<EditProfile />} />
+                <Route path="seeLater" element={<SeesLater />} />
                 <Route path="products/detail/:id" element={<AdDetail />} />
                 <Route path="seller/:seller_id" element={<SellerProfile />} />
                 {/* <Route path="seller/:seller_id/products" element={<SellerProducts />} />
