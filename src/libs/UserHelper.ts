@@ -234,4 +234,6 @@ export default {
   UpdateUserData,
   getUserByUsername,
   getProfilePicture,
+  GetAverageRating,
+  GetReviews,
 };
