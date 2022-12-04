@@ -5,6 +5,9 @@ import { Slide } from 'react-slideshow-image';
 import { ReactComponent as SmallStar } from '../../assets/icons/SmallStar.svg';
 import AdvertisementManagement from '../../libs/AdvertisementManagement';
 import UserHelper from '../../libs/UserHelper';
+import { useRef } from 'react';
+import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet';
+import BuyAdDialog from './BuyAdvertisement/BuyAdDialog';
 
 interface AdDetailBuyerProps {
   productName: string;
@@ -22,6 +25,9 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
   );
   const [sellerImage, setSellerImage] = useState<string>('');
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<BottomSheetRef>(null);
+  const [distance, setDistance] = useState<string>('');
 
   React.useEffect(() => {
     const productImagesGet = AdvertisementManagement.GetProductPictures(
@@ -35,6 +41,21 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
 
     productImagesGet.then((res) => {
       setProductImages(res);
+    });
+
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const userLocs = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+
+      AdvertisementManagement.GetDistanceFormSeller(
+        props.sellerId,
+        userLocs.latitude,
+        userLocs.longitude
+      ).then((res) => {
+        setDistance(res);
+      });
     });
   }, []);
 
@@ -58,8 +79,16 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
     );
   }, [productImages]);
 
+  function onDismiss() {
+    setOpen(false);
+  }
+
+  const handleProductBuy = () => {
+    ref.current?.snapTo(({ snapPoints }) => Math.max(...snapPoints));
+  };
+
   return (
-    <div className="relative z-10 h-screen w-screen shrink-0 snap-center snap-always bg-black">
+    <div className="relative z-[1] h-screen w-screen shrink-0 snap-center snap-always bg-black">
       {productImagesSlides.length > 0 && (
         <Slide
           easing="ease"
@@ -73,7 +102,14 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
           {productImagesSlides}
         </Slide>
       )}
-      <div className="absolute bottom-0 left-0 z-20 flex w-screen flex-col bg-gradient-to-t from-black pt-16">
+      {productImagesSlides.length == 0 && (
+        <div className="flex h-screen w-screen flex-col items-center justify-center bg-black">
+          <div className="animate-pulse text-center font-outfit text-5xl font-bold text-neutral-400">
+            freshquet
+          </div>
+        </div>
+      )}
+      <div className="absolute bottom-0 left-0 z-[2] flex w-screen flex-col bg-gradient-to-t from-black pt-16">
         <div className="flex-rows flex w-screen items-stretch pl-4 pr-4 font-outfit text-white">
           <div className="flex-grow text-xl font-semibold">
             {props.productName}
@@ -117,14 +153,37 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
             </span>
           </div>
           <div className="ml-2 mr-2 text-sm font-bold">·</div>
-          <div className="text-sm font-light">A 2km de ti</div>
+          {distance === '' && (
+            <div className="mt-1 h-4 w-24 animate-pulse bg-neutral-400 align-middle"></div>
+          )}
+          {distance !== '' && (
+            <div className="text-sm font-light">A {distance}km de ti</div>
+          )}
         </div>
         <div className="mt-6 flex w-screen flex-row items-center justify-center pb-7 font-outfit text-white">
-          <button className="w-44 rounded-full bg-fresh-verde py-2 px-4 text-xl font-medium text-white">
+          <button
+            className="h-11 w-44 rounded-full bg-fresh-verde py-2 px-4 text-xl font-medium text-white active:bg-fresh-verde-oscuro"
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
             Comprar
           </button>
         </div>
       </div>
+      {productImages.length === 0 && (
+        <div className="absolute bottom-0 z-[2] flex max-h-full w-screen flex-row items-center justify-center">
+          <div className=" mb-2 h-0.5 w-36 max-w-full animate-ping bg-neutral-400"></div>
+        </div>
+      )}
+      <BottomSheet
+        open={open}
+        onDismiss={onDismiss}
+        snapPoints={({ minHeight, maxHeight }) => [minHeight, maxHeight]}
+        ref={ref}
+      >
+        <BuyAdDialog id={props.productId} onBuy={handleProductBuy} />
+      </BottomSheet>
     </div>
   );
 }

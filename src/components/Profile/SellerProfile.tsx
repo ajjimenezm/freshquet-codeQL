@@ -18,16 +18,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { User } from '../../types/User';
 import { ReactComponent as SmallStar } from '../../assets/icons/SmallStar.svg';
-import { ReactComponent as HamburgerIcon } from '../../assets/icons/HamburgerIcon.svg';
 import { ReactComponent as BackIcon } from '../../assets/icons/BackArrow.svg';
 import { ReactComponent as FavouriteIcon } from '../../assets/icons/FavouriteIcon.svg';
 import { ReactComponent as NotFavouriteIcon } from '../../assets/icons/NotFavouriteIcon.svg';
 import { ReactComponent as OpenChatIcon } from '../../assets/icons/OpenChatIcon.svg';
 
 import UserHelper from '../../libs/UserHelper';
-import SellerProducts from './SellerProducts';
 import SellerReviews from './SellerReviews';
+import React from 'react';
+import AdDetailBuyerList from '../advertisements/AdDetailBuyerList';
+import Advertisement from '../../types/Advertisement';
 import AdvertisementManagement from '../../libs/AdvertisementManagement';
+import SellerProducts from './SellerProducts';
 
 const createAvatar = (avatar: string, seller: User | undefined) => {
   if (seller && seller?.username && seller?.name) {
@@ -54,6 +56,11 @@ const SellerProfile = () => {
   const [avatar, setAvatar] = useState<string>();
   const [helpMessage, setHelpMessage] = useState<string>('·');
   const [avgRating, setAvgRating] = useState<number>(-1);
+  const [showProductDetail, setShowProductDetail] = React.useState(false);
+  const [productToOpen, setProductToOpen] = React.useState(0);
+  const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
+    []
+  );
 
   //#region tabs
   const [currentTab, setCurrentTab] = useState(0);
@@ -85,15 +92,6 @@ const SellerProfile = () => {
   const handleBackButton = () => {
     navigate(-1);
   };
-
-  function handleListKeyDownHamburgerMenu(event: React.KeyboardEvent) {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === 'Escape') {
-      setOpen(false);
-    }
-  }
 
   const prevOpen = useRef(open);
   useEffect(() => {
@@ -292,7 +290,14 @@ const SellerProfile = () => {
             />
           </Tabs>
           <TabPanel value={currentTab} index={0}>
-            <SellerProducts seller_id={seller_id as string} />
+            <SellerProducts
+              seller_id={seller_id as string}
+              onProductClick={(ads: Advertisement[], index: number) => {
+                setProductToOpen(index);
+                setAdvertisements(ads);
+                setShowProductDetail(true);
+              }}
+            />
           </TabPanel>
           <TabPanel value={currentTab} index={1}>
             <SellerReviews

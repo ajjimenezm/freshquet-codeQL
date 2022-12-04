@@ -4,8 +4,7 @@ import LocationManagement from './LocationManagement';
 import { Buffer } from 'buffer';
 import { Review } from '../types/Compra';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const uploadProfilePicture = (file: any) => {
+const uploadProfilePicture = async (file: any) => {
   axios.post(
     `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}users/upload`,
     { file: file },

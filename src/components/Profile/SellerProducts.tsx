@@ -6,9 +6,11 @@ import AdvertisementCardStandard from '../shared/AdvertismentCardStandard';
 
 interface SellerProductProps {
   seller_id: string;
+  onProductClick: (ads: Advertisement[], index: number) => void;
 }
 
 const SellerProducts = (props: SellerProductProps) => {
+  const navigate = useNavigate();
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
   const [advertisementsToShow, setAdvertisementsToShow] =
     useState<JSX.Element[]>();
@@ -23,10 +25,15 @@ const SellerProducts = (props: SellerProductProps) => {
 
   useEffect(() => {
     setAdvertisementsToShow(
-      advertisements.map((ad) => {
+      advertisements.map((ad, index) => {
         return (
-          <div key={ad._id} className="m-2 w-[275px]">
-            <AdvertisementCardStandard advertisement={ad} />
+          <div key={ad._id} className="mb-2">
+            <AdvertisementCardStandard
+              advertisement={ad}
+              onClick={() => {
+                props.onProductClick(advertisements, index);
+              }}
+            />
           </div>
         );
       })

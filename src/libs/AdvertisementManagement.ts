@@ -204,8 +204,6 @@ async function GetProductPictures(id: string): Promise<string[]> {
     })
   );
 
-  console.log('resImages: ', resImages);
-
   return resImages;
 }
 
@@ -219,7 +217,7 @@ const filterByDistance = async (
 ) => {
   const sellerIds = new Set();
   advertisements.forEach((ad: Advertisement) => {
-    sellerIds.add(ad.sellerId);
+    sellerIds.add(ad.sellerId._id);
   });
   const sellerIdsArray = Array.from(sellerIds);
 
@@ -242,7 +240,7 @@ const filterByDistance = async (
       userLocs.longitude
     );
     if (distance < filterValue) {
-      const ads = advertisements.filter((ad) => ad.sellerId === seller._id);
+      const ads = advertisements.filter((ad) => ad.sellerId._id == seller._id);
       if (ads) ads.forEach((ad) => adsToShow.push(ad));
     }
   });
