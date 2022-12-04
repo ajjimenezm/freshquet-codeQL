@@ -22,7 +22,8 @@ import SellerProducts from './Profile/SellerProducts';
 import SellerReviews from './Profile/SellerReviews';
 
 import OrderCard from './Profile/OrderCard';
-import Search from './search/Search';
+import Search from './Search/Search';
+
 
 function MainApp() {
   //localStorage.clear();
