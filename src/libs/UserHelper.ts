@@ -1,8 +1,8 @@
-import axios from 'axios';
-import { User } from '../types/User';
-import LocationManagement from './LocationManagement';
-import { Buffer } from 'buffer';
-import { Review } from '../types/Compra';
+import axios from "axios";
+import { User } from "../types/User";
+import LocationManagement from "./LocationManagement";
+import { Buffer } from "buffer";
+import { Review } from "../types/Compra";
 
 const uploadProfilePicture = async (file: any) => {
   axios.post(
@@ -10,8 +10,8 @@ const uploadProfilePicture = async (file: any) => {
     { file: file },
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
-        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        "Content-Type": "multipart/form-data",
       },
     }
   );
@@ -20,47 +20,48 @@ const uploadProfilePicture = async (file: any) => {
 const retrieveProfilePicture = async (imgname: string): Promise<string> => {
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
 
-  if (!imgname || imgname === '') return '';
+  if (!imgname || imgname === "") return "";
 
   return await axios
     .get(
       `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}users/profile-picture/${imgname}`,
       {
-        responseType: 'arraybuffer',
+        responseType: "arraybuffer",
       }
     )
     .then((res) => {
-      return `data:;base64,${Buffer.from(res.data, 'binary').toString(
-        'base64'
+      return `data:;base64,${Buffer.from(res.data, "binary").toString(
+        "base64"
       )}`;
     })
     .catch((err) => {
       console.log(err);
-      return '';
+      return "";
     });
 };
 
 async function getProfile(userId: string): Promise<User> {
   let returnUser: User = {
-    _id: '',
-    name: 'empty',
-    username: '',
-    password: '',
-    phoneNumber: '',
-    email: '',
-    profile_picture: '',
-    address: '',
-    biography: '',
+    _id: "",
+    name: "empty",
+    username: "",
+    password: "",
+    phoneNumber: "",
+    email: "",
+    profile_picture: "",
+    address: "",
+    biography: "",
 
     latitude: 0,
     longitude: 0,
-    userType: '',
+    userType: "",
+    adsInSeeLater: [],
   };
 
   await axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${userId}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       },
     })
     .then((res1) => {
@@ -77,25 +78,26 @@ async function getProfilePicture(userId: string): Promise<string> {
 
 async function getOwnProfile(): Promise<User> {
   let returnUser: User = {
-    _id: '',
-    name: 'empty',
-    username: '',
-    password: '',
-    phoneNumber: '',
-    email: '',
-    profile_picture: '',
-    address: '',
-    biography: '',
+    _id: "",
+    name: "empty",
+    username: "",
+    password: "",
+    phoneNumber: "",
+    email: "",
+    profile_picture: "",
+    address: "",
+    biography: "",
 
     latitude: 0,
     longitude: 0,
-    userType: '',
+    userType: "",
+    adsInSeeLater: [],
   };
 
   await axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/profile`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       },
     })
     .then((res1) => {
@@ -107,25 +109,26 @@ async function getOwnProfile(): Promise<User> {
 
 async function getUserById(id: string): Promise<User> {
   let returnUser: User = {
-    _id: '',
-    name: 'empty',
-    username: '',
-    password: '',
-    phoneNumber: '',
-    email: '',
-    profile_picture: '',
-    address: '',
-    biography: '',
+    _id: "",
+    name: "empty",
+    username: "",
+    password: "",
+    phoneNumber: "",
+    email: "",
+    profile_picture: "",
+    address: "",
+    biography: "",
     latitude: 0,
     longitude: 0,
-    userType: '',
+    userType: "",
+    adsInSeeLater: [],
   };
 
   const getUserRequest = await axios.get(
     `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${id}/profile`,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       },
     }
   );
@@ -135,9 +138,9 @@ async function getUserById(id: string): Promise<User> {
   return returnUser;
 }
 function Logout() {
-  localStorage.removeItem('userToken');
-  localStorage.removeItem('userId');
-  alert('La sesion se ha cerrado correctamente');
+  localStorage.removeItem("userToken");
+  localStorage.removeItem("userId");
+  alert("La sesion se ha cerrado correctamente");
 }
 
 async function getUserByUsername(username: string): Promise<User> {
@@ -145,7 +148,7 @@ async function getUserByUsername(username: string): Promise<User> {
     `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/${username}/profilebyUsername`,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       },
     }
   );
@@ -161,14 +164,14 @@ function StringAvatar(
 ) {
   return {
     sx: {
-      bgcolor: '#63d4a1',
+      bgcolor: "#63d4a1",
       width: width || 75,
       height: height || 75,
       fontSize: fontSize || 45,
-      fontWeight: 'bold',
-      fontFace: 'Mono Space',
+      fontWeight: "bold",
+      fontFace: "Mono Space",
     },
-    children: `${name.split(' ')[0][0]}`,
+    children: `${name.split(" ")[0][0]}`,
   };
 }
 
@@ -180,7 +183,7 @@ async function UpdateUserData(user: User) {
       await axios
         .put(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/edit`, user, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
         })
         .then(() => {

@@ -136,6 +136,10 @@ const BuyerProfile = () => {
     navigate("/editprofile");
   };
 
+  const handleSeeLater = () => {
+    navigate("/seeLater");
+  };
+
   return (
     <div>
       {/* <Observer update={fetchData} /> */}
@@ -198,6 +202,14 @@ const BuyerProfile = () => {
                       </div>
                     </MenuItem>
                     {/* <MenuItem onClick={handleCloseHamburgerMenu}>Mis estadísticas</MenuItem> */}
+                    <MenuItem
+                      onClick={handleSeeLater}
+                      className="font-space-mono text-[14px]"
+                    >
+                      <div className="font-space-mono text-[14px]">
+                        Ver más tarde
+                      </div>
+                    </MenuItem>
                     <MenuItem
                       key="qua02"
                       onClick={handleLogout}
