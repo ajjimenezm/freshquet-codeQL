@@ -134,11 +134,6 @@ const Home = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log('k onda ');
-        UserHelper.getFavouriteProfiles(localStorage.userId);
-    }, []);
-
     React.useEffect(() => {
         console.log('k onda lelelelel');
         const user = localStorage.getItem("userToken");

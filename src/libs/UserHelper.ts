@@ -228,7 +228,6 @@ async function checkIsFavourite(
   userId: string,
   favouriteId: string
 ): Promise<boolean> {
-  console.log("llamado");
   return await axios
     .get(
       `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}favourites/${userId}/${favouriteId}`
@@ -274,7 +273,6 @@ async function getFavouriteProfiles(userId: string) {
   return await axios
     .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}favourites/${userId}`)
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
