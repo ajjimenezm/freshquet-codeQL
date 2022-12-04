@@ -8,6 +8,11 @@ import UserHelper from '../../libs/UserHelper';
 import { useRef } from 'react';
 import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet';
 import BuyAdDialog from './BuyAdvertisement/BuyAdDialog';
+import { ReactComponent as NotFavouriteIcon } from '../../assets/icons/NotFavouriteIcon.svg';
+import { ReactComponent as FavouriteIcon } from '../../assets/icons/FavouriteIcon.svg';
+import { IconButton } from '@mui/material';
+import { User } from '../../types/User';
+
 
 interface AdDetailBuyerProps {
   productName: string;
@@ -28,11 +33,14 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<BottomSheetRef>(null);
   const [distance, setDistance] = useState<string>('');
+  const [user, setUser] = useState<User>();
+
 
   React.useEffect(() => {
     const productImagesGet = AdvertisementManagement.GetProductPictures(
       props.productId
     );
+
     UserHelper.getUserById(props.sellerId).then((res) => {
       UserHelper.retrieveProfilePicture(res.profile_picture).then((res) => {
         setSellerImage(res);
@@ -79,12 +87,32 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
     );
   }, [productImages]);
 
+  React.useEffect(() => {
+    UserHelper.getUserById(localStorage.getItem("userId")!).then((res) => {
+      setUser(res);
+    });  
+  }, [user]);
+
   function onDismiss() {
     setOpen(false);
   }
 
   const handleProductBuy = () => {
     ref.current?.snapTo(({ snapPoints }) => Math.max(...snapPoints));
+  };
+
+  const storeProd = () => {
+    //petición al back con el user
+    if (!user?.adsInSeeLater.includes(props.productId)) {
+      user?.adsInSeeLater.push(props.productId);
+      UserHelper.UpdateUserData(user!);
+      alert("GUARDADO");
+    } else {
+      const idRemove = user?.adsInSeeLater.indexOf(props.productId);
+      user?.adsInSeeLater.splice(idRemove, 1);
+      UserHelper.UpdateUserData(user!);
+      alert("BORRADO");
+    }
   };
 
   return (
@@ -113,6 +141,12 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
         <div className="flex-rows flex w-screen items-stretch pl-4 pr-4 font-outfit text-white">
           <div className="flex-grow text-xl font-semibold">
             {props.productName}
+          </div>
+          <div>
+            <IconButton onClick={storeProd}>
+              {user?.adsInSeeLater.includes(props.productId) && <FavouriteIcon />}
+              {!user?.adsInSeeLater.includes(props.productId) && <NotFavouriteIcon/>}              
+            </IconButton>
           </div>
           <div className="text-xl font-semibold">
             {props.productPrice + '€/Kg'}
