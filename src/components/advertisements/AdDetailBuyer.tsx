@@ -64,6 +64,12 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                 setDistance(res);
             });
         });
+
+        UserHelper.getUserById(localStorage.getItem("userId") || "").then(
+            (res) => {
+                setUser(res);
+            }
+        );
     }, []);
 
     React.useEffect(() => {
