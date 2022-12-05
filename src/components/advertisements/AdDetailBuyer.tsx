@@ -65,11 +65,6 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
             });
         });
 
-        UserHelper.getUserById(localStorage.getItem("userId") || "").then(
-            (res) => {
-                setUser(res);
-            }
-        );
     }, []);
 
     React.useEffect(() => {
@@ -92,6 +87,15 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
         );
     }, [productImages]);
 
+    React.useEffect(() => {
+        UserHelper.getUserById(localStorage.getItem("userId") || "").then(
+            (res) => {
+                setUser(res);
+            }
+        );
+    },[user])
+
+
     function onDismiss() {
         setOpen(false);
     }
@@ -102,6 +106,8 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
 
     const storeProd = () => {
         //petición al back con el user
+        console.log("ADSINSEELATER");
+        console.log(user?.adsInSeeLater);
         if (!user?.adsInSeeLater.includes(props.productId)) {
             user?.adsInSeeLater.push(props.productId);
             UserHelper.UpdateUserData(user!);
