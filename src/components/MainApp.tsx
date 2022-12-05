@@ -6,21 +6,15 @@ import Home from "./Home/Home";
 import Map from "./map/Map";
 import Chat from "./Chat/Chat";
 import AdDetail from "./advertisements/AdDetail";
-import Profile from "./Profile/Profile";
-import SellerPage from "./seller-page/SellerPage";
 import EditAdDetail from "./advertisements/EditAdDetail";
 import { useEffect } from "react";
 import ChatMenu from "./Chat/ChatMenu";
-
 import AdvertismentHistory from "./advertismentHistory/advertismentHistory";
 import BuyerProfile from "./Profile/BuyerProfile";
 import EditProfile from "./Profile/EditProfile";
 import NearbyProducts from "./Home/NearbyProducts";
 import NewProduct from "./advertisements/NewProduct";
 import SellerProfile from "./Profile/SellerProfile";
-import SellerProducts from "./Profile/SellerProducts";
-import SellerReviews from "./Profile/SellerReviews";
-
 import OrderCard from "./Profile/OrderCard";
 import Search from "./Search/Search";
 import SeesLater from "./Profile/SeeLater/SeesLater";
