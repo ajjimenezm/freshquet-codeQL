@@ -1,309 +1,228 @@
-import ComboBox from "./Combobox";
-import {
-    Button,
-    Avatar,
-    Divider,
-    TextField,
-    Rating,
-    Skeleton,
-} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { Category } from "../../types/Category";
 import Advertisement from "../../types/Advertisement";
-import React, { SyntheticEvent, useEffect, useState } from "react";
-import { Buffer } from "buffer";
-import SimpleImageSlider from "react-simple-image-slider";
-
-interface ChangeProductState {
-    _id: string | undefined;
-    name: string;
-    description: string;
-    pricePerKilogram: number;
-    category: Category;
-    averageReviewScore: number;
-    sellerId: string;
-}
+import { useEffect, useRef, useState } from "react";
+import AdvertisementManagement from "../../libs/AdvertisementManagement";
+import { useFilePicker } from "use-file-picker";
+import { IconButton } from "@mui/material";
+import { ReactComponent as BackIcon } from "../../assets/icons/BackArrow.svg";
 
 function EditAdDetail() {
-    const { id } = useParams<{ id: string }>();
-    const [advertisement, setProduct] = useState<Advertisement>();
-    // const [productChange, setState] = useState<ChangeProductState>({
-    //     _id: '',
-    //     name: '',
-    //     description: '',
-    //     pricePerKilogram: 0,
-    //     category: Category.Fresh,
-    //     averageReviewScore: 0.0,
-    //     sellerId: '',
-    // });
-    const [images, setImages] = useState<string[]>([]);
-    const [imagenames, setImagenames] = useState<string[]>([]);
-    const [imagesLoaded, setImagesLoaded] = useState<number>(0);
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const [advertisement, setProduct] = useState<Advertisement>();
+  const [images, setImages] = useState<string[]>([]);
+  const [fileImages, setFileImages] = useState<File[]>([]);
+  const [openFileSelector, { plainFiles }] = useFilePicker({
+    readAs: "DataURL",
+    accept: "image/*",
+    multiple: true,
+    limitFilesConfig: { max: 5 },
 
-    useEffect(() => {
-        const getProduct = async () => {
-            try {
-                axios
-                    .get(
-                        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}`
-                    )
-                    .then((res) => {
-                        console.log("GET RESPONSE");
-                        console.log(res);
-                        setProduct(res.data);
-                        // setState({
-                        //     ...productChange,
-                        //     sellerId: advertisement?.sellerId.id,
-                        // })
-                    });
-            } catch (err) {
-                alert(err);
-            }
-        };
-        const getProductImagenames = async () => {
-            try {
-                axios
-                    .get(
-                        `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images`
-                    )
-                    .then((res) => {
-                        if (res.data.length > 0) setImagenames(res.data);
-                    });
-            } catch (err) {
-                alert(err);
-            }
-        };
-        getProduct();
-        getProductImagenames();
-    }, [id]);
+    maxFileSize: 10, //MB
+  });
 
-    React.useEffect(() => {
-        let requests: Promise<AxiosResponse<any, any>>[] = [];
-        for (let i = 0; i < imagenames.length; i++) {
-            requests = requests.concat(
-                axios.get(
-                    `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}advertisements/${id}/images/${imagenames[i]}`,
-                    {
-                        responseType: "arraybuffer",
-                    }
-                )
-            );
-        }
+  const handleBackButton = () => {
+    navigate(-1);
+  };
 
-        axios.all(requests).then(
-            axios.spread((...responses) => {
-                for (let i = 0; i < responses.length; i++) {
-                    setImages((images) =>
-                        images.concat(
-                            `data:;base64,${Buffer.from(
-                                responses[i].data,
-                                "binary"
-                            ).toString("base64")}`
-                        )
-                    );
-                    setImagesLoaded((imagesLoaded) => imagesLoaded + 1);
-                }
-            })
-        );
-    }, [imagenames]);
-
-    function handleChange(event: any) {
-        if (advertisement) {
-            setProduct({
-                ...advertisement,
-                [event.target.name]: event.target.value,
-            });
-        }
+  useEffect(() => {
+    if (plainFiles.length) {
+      console.log(plainFiles);
+      setFileImages(plainFiles);
+      const img: string[] = [];
+      plainFiles.forEach((file) => {
+        img.push(URL.createObjectURL(file));
+      });
+      setImages(img);
     }
+  }, [plainFiles]);
 
-    const handleCategory = (
-        event: SyntheticEvent<Element, Event>,
-        value: Category | null
-    ): void => {
-        if (value != null && advertisement) {
-            setProduct({
-                ...advertisement,
-                category: value,
-            });
-        }
-    };
+  useEffect(() => {
+    if (id) {
+      AdvertisementManagement.GetAdvertisementById(id).then((res) => {
+        setProduct(res);
+      });
+      AdvertisementManagement.GetProductPictures(id).then((res) => {
+        setImages(res);
+      });
+    }
+  }, [id]);
 
-    const updateData = (event: { preventDefault: () => void }) => {
-        //productChange.sellerId = advertisement?.sellerId.id;
-        event.preventDefault();
-        axios
-            .put(
-                `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}`,
-                advertisement,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "userToken"
-                        )}`,
-                    },
+  function handleChange(event: any) {
+    if (advertisement) {
+      setProduct({
+        ...advertisement,
+        [event.target.name]: event.target.value,
+      });
+    }
+  }
+
+  const updateData = async (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    if (advertisement) {
+      await axios
+        .put(
+          `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}`,
+          advertisement,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            },
+          }
+        )
+        .then((res) => {
+          alert("PRODUCTO ACTUALIZADO");
+          navigate(`/sellerSelfProfile`);
+        })
+        .catch((res) => {
+          console.log("PUT ERROR");
+          console.log(res);
+        });
+
+      await AdvertisementManagement.UploadProductImages(
+        advertisement?._id,
+        fileImages
+      ).then((res) => {
+        console.log(res);
+      });
+    }
+  };
+
+  const deleteData = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    axios
+      .delete(
+        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}`
+      )
+      .then((res) => {
+        alert("PRODUCTO ELIMINADO");
+        navigate(`/home`);
+      })
+      .catch((res) => {
+        console.log("PUT ERROR");
+        console.log(res);
+      });
+  };
+  const selectFile = () => {
+    openFileSelector();
+  };
+
+  return (
+    <div className="mt-8 pb-24">
+      <div>
+        <IconButton
+          onClick={handleBackButton}
+          sx={{
+            position: "fixed",
+            top: 20,
+            left: 20,
+            backgroundColor: "white",
+            border: "0",
+            boxShadow: "none",
+          }}
+        >
+          <BackIcon />
+        </IconButton>
+      </div>
+      <h2 className="ml-4  mt-12 p-4 font-outfit text-xl font-semibold">
+        Editar producto
+      </h2>
+      <div className="ml-7">
+        <button
+          className="inline-block h-96 min-h-full w-11/12 rounded-2xl border border-solid border-fresh-morado-claro text-9xl text-fresh-morado-claro ease-in-out hover:bg-fresh-morado-oscuro hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0"
+          onClick={selectFile}
+          style={{
+            backgroundImage: `url(${images[0]})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="mb-5 mt-6 grid w-11/12 place-items-center">
+          <input
+            id="fullWidth"
+            name="name"
+            placeholder="Nombre del producto"
+            type="text"
+            className="inline-block w-full rounded-md border border-solid border-fresh-morado-claro bg-white bg-clip-padding px-3 py-1.5 font-outfit text-base
+            focus:border-fresh-morado-oscuro focus:outline-none"
+            onChange={handleChange}
+            defaultValue={advertisement?.name}
+          />
+        </div>
+        <div className="mb-5 grid w-11/12 grid-cols-7 gap-4">
+          <div className="col-start-1 col-end-4">
+            <select
+              className="w-full rounded-md border border-solid border-fresh-morado-claro bg-white px-3 py-2 text-base"
+              onChange={(selectedOption) => {
+                if (selectedOption != null) {
+                  let cat: Category;
+                  if (selectedOption.currentTarget.value === "Fruta") {
+                    cat = Category.Fruta;
+                  } else if (selectedOption.currentTarget.value === "Verdura") {
+                    cat = Category.Verdura;
+                  } else if (
+                    selectedOption.currentTarget.value === "Legumbres"
+                  ) {
+                    cat = Category.Legumbres;
+                  } else {
+                    cat = Category.Otros;
+                  }
+                  if (advertisement)
+                    setProduct({
+                      ...advertisement,
+                      category: cat,
+                    });
                 }
-            )
-            .then((res) => {
-                console.log("PUT RESPONSE");
-                console.log(res);
-                alert("PRODUCTO ACTUALIZADO");
-                navigate(`/home`);
-            })
-            .catch((res) => {
-                console.log("PUT ERROR");
-                console.log(res);
-            });
-    };
-
-    const navigate = useNavigate();
-    const navigateToProduct = (id: string) => {
-        navigate(`/products/detail/${id}`);
-    };
-
-    const deleteData = (event: { preventDefault: () => void }) => {
-        event.preventDefault();
-        axios
-            .delete(
-                `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}`
-            )
-            .then((res) => {
-                console.log("PUT RESPONSE");
-                console.log(res);
-                alert("PRODUCTO ELIMINADO");
-                navigate(`/home`);
-            })
-            .catch((res) => {
-                console.log("PUT ERROR");
-                console.log(res);
-            });
-    };
-
-    function getAdPicturesSlider(): JSX.Element {
-        const moreThanOne = images.length > 1;
-
-        if (imagesLoaded < imagenames.length) {
-            return (
-                <Skeleton
-                    variant="rectangular"
-                    animation="wave"
-                    sx={{ width: 400, height: 400 }}
-                />
-            );
-        }
-
-        return (
-            <SimpleImageSlider
-                width={400}
-                height={400}
-                showBullets={moreThanOne}
-                showNavs={moreThanOne}
-                images={images}
+              }}
+            >
+              <option selected disabled hidden>
+                {advertisement?.category}
+              </option>
+              <option value={Category.Fruta}>{Category.Fruta}</option>
+              <option value={Category.Verdura}>{Category.Verdura}</option>
+              <option value={Category.Legumbres}>{Category.Legumbres}</option>
+              <option value={Category.Otros}>{Category.Otros}</option>
+            </select>
+          </div>
+          <div className="col-span-3 col-end-8 flex">
+            <input
+              id="quantity-field"
+              name="quantity"
+              placeholder="-"
+              type="text"
+              className="inline-block w-2/3 rounded-l-lg border border-solid border-fresh-morado-claro bg-white bg-clip-padding px-3 py-1.5 text-center font-outfit
+            text-base focus:border-fresh-morado-oscuro focus:outline-none"
+              defaultValue={advertisement?.pricePerKilogram}
+              onChange={handleChange}
             />
-        );
-    }
-
-    return (
-        <>
-            {advertisement && (
-                <div className="mb-14 flex min-h-screen w-full flex-col items-center bg-slate-200 p-8 pb-20">
-                    <h1 className="mb-4 text-3xl font-bold uppercase">
-                        <TextField
-                            name="name"
-                            fullWidth
-                            multiline
-                            defaultValue={advertisement.name}
-                            onChange={handleChange}
-                        >
-                            <input
-                                id="name"
-                                name="name"
-                                value={advertisement.name}
-                                onChange={handleChange}
-                                type="text"
-                            />
-                        </TextField>
-                    </h1>
-                    {getAdPicturesSlider()}
-
-                    <p className="py-4 text-2xl font-semibold">
-                        <TextField
-                            name="pricePerKilogram"
-                            multiline
-                            defaultValue={advertisement.pricePerKilogram}
-                            onChange={handleChange}
-                        >
-                            <input
-                                id="pricePerKilogram"
-                                name="pricePerKilogram"
-                                value={advertisement.pricePerKilogram}
-                                onChange={handleChange}
-                                type="number"
-                            />
-                        </TextField>
-                        €/kg
-                    </p>
-                    <div className="w-full rounded-lg border-2 border-[#63d4a1] p-4">
-                        <p className="text-xl"> Descripción del Vendedor: </p>
-                        <p className="text-xl">
-                            <TextField
-                                name="description"
-                                fullWidth
-                                multiline
-                                defaultValue={advertisement.description}
-                                onChange={handleChange}
-                            >
-                                <input
-                                    id="description"
-                                    name="description"
-                                    value={advertisement.description}
-                                    onChange={handleChange}
-                                    type="text"
-                                />
-                            </TextField>
-                        </p>
-                    </div>
-                    <p className="py-4 text-2xl font-medium">
-                        Categoría:{" "}
-                        <span className="border-1 rounded-lg p-2 uppercase">
-                            <ComboBox onChangeHandler={handleCategory} />
-                        </span>
-                    </p>
-                    <Rating
-                        name="half-rating-read"
-                        defaultValue={advertisement.averageReviewScore}
-                        precision={0.5}
-                        readOnly
-                    />
-                    <Divider />
-                    <div className=" space-x-10 text-right">
-                        <Button
-                            onClick={updateData}
-                            variant="outlined"
-                            color="success"
-                        >
-                            Save
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="error"
-                            onClick={navigateToProduct.bind(null, id!)}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="error"
-                            id="delete"
-                            onClick={deleteData}
-                        >
-                            Delete
-                        </Button>
-                    </div>
-                </div>
-            )}
-        </>
-    );
+            <label
+              className="inline-block w-1/2 rounded-r-lg border border-solid border-fresh-morado-claro bg-white bg-clip-padding px-3 py-1.5 text-center font-outfit
+            text-fresh-morado-oscuro focus:border-fresh-morado-oscuro focus:outline-none"
+            >
+              €/kg
+            </label>
+          </div>
+        </div>
+        <div className="mb-8 grid grid-cols-2 ">
+          <button
+            className="inline-block h-12 min-h-full w-5/6 rounded-3xl bg-fresh-naranja text-base  text-white ease-in-out hover:bg-fresh-morado-oscuro hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0"
+            onClick={deleteData}
+          >
+            Eliminar
+          </button>
+          <button
+            className="inline-block h-12 min-h-full w-5/6 rounded-3xl bg-fresh-morado-oscuro text-base  text-white ease-in-out hover:bg-fresh-morado-oscuro hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0"
+            onClick={updateData}
+          >
+            Actualizar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default EditAdDetail;

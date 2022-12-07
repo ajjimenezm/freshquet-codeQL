@@ -150,7 +150,7 @@ const BuyerProfile = () => {
             {user?.name}
           </div>
           <div className="font-space-mono text-[14px]">
-            {user?.address ? user.address : "Dirección no especificada"}
+            {user?.direction ? user.direction : "Dirección no especificada"}
           </div>
         </div>
         <div className="pr-4 pl-4 pb-16">

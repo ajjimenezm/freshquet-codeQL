@@ -1,19 +1,19 @@
-import { Skeleton } from '@mui/material';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AdvertisementManagement from '../../libs/AdvertisementManagement';
-import Advertisement from '../../types/Advertisement';
+import { Skeleton } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AdvertisementManagement from "../../libs/AdvertisementManagement";
+import Advertisement from "../../types/Advertisement";
 
 interface AdvertisementCardProps {
-  advertisement: any;
+  advertisement: Advertisement;
 }
 
 const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [image, setImage] = useState<string>('');
-  const [distance, setDistance] = useState<string>('');
-  const [seller, setSeller] = useState<string>('');
+  const [image, setImage] = useState<string>("");
+  const [distance, setDistance] = useState<string>("");
+  const [seller, setSeller] = useState<string>("");
 
   const navigateFunction = (id: string) => {
     navigate(`/products/detail/${id}`);
@@ -34,7 +34,7 @@ const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
       };
 
       AdvertisementManagement.GetDistanceFormSeller(
-        props.advertisement.sellerId,
+        props.advertisement.sellerId._id,
         userLocs.latitude,
         userLocs.longitude
       ).then((res) => {
@@ -42,11 +42,11 @@ const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
       });
     });
 
-    AdvertisementManagement.GetSellerName(props.advertisement.sellerId).then(
-      (res) => {
-        setSeller(res);
-      }
-    );
+    AdvertisementManagement.GetSellerName(
+      props.advertisement.sellerId._id
+    ).then((res) => {
+      setSeller(res);
+    });
   }, []);
 
   return (
@@ -59,7 +59,7 @@ const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
           <p className=" text-[16px] font-medium">
             {props.advertisement.name.length < 15
               ? props.advertisement.name
-              : props.advertisement.name.substring(0, 12) + '...'}
+              : props.advertisement.name.substring(0, 12) + "..."}
           </p>
           <p className=" text-[12px] font-medium">
             {props.advertisement.pricePerKilogram}€/Kg
@@ -82,7 +82,7 @@ const AdvertisementCardStandard = (props: AdvertisementCardProps) => {
             <Skeleton
               variant="rectangular"
               animation="wave"
-              sx={{ width: '100%', height: '100%', bgcolor: '#F4511D' }}
+              sx={{ width: "100%", height: "100%", bgcolor: "#F4511D" }}
             />
           </div>
         )}

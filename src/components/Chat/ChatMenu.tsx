@@ -1,19 +1,17 @@
 import React, { useEffect } from "react";
 import ChatCard from "./ChatCard";
-import MailIcon from "@mui/icons-material/Mail";
-import IconButton from "@mui/material/IconButton";
-import { common } from "@mui/material/colors";
 import { db } from "../../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { AuthContext } from "../../chatContext/AuthContext";
 import { UserContext } from "../../chatContext/UserContext";
-import Photo from "./logo192.png";
 import { useNavigate } from "react-router-dom";
+import AdvertisementCardSkeleton from "../AdvertisementCardSkeleton";
 
 function ChatMenu() {
   const navigate = useNavigate();
   const currentUser = React.useContext(AuthContext);
   const { dispatch } = React.useContext(UserContext);
+  const [dataLoaded, setDataLoaded] = React.useState(false);
 
   const [chats, setChats] = React.useState<any>([]);
   useEffect(() => {
@@ -21,6 +19,7 @@ function ChatMenu() {
       doc(db, "userChats", currentUser!.uid),
       (doc: any) => {
         setChats(doc.data());
+        setDataLoaded(true);
       }
     );
     return unsubscribe;
@@ -39,17 +38,24 @@ function ChatMenu() {
         </div>
       </div>
       <div className="chatCards h-[calc(100vh-55px)] overflow-auto pt-20">
-        {Object.entries(chats)
-          ?.sort((a: any, b: any) => b[1].date - a[1].date)
-          .map((chat: any) => (
-            <ChatCard
-              key={chat[0]}
-              lastMessage={chat[1].lastMessage?.text}
-              date={chat[1].date}
-              userInfo={chat[1].userInfo}
-              handleClick={handleSelectChat}
-            />
-          ))}
+        {dataLoaded ? (
+          Object.entries(chats)
+            ?.sort((a: any, b: any) => b[1].date - a[1].date)
+            .map((chat: any) => (
+              <ChatCard
+                key={chat[0]}
+                lastMessage={chat[1].lastMessage?.text}
+                date={chat[1].date}
+                userInfo={chat[1].userInfo}
+                handleClick={handleSelectChat}
+              />
+            ))
+        ) : (
+          <div className="m-4 space-y-4">
+            <AdvertisementCardSkeleton />
+            <AdvertisementCardSkeleton />
+          </div>
+        )}
       </div>
     </div>
   );

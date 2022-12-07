@@ -4,7 +4,7 @@ import LocationManagement from "./LocationManagement";
 import { Buffer } from "buffer";
 import { Review } from "../types/Compra";
 
-const uploadProfilePicture = async (file: any) => {
+const uploadProfilePicture = async (file: File) => {
   axios.post(
     `${process.env.REACT_APP_BACKENDFOTOS_DEFAULT_ROUTE}users/upload`,
     { file: file },
@@ -49,7 +49,7 @@ async function getProfile(userId: string): Promise<User> {
     phoneNumber: "",
     email: "",
     profile_picture: "",
-    address: "",
+    direction: "",
     biography: "",
 
     latitude: 0,
@@ -85,7 +85,7 @@ async function getOwnProfile(): Promise<User> {
     phoneNumber: "",
     email: "",
     profile_picture: "",
-    address: "",
+    direction: "",
     biography: "",
 
     latitude: 0,
@@ -116,7 +116,7 @@ async function getUserById(id: string): Promise<User> {
     phoneNumber: "",
     email: "",
     profile_picture: "",
-    address: "",
+    direction: "",
     biography: "",
     latitude: 0,
     longitude: 0,
@@ -176,7 +176,7 @@ function StringAvatar(
 }
 
 async function UpdateUserData(user: User) {
-  await LocationManagement.GetCoordinatesFromAddress(user.address).then(
+  await LocationManagement.GetCoordinatesFromAddress(user.direction).then(
     async (coordinates) => {
       user.latitude = coordinates.lat;
       user.longitude = coordinates.lng;
@@ -248,9 +248,6 @@ async function addFavourite(userId: string, favouriteId: string) {
       user_id: userId,
       favourite_id: favouriteId,
     })
-    .then((res) => {
-      return;
-    })
     .catch((err) => {
       console.log(err);
     });
@@ -261,9 +258,6 @@ async function removeFavourite(userId: string, favouriteId: string) {
     .delete(
       `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}favourites/${userId}/${favouriteId}`
     )
-    .then((res) => {
-      return;
-    })
     .catch((err) => {
       console.log(err);
     });

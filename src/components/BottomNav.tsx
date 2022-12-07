@@ -1,14 +1,14 @@
-import { Paper } from '@mui/material';
-import { ReactComponent as SearchIcon } from '../assets/icons/BottomNavSearchIcon.svg';
-import { ReactComponent as HomeIcon } from '../assets/icons/BottomNavHomeIcon.svg';
-import { ReactComponent as NotificationIcon } from '../assets/icons/BottomNavNotificationIcon.svg';
-import { ReactComponent as UploadIcon } from '../assets/icons/BottomNavUploadIcon.svg';
-import { ReactComponent as MapIcon } from '../assets/icons/BottomNavMapIcon.svg';
-import { useState } from 'react';
-import useReactPath from '../hooks/useReactPath';
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import UserHelper from '../libs/UserHelper';
+import { Paper } from "@mui/material";
+import { ReactComponent as SearchIcon } from "../assets/icons/BottomNavSearchIcon.svg";
+import { ReactComponent as HomeIcon } from "../assets/icons/BottomNavHomeIcon.svg";
+import { ReactComponent as NotificationIcon } from "../assets/icons/BottomNavNotificationIcon.svg";
+import { ReactComponent as UploadIcon } from "../assets/icons/BottomNavUploadIcon.svg";
+import { ReactComponent as MapIcon } from "../assets/icons/BottomNavMapIcon.svg";
+import { useState } from "react";
+import useReactPath from "../hooks/useReactPath";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import UserHelper from "../libs/UserHelper";
 
 interface BottomNavProps {
   navigateFunction: (value: string) => void;
@@ -21,23 +21,23 @@ function BottomNav(props: BottomNavProps) {
   const navigate = props.navigateFunction;
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [navbarStyle, setNavbarStyle] = useState<string>(
-    'flex h-16 flex-row items-center justify-evenly'
+    "flex h-16 flex-row items-center justify-evenly"
   );
-  const [selectedIcon, setSelectedIcon] = useState('');
+  const [selectedIcon, setSelectedIcon] = useState("");
   const selectedIconBase =
-    'mt-1 h-1 w-6 transition-width rounded-full duration-500 ease-in-out';
-  const [notSelectedIcon, setNotSelectedIcon] = useState('');
+    "mt-1 h-1 w-6 transition-width rounded-full duration-500 ease-in-out";
+  const [notSelectedIcon, setNotSelectedIcon] = useState("");
   const notselectedIconBase =
-    'mt-1 h-1 w-0 transition-width rounded-full duration-300 ease-in-out';
+    "mt-1 h-1 w-0 transition-width rounded-full duration-300 ease-in-out";
   const individualIconStyle =
-    'h-6 w-6 transition-all active:mt-1 active:h-5 active:w-5';
+    "h-6 w-6 transition-all active:mt-1 active:h-5 active:w-5";
   const navbarDivStyle =
-    'mt-2 flex h-8 w-6 cursor-pointer flex-col items-center';
+    "mt-2 flex h-8 w-6 cursor-pointer flex-col items-center";
   const profileStyle =
-    individualIconStyle + ' rounded-full border-2 border-solid border-black';
+    individualIconStyle + " rounded-full border-2 border-solid border-black";
 
   const [isBuyer, setIsBuyer] = useState(false);
-  const [ProfileIcon, setProfileIcon] = useState<string>('');
+  const [ProfileIcon, setProfileIcon] = useState<string>("");
 
   const location = useLocation();
   const [iconStyle, setIconStyle] = useState({
@@ -50,26 +50,26 @@ function BottomNav(props: BottomNavProps) {
   });
 
   React.useEffect(() => {
-    const buyer = localStorage.getItem('userRole') === 'buyer';
+    const buyer = localStorage.getItem("userRole") === "buyer";
     setIsBuyer(buyer);
 
     if (buyer) {
-      setSelectedIcon(selectedIconBase + ' bg-fresh-verde');
-      setNotSelectedIcon(notselectedIconBase + ' bg-fresh-verde');
+      setSelectedIcon(selectedIconBase + " bg-fresh-verde");
+      setNotSelectedIcon(notselectedIconBase + " bg-fresh-verde");
     } else {
-      setSelectedIcon(selectedIconBase + ' bg-fresh-morado');
-      setNotSelectedIcon(notselectedIconBase + ' bg-fresh-morado');
+      setSelectedIcon(selectedIconBase + " bg-fresh-morado");
+      setNotSelectedIcon(notselectedIconBase + " bg-fresh-morado");
     }
 
     UserHelper.getOwnProfile().then((profile) => {
-      if (profile.profile_picture !== '') {
+      if (profile.profile_picture !== "") {
         UserHelper.retrieveProfilePicture(profile.profile_picture).then(
           (image) => {
             setProfileIcon(image);
           }
         );
       } else {
-        setProfileIcon('');
+        setProfileIcon("");
       }
     });
     updateSelectedIcon();
@@ -89,13 +89,13 @@ function BottomNav(props: BottomNavProps) {
   }, [value]);
 
   function updateSelectedIcon() {
-    if (pathname === '/search') {
+    if (pathname === "/search") {
       setIsSearch(true);
     } else {
       setIsSearch(false);
     }
 
-    if (pathname === '/home') {
+    if (pathname === "/home") {
       setIconStyle({
         home: selectedIcon,
         search: notSelectedIcon,
@@ -104,7 +104,7 @@ function BottomNav(props: BottomNavProps) {
         newproduct: notSelectedIcon,
         profile: notSelectedIcon,
       });
-    } else if (pathname === '/search') {
+    } else if (pathname === "/search") {
       setIconStyle({
         home: notSelectedIcon,
         search: selectedIcon,
@@ -113,7 +113,7 @@ function BottomNav(props: BottomNavProps) {
         newproduct: notSelectedIcon,
         profile: notSelectedIcon,
       });
-    } else if (pathname === '/map') {
+    } else if (pathname === "/map") {
       setIconStyle({
         home: notSelectedIcon,
         search: notSelectedIcon,
@@ -122,7 +122,7 @@ function BottomNav(props: BottomNavProps) {
         newproduct: notSelectedIcon,
         profile: notSelectedIcon,
       });
-    } else if (pathname === '/chatmenu') {
+    } else if (pathname === "/chatmenu") {
       setIconStyle({
         home: notSelectedIcon,
         search: notSelectedIcon,
@@ -131,7 +131,7 @@ function BottomNav(props: BottomNavProps) {
         newproduct: notSelectedIcon,
         profile: notSelectedIcon,
       });
-    } else if (pathname === '/newproduct') {
+    } else if (pathname === "/newproduct") {
       setIconStyle({
         home: notSelectedIcon,
         search: notSelectedIcon,
@@ -140,7 +140,7 @@ function BottomNav(props: BottomNavProps) {
         newproduct: selectedIcon,
         profile: notSelectedIcon,
       });
-    } else if (pathname === '/profile') {
+    } else if (pathname === "/profile") {
       setIconStyle({
         home: notSelectedIcon,
         search: notSelectedIcon,
@@ -155,16 +155,16 @@ function BottomNav(props: BottomNavProps) {
   React.useEffect(() => {
     if (isSearch) {
       setNavbarStyle(
-        'flex h-16 flex-row items-center justify-evenly bg-fresh-fondo-azul'
+        "flex h-16 flex-row items-center justify-evenly bg-fresh-fondo-azul"
       );
     } else {
-      setNavbarStyle('flex h-16 flex-row items-center justify-evenly bg-white');
+      setNavbarStyle("flex h-16 flex-row items-center justify-evenly bg-white");
     }
   }, [isSearch]);
 
   return (
     <Paper
-      sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
       elevation={0}
     >
       <div className={navbarStyle}>
@@ -173,7 +173,7 @@ function BottomNav(props: BottomNavProps) {
             <HomeIcon
               className={individualIconStyle}
               onClick={() => {
-                navigate('/home');
+                navigate("/home");
               }}
             />
             <div className={iconStyle.home}></div>
@@ -185,7 +185,7 @@ function BottomNav(props: BottomNavProps) {
             <SearchIcon
               className={individualIconStyle}
               onClick={() => {
-                navigate('/search');
+                navigate("/search");
               }}
             />
             <div className={iconStyle.search}></div>
@@ -196,7 +196,7 @@ function BottomNav(props: BottomNavProps) {
             <MapIcon
               className={individualIconStyle}
               onClick={() => {
-                navigate('/map');
+                navigate("/map");
               }}
             />
             <div className={iconStyle.map}></div>
@@ -207,7 +207,7 @@ function BottomNav(props: BottomNavProps) {
           <NotificationIcon
             className={individualIconStyle}
             onClick={() => {
-              navigate('/chatmenu');
+              navigate("/chatmenu");
             }}
           />
           <div className={iconStyle.chat}></div>
@@ -218,7 +218,7 @@ function BottomNav(props: BottomNavProps) {
             <UploadIcon
               className={individualIconStyle}
               onClick={() => {
-                navigate('/newproduct');
+                navigate("/newproduct");
               }}
             />
             <div className={iconStyle.newproduct}></div>
@@ -226,25 +226,24 @@ function BottomNav(props: BottomNavProps) {
         )}
 
         <div className={navbarDivStyle}>
-          {ProfileIcon !== '' && (
+          {ProfileIcon !== "" && (
             <img
               src={ProfileIcon}
               alt="profile"
               className={profileStyle}
               onClick={() => {
-                if (!isBuyer)
-                  navigate(`/seller/${localStorage.getItem('userId')}`);
-                else navigate('/profile');
+                if (!isBuyer) navigate(`/sellerSelfProfile`);
+                else navigate("/profile");
               }}
             />
           )}
-          {ProfileIcon === '' && (
+          {ProfileIcon === "" && (
             <div
               className={profileStyle}
               onClick={() => {
                 if (!isBuyer)
-                  navigate(`/seller/${localStorage.getItem('userId')}`);
-                else navigate('/profile');
+                  navigate(`/seller/${localStorage.getItem("userId")}`);
+                else navigate("/profile");
               }}
             ></div>
           )}

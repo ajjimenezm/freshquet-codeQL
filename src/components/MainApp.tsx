@@ -19,6 +19,7 @@ import OrderCard from "./Profile/OrderCard";
 import Search from "./Search/Search";
 import SeesLater from "./Profile/SeeLater/SeesLater";
 import AdDetailLater from "./Profile/SeeLater/AdDetailLater";
+import SellerSelfProfile from "./Profile/SellerSelfProfile";
 
 function MainApp() {
   //localStorage.clear();
@@ -30,6 +31,9 @@ function MainApp() {
     if (!user) {
       navigate("/login");
     }
+    const role = localStorage.getItem("userRole");
+    if (role == "seller") navigate("/sellerSelfProfile");
+    else navigate("/home");
   }, []);
 
   return (
@@ -48,6 +52,7 @@ function MainApp() {
         <Route path="seeLater/detail/:id" element={<AdDetailLater />} />
         <Route path="products/detail/:id" element={<AdDetail />} />
         <Route path="seller/:seller_id" element={<SellerProfile />} />
+        <Route path="sellerSelfProfile" element={<SellerSelfProfile />} />
         {/* <Route path="seller/:seller_id/products" element={<SellerProducts />} />
         <Route path="seller/:seller_id/reviews" element={<SellerReviews />} /> */}
         <Route path="products/edit/:id" element={<EditAdDetail />} />

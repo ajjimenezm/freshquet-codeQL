@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AdvertisementManagement from '../../libs/AdvertisementManagement';
-import Advertisement from '../../types/Advertisement';
-import AdvertisementCardStandard from '../shared/AdvertismentCardStandard';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AdvertisementManagement from "../../libs/AdvertisementManagement";
+import Advertisement from "../../types/Advertisement";
+import AdvertisementCardStandard from "../shared/AdvertismentCardStandard";
 
 interface SellerProductProps {
   seller_id: string;
