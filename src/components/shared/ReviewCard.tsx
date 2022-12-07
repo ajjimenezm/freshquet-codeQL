@@ -1,31 +1,29 @@
-import { Avatar, Skeleton, Rating } from '@mui/material';
-import { useEffect, useState } from 'react';
-import UserHelper from '../../libs/UserHelper';
+import { Avatar, Skeleton, Rating } from "@mui/material";
+import { useEffect, useState } from "react";
+import UserHelper from "../../libs/UserHelper";
+import { User } from "../../types/User";
 
 interface ReviewCardProps {
   buyerId: string;
-  buyerUserName: string;
-  buyerName: string;
-  buyerProfilePicture?: string;
   score: number;
   comment: string;
 }
 
 const ReviewCard = (props: ReviewCardProps) => {
   const [avatar, setAvatar] = useState<string>();
+  const [buyer, setBuyer] = useState<User>();
 
   useEffect(() => {
-    if (props.buyerProfilePicture) {
-      UserHelper.retrieveProfilePicture(props.buyerProfilePicture).then(
-        (res) => {
-          setAvatar(res);
-        }
-      );
+    UserHelper.getUserById(props.buyerId).then((res) => setBuyer(res));
+    if (buyer?.profile_picture) {
+      UserHelper.retrieveProfilePicture(buyer?.profile_picture).then((res) => {
+        setAvatar(res);
+      });
     }
   }, []);
 
   useEffect(() => {
-    if (!props.buyerProfilePicture) {
+    if (!buyer?.profile_picture) {
       UserHelper.getUserById(props.buyerId).then((res) => {
         if (res.profile_picture) {
           UserHelper.retrieveProfilePicture(res.profile_picture).then((res) => {
@@ -39,16 +37,13 @@ const ReviewCard = (props: ReviewCardProps) => {
   return (
     <div className="w-full border-b-[1px] border-solid border-b-slate-300 pb-1">
       <div className="relative z-[2] float-right mt-2 mr-5">
-        {createAvatar(
-          avatar ? avatar : '',
-          props.buyerUserName,
-          props.buyerName
-        )}
+        {buyer &&
+          createAvatar(avatar ? avatar : "", buyer.username, buyer.name)}
       </div>
       <div>
         <div className="flex flex-col">
           <div className="font-outfit text-[16px] font-medium">
-            {props.buyerName}
+            {buyer?.name}
           </div>
           <div className="mt-4 font-outfit text-[14px] font-medium">
             {transformScore(props.score)} - {props.score}
@@ -72,11 +67,11 @@ const createAvatar = (avatar: string, username: string, name: string) => {
         src={avatar}
         alt={username}
         sx={{
-          border: 'solid',
-          borderColor: '#4C987B',
+          border: "solid",
+          borderColor: "#4C987B",
           width: 40,
           height: 40,
-          borderRadius: '50%',
+          borderRadius: "50%",
         }}
       />
     ) : (
@@ -84,27 +79,27 @@ const createAvatar = (avatar: string, username: string, name: string) => {
     );
   } else {
     return (
-      <Skeleton variant="circular" width={40} height={40} animation={'wave'} />
+      <Skeleton variant="circular" width={40} height={40} animation={"wave"} />
     );
   }
 };
 
 const transformScore = (score: number): string => {
-  let scoreString = '';
+  let scoreString = "";
   if (score >= 0 && score < 1) {
-    scoreString = 'Muy mal';
+    scoreString = "Muy mal";
   } else if (score >= 1 && score < 2) {
-    scoreString = 'Mal';
+    scoreString = "Mal";
   } else if (score >= 2 && score < 3) {
-    scoreString = 'Regular';
+    scoreString = "Regular";
   } else if (score >= 3 && score < 4) {
-    scoreString = 'Bueno';
+    scoreString = "Bueno";
   } else if (score >= 4 && score < 4.5) {
-    scoreString = 'Muy bueno';
+    scoreString = "Muy bueno";
   } else if (score >= 4.5 && score <= 5) {
-    scoreString = 'Excelente';
+    scoreString = "Excelente";
   } else {
-    scoreString = 'Sin calificación';
+    scoreString = "Sin calificación";
   }
   return scoreString;
 };

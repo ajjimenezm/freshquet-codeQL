@@ -32,6 +32,7 @@ import Advertisement from "../../types/Advertisement";
 import AdvertisementManagement from "../../libs/AdvertisementManagement";
 import SellerProducts from "./SellerProducts";
 import AdSellerCard from "./AdSellerCard";
+import AdvertismentHistory from "../advertismentHistory/advertismentHistory";
 
 const createAvatar = (avatar: string, seller: User | undefined) => {
   if (seller && seller?.username && seller?.name) {
@@ -347,6 +348,13 @@ const SellerSelfProfile = () => {
                     </span>
                   }
                 />
+                <Tab
+                  label={
+                    <span className="text-[14x] font-outfit font-semibold">
+                      Ventas
+                    </span>
+                  }
+                />
               </Tabs>
               <TabPanel value={currentTab} index={0}>
                 <div className=" grid grid-cols-2">{advertisementsToShow}</div>
@@ -356,6 +364,9 @@ const SellerSelfProfile = () => {
                   seller_id={seller_id as string}
                   avgRating={avgRating}
                 />
+              </TabPanel>
+              <TabPanel value={currentTab} index={2}>
+                <AdvertismentHistory />
               </TabPanel>
             </div>
           </div>

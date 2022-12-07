@@ -1,7 +1,13 @@
 import {
   Avatar,
   Box,
+  ClickAwayListener,
+  Grow,
   IconButton,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
   Skeleton,
   Tab,
   Tabs,
@@ -24,6 +30,7 @@ import AdDetailBuyerList from "../advertisements/AdDetailBuyerList";
 import Advertisement from "../../types/Advertisement";
 import AdvertisementManagement from "../../libs/AdvertisementManagement";
 import SellerProducts from "./SellerProducts";
+import Sales from "./SellerSales";
 
 const createAvatar = (avatar: string, seller: User | undefined) => {
   if (seller && seller?.username && seller?.name) {
@@ -131,8 +138,6 @@ const SellerProfile = () => {
 
   useEffect(() => {
     if (!seller) return;
-
-    console.log(seller);
     UserHelper.retrieveProfilePicture(seller.profile_picture).then(
       (res: string) => {
         setAvatar(res);
@@ -322,6 +327,15 @@ const SellerProfile = () => {
                     </span>
                   }
                 />
+                {localStorage.getItem("userId") === seller_id && (
+                  <Tab
+                    label={
+                      <span className="text-[14x] font-outfit font-semibold">
+                        Pedidos
+                      </span>
+                    }
+                  />
+                )}
               </Tabs>
               <TabPanel value={currentTab} index={0}>
                 <SellerProducts
@@ -338,6 +352,9 @@ const SellerProfile = () => {
                   seller_id={seller_id as string}
                   avgRating={avgRating}
                 />
+              </TabPanel>
+              <TabPanel value={currentTab} index={2}>
+                <Sales seller_id={seller_id} />
               </TabPanel>
             </div>
           </div>

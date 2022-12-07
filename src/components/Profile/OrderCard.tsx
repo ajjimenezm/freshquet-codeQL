@@ -1,6 +1,8 @@
-import { Divider, Link } from '@mui/material';
+import { Button, Divider, Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface IPropsOrderCard {
+  orderID?: string;
   productName: string;
   sellerUsername: string;
   sellerAddress: string;
@@ -11,6 +13,10 @@ interface IPropsOrderCard {
 }
 
 const OrderCard = (props: IPropsOrderCard) => {
+  const navigate = useNavigate();
+  const navigateToReview = () => {
+    navigate(`/review/${props.orderID}`);
+  }
   return (
     <div className="flex-col space-y-1 rounded-fresh border-[0.8px] border-black pl-2 pr-2 pt-4 pb-4">
       <div className="ml-6 mr-6 flex justify-between">
@@ -52,6 +58,16 @@ const OrderCard = (props: IPropsOrderCard) => {
         </div>
       ) : (
         <></>
+      )}
+      {props.is_ended && (
+        <div>
+          <Divider variant="middle" sx={{ borderStyle: 'dashed' }} />
+          <div className="mr-6 ml-6 mt-4 font-space-mono text-[12px] font-normal text-center">
+            <button onClick={navigateToReview}
+              className='inline-block h-10 min-h-full w-4/6 rounded-3xl bg-fresh-verde text-base  text-white ease-in-out hover:bg-fresh-morado-oscuro hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0'
+            >Haz tu reseña</button>
+          </div>
+        </div>
       )}
     </div>
   );

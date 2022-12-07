@@ -32,6 +32,7 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<BottomSheetRef>(null);
   const [distance, setDistance] = useState<string>("");
+  const [averageReviewScore, setAverageReviewScore] = useState<string>("");
   const [user, setUser] = useState<User>();
 
   React.useEffect(() => {
@@ -61,6 +62,11 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
       ).then((res) => {
         setDistance(res);
       });
+    });
+
+    AdvertisementManagement.GetAverageReview(props.productId).then((res) => {
+      if (!isNaN(res)) setAverageReviewScore(res);
+      else setAverageReviewScore("No reviews");
     });
   }, []);
 
@@ -180,7 +186,7 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
           </div>
           <div className="ml-2 mr-2 text-sm font-bold">·</div>
           <div className="flex flex-row items-center text-sm font-light">
-            {props.productRating}
+            {averageReviewScore}
             <span className="ml-1 align-middle">
               <SmallStar className="h-3 w-3 fill-white stroke-white align-middle" />
             </span>

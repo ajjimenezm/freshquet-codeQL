@@ -1,8 +1,8 @@
-import { Skeleton } from '@mui/material';
-import { useEffect, useState } from 'react';
-import UserHelper from '../../libs/UserHelper';
-import { Review } from '../../types/Compra';
-import ReviewCard from '../shared/ReviewCard';
+import { Skeleton } from "@mui/material";
+import { useEffect, useState } from "react";
+import UserHelper from "../../libs/UserHelper";
+import { Review } from "../../types/Compra";
+import ReviewCard from "../shared/ReviewCard";
 
 interface SellerReviewsProps {
   seller_id: string;
@@ -16,6 +16,7 @@ const SellerReviews = (props: SellerReviewsProps) => {
   useEffect(() => {
     UserHelper.GetReviews(props.seller_id).then((res) => {
       setReviews(res);
+      console.log(res);
     });
   }, []);
 
@@ -25,14 +26,11 @@ const SellerReviews = (props: SellerReviewsProps) => {
       aux.push(
         <ReviewCard
           key={
-            review.buyer._id + review.score + Math.floor(Math.random() * 10001)
+            review.buyer_id + review.review + Math.floor(Math.random() * 10001)
           }
-          buyerId={review.buyer._id}
-          buyerName={review.buyer.name}
-          buyerUserName={review.buyer.username}
-          buyerProfilePicture={review.buyer.profile_picture}
-          comment={review.comment}
-          score={review.score}
+          buyerId={review.buyer_id}
+          comment={review.review_text}
+          score={review.review}
         />
       );
     });

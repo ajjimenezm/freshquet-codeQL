@@ -32,8 +32,8 @@ function MainApp() {
       navigate("/login");
     }
     const role = localStorage.getItem("userRole");
-    if (role == "seller") navigate("/sellerSelfProfile");
-    else navigate("/home");
+    // if (role == "seller") navigate("/sellerSelfProfile");
+    // else navigate("/home");
   }, []);
 
   return (

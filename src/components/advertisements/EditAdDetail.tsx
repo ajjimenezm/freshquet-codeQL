@@ -62,24 +62,12 @@ function EditAdDetail() {
   const updateData = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     if (advertisement) {
-      await axios
-        .put(
-          `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}advertisements/${id}`,
-          advertisement,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-            },
-          }
-        )
-        .then((res) => {
+      await AdvertisementManagement.UpdateAdvertisment(advertisement).then(
+        () => {
           alert("PRODUCTO ACTUALIZADO");
           navigate(`/sellerSelfProfile`);
-        })
-        .catch((res) => {
-          console.log("PUT ERROR");
-          console.log(res);
-        });
+        }
+      );
 
       await AdvertisementManagement.UploadProductImages(
         advertisement?._id,
