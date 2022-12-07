@@ -1,6 +1,8 @@
-import { User } from './User';
+import { User } from "./User";
 
 export type Compra = {
+  _id?: string;
+
   adv_id: any;
 
   seller_id: any;

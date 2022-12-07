@@ -30,6 +30,7 @@ import AdDetailBuyerList from "../advertisements/AdDetailBuyerList";
 import Advertisement from "../../types/Advertisement";
 import AdvertisementManagement from "../../libs/AdvertisementManagement";
 import SellerProducts from "./SellerProducts";
+import Sales from "./SellerSales";
 
 const createAvatar = (avatar: string, seller: User | undefined) => {
     if (seller && seller?.username && seller?.name) {
@@ -159,10 +160,9 @@ const SellerProfile = () => {
                     setAvgRating(avgRating);
                     setHelpMessage(
                         // eslint-disable-next-line no-useless-escape
-                        `${noSells} ventas · ${
-                            avgRating === -1 || isNaN(avgRating)
-                                ? "Sin reviews"
-                                : avgRating
+                        `${noSells} ventas · ${avgRating === -1 || isNaN(avgRating)
+                            ? "Sin reviews"
+                            : avgRating
                         }`
                     );
                 }
@@ -349,6 +349,15 @@ const SellerProfile = () => {
                                         </span>
                                     }
                                 />
+                                {localStorage.getItem("userId") === seller_id && (
+                                    <Tab
+                                        label={
+                                            <span className="text-[14x] font-outfit font-semibold">
+                                                Pedidos
+                                            </span>
+                                        }
+                                    />
+                                )}
                             </Tabs>
                             <TabPanel value={currentTab} index={0}>
                                 <SellerProducts
@@ -368,6 +377,9 @@ const SellerProfile = () => {
                                     seller_id={seller_id as string}
                                     avgRating={avgRating}
                                 />
+                            </TabPanel>
+                            <TabPanel value={currentTab} index={2}>
+                                <Sales seller_id={seller_id} />
                             </TabPanel>
                         </div>
                     </div>

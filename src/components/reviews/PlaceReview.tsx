@@ -55,23 +55,23 @@ const PlaceReview = (props: PlaceReviewProps) => {
 
   return (
     <div className="ml-8 mt-8 mb-8 mr-8 flex flex-col space-y-7">
-      <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}> 
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div className="w-40 select-none font-outfit text-4xl font-semibold text-fresh-verde-oscuro">
           Deja una reseña
         </div>
-        <IconButton onClick={() => {navigate('/advertisementHistory');}}>
-          <CloseIcon color="secondary"/>
+        <IconButton onClick={() => { navigate('/advertisementHistory'); }}>
+          <CloseIcon color="secondary" />
         </IconButton>
       </div>
       <div className="flex flex-col items-center">
         <Rating
           sx={{
-          "& .MuiRating-iconFilled": {
-            color: "#976D9C"
-          },
-          "& .MuiRating-iconHover": {
-            color: "#976D9C"
-          }
+            "& .MuiRating-iconFilled": {
+              color: "#976D9C"
+            },
+            "& .MuiRating-iconHover": {
+              color: "#976D9C"
+            }
           }}
           name="rating"
           defaultValue={0}
@@ -110,7 +110,7 @@ const PlaceReview = (props: PlaceReviewProps) => {
       />
       <div className="absolute bottom-20 inset-x-0 flex flex-col items-center">
         <button
-          className='inline-block h-12 min-h-full w-3/6 rounded-3xl bg-fresh-morado-oscuro text-base  text-white ease-in-out hover:bg-fresh-morado-oscuro hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0'
+          className='inline-block h-12 min-h-full w-3/6 rounded-3xl bg-fresh-verde-oscuro text-base  text-white ease-in-out hover:bg-fresh-verde-oscuro hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0'
           color='secondary'
           onClick={() => sendReview()}
           disabled={!rating || !confcode}

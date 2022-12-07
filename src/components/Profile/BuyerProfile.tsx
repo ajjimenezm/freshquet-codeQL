@@ -91,6 +91,7 @@ const BuyerProfile = () => {
             productName={order.adv_id.name}
             sellerUsername={order.seller_id.username}
             sellerAddress={order.seller_id.direction}
+            orderID={order._id}
           />
         );
       });
