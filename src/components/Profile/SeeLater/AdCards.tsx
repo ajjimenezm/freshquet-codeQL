@@ -5,86 +5,90 @@ import AdvertisementManagement from "../../../libs/AdvertisementManagement";
 import Advertisement from "../../../types/Advertisement";
 
 interface NearbyAdCardProps {
-  ad_id: string;
+    ad_id: string;
 }
 
 const AdCards = (props: NearbyAdCardProps) => {
-  const navigate = useNavigate();
-  const [advertisement, setAd] = useState<Advertisement>();
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [image, setImage] = useState<string>("");
-  const [seller, setSeller] = useState<string>("");
+    const navigate = useNavigate();
+    const [advertisement, setAd] = useState<Advertisement>();
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [image, setImage] = useState<string>("");
+    const [seller, setSeller] = useState<string>("");
 
-  const navigateFunction = () => {
-    navigate(`/seeLater/detail/${advertisement?._id}`);
-  };
+    const navigateFunction = () => {
+        navigate(`/seeLater/detail/${advertisement?._id}`);
+    };
 
-  useEffect(() => {
-    AdvertisementManagement.GetAdvertisementById(props.ad_id).then((res) => {
-      setAd(res);
-    });
-  }, []);
+    useEffect(() => {
+        AdvertisementManagement.GetAdvertisementById(props.ad_id).then(
+            (res) => {
+                setAd(res);
+            }
+        );
+    }, []);
 
-  useEffect(() => {
-    if (advertisement?._id) {
-      AdvertisementManagement.GetImageAdvertisment(advertisement?._id).then(
-        (res) => {
-          setImage(res);
-          setImageLoaded(true);
+    useEffect(() => {
+        if (advertisement?._id) {
+            AdvertisementManagement.GetImageAdvertisment(
+                advertisement?._id
+            ).then((res) => {
+                setImage(res);
+                setImageLoaded(true);
+            });
         }
-      );
-    }
 
-    if (advertisement?.sellerId) {
-      AdvertisementManagement.GetSellerName(advertisement?.sellerId._id).then(
-        (res) => {
-          setSeller(res);
+        if (advertisement?.sellerId) {
+            AdvertisementManagement.GetSellerName(
+                advertisement?.sellerId._id
+            ).then((res) => {
+                setSeller(res);
+            });
         }
-      );
-    }
-  }, [advertisement]);
+    }, [advertisement]);
 
-  return (
-    <>
-      {advertisement && (
-        <div
-          className="text-semibold flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-black bg-[white]"
-          //onClick={navigateFunction.bind(null, advertisement?._id)}
-          onClick={navigateFunction}
-        >
-          <div className=" w-7/12">
-            <div className="flex flex-col items-start space-y-2 border-b-[1px] border-dashed border-black pl-4 pt-2 pb-4 text-left">
-              <p className=" text-[16px] font-medium">{advertisement?.name}</p>
-              <p className=" text-[12px] font-medium">
-                {advertisement?.pricePerKilogram}€/Kg
-              </p>
-            </div>
-            <div className=" pl-4 pt-1">
-              <p className=" text-[12px] font-medium">{seller}</p>
-            </div>
-          </div>
-          <div className="w-5/12 border-l-[1px] border-black align-middle">
-            {imageLoaded ? (
-              <img
-                src={image}
-                alt={advertisement?.name}
-                className="h-full w-full  object-cover"
-              />
-            ) : (
-              <div className="h-full w-full object-cover">
-                <Skeleton
-                  variant="rectangular"
-                  animation="wave"
-                  sx={{ width: "100%", height: "100%", bgcolor: "#F4511D" }}
-                />
-              </div>
+    return (
+        <>
+            {advertisement && (
+                <div
+                    className="text-semibold flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-black bg-[white]"
+                    //onClick={navigateFunction.bind(null, advertisement?._id)}
+                    onClick={navigateFunction}
+                >
+                    <div className=" w-7/12">
+                        <div className="flex flex-col items-start space-y-2 border-b-[1px] border-dashed border-black pl-4 pt-2 pb-4 text-left">
+                            <p className=" text-[16px] font-medium">
+                                {advertisement?.name}
+                            </p>
+                            <p className=" text-[12px] font-medium">
+                                {advertisement?.pricePerKilogram}€/Kg
+                            </p>
+                        </div>
+                        <div className=" pl-4 pt-1">
+                            <p className=" text-[12px] font-medium">{seller}</p>
+                        </div>
+                    </div>
+                    <div className="w-5/12 border-l-[1px] border-black align-middle">
+                        {imageLoaded ? (
+                            <img
+                                src={image}
+                                alt={advertisement?.name}
+                                className="h-full w-full  object-cover"
+                            />
+                        ) : (
+                            <div className="h-full w-full object-cover">
+                                <Skeleton
+                                    variant="rectangular"
+                                    animation="wave"
+                                    sx={{ width: "100%", height: "100%" }}
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
             )}
-          </div>
-        </div>
-      )}
-    </>
-  );
-  /*  return (
+        </>
+    );
+    /*  return (
     <div
       className="text-semibold flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-black bg-[white]"
       //onClick={navigateFunction.bind(null, advertisement?._id)}
