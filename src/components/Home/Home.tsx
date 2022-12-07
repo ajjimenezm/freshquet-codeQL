@@ -44,7 +44,6 @@ const Home = () => {
         });
     }, []);
 
-
     useEffect(() => {
         AdvertisementManagement.GetAllAdvertisements().then((res) => {
             setAdvertisements(res);
@@ -166,7 +165,7 @@ const Home = () => {
                                     </p>
                                 </div>
                                 <img
-                                    className="pointer-events-none mt-8 ml-7 max-h-[calc(200vh-800px)] select-none"
+                                    className="pointer-events-none mt-8 ml-auto mr-auto block max-h-[calc(100vh-500px)] select-none pl-7"
                                     src={Jardinera}
                                     alt="Jardinera"
                                 />
