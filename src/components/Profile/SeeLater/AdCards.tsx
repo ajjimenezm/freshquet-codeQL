@@ -16,7 +16,7 @@ const AdCards = (props: NearbyAdCardProps) => {
   const [seller, setSeller] = useState<string>("");
 
   const navigateFunction = () => {
-    navigate(`/products/detail/${advertisement?._id}`);
+    navigate(`/seeLater/detail/${advertisement?._id}`);
   };
 
   useEffect(() => {
