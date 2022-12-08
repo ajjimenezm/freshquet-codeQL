@@ -176,24 +176,43 @@ function StringAvatar(
 }
 
 async function UpdateUserData(user: User) {
-  await LocationManagement.GetCoordinatesFromAddress(user.direction).then(
-    async (coordinates) => {
-      user.latitude = coordinates.lat;
-      user.longitude = coordinates.lng;
-      await axios
-        .put(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/edit`, user, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
-        })
-        .then(() => {
-          return true;
-        })
-        .catch(() => {
-          return false;
-        });
-    }
-  );
+  if (user.direction) {
+    await LocationManagement.GetCoordinatesFromAddress(user.direction).then(
+      async (coordinates) => {
+        user.latitude = coordinates.lat;
+        user.longitude = coordinates.lng;
+        await axios
+          .put(
+            `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/edit`,
+            user,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+              },
+            }
+          )
+          .then(() => {
+            return true;
+          })
+          .catch(() => {
+            return false;
+          });
+      }
+    );
+  } else {
+    await axios
+      .put(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/edit`, user, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      })
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
 }
 
 async function GetAverageRating(userId: string): Promise<number> {

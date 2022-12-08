@@ -1,16 +1,6 @@
-import Advertisement from "../../types/Advertisement";
-import AdvertisementCard from "../AdvertisementCard";
-import Heading from "../Heading";
-import SubHeading from "../SubHeading";
 import axios from "axios";
 import React from "react";
-import AdvertisementCardSkeleton from "../AdvertisementCardSkeleton";
-import AddProduct from "../advertisements/AddProduct";
-import AddIcon from "@mui/icons-material/Add";
-import { Fab, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import AdvHistoryCard from "./advHistoryCard";
-import AdvHistoryCardBuyer from "./advHistoryCardBuyer";
 import OrderCard from "./OrderCard";
 
 interface ICompra {

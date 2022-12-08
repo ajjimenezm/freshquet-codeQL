@@ -94,7 +94,7 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
     UserHelper.getUserById(localStorage.getItem("userId") || "").then((res) => {
       setUser(res);
     });
-  }, [user]);
+  }, []);
 
   function onDismiss() {
     setOpen(false);

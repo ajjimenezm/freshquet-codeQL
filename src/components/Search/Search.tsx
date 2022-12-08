@@ -4,7 +4,7 @@ import {
   checkIfSearchHistoryExists,
   removeSearchHistory,
 } from "../../libs/SearchHistory";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AdvertisementCard from "../Home/AdvertismentCard";
 import AdvertisementCardSkeleton from "../AdvertisementCardSkeleton";
@@ -142,54 +142,30 @@ function Search() {
     });
   };
 
-  const filterByDistance = (
-    filterValue: number,
-    ads: Advertisement[],
-    userLocs: any
-  ) => {
-    const adsToShow: Advertisement[] = [];
-    axios
-      .post(
-        `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/coordinates`,
-        sellerIds,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
-        }
-      )
-      .then((res) => {
-        res.data.map((seller: any) => {
-          const distance = getDistanceFromLatLonInKm(
-            seller.latitude,
-            seller.longitude,
-            userLocs.latitude,
-            userLocs.longitude
-          );
-          if (distance < filterValue) {
-            const ad = ads.find((ad) => ad.sellerId === seller._id);
-            if (ad) adsToShow.push(ad);
-          }
-        });
-      });
-    return advertisements;
-  };
+  const [latitude, setLatitude] = useState<number>(0);
+  const [longitude, setLongitude] = useState<number>(0);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setLatitude(position.coords.latitude);
+      setLongitude(position.coords.longitude);
+    });
+  }, []);
 
   const filterWithFilters = async (ads: Advertisement[]) => {
     console.log(ads);
     let filteredAdvertisements: Advertisement[] = ads;
 
     if (distanceFilter) {
-      await navigator.geolocation.getCurrentPosition(async (position) => {
-        const userLocs = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-        filteredAdvertisements = filterByDistance(
-          distanceFilterValue,
-          advertisements,
-          userLocs
-        );
+      const userLocs = {
+        latitude: latitude,
+        longitude: longitude,
+      };
+      await AdvertisementManagement.filterByDistance(
+        distanceFilterValue,
+        advertisements,
+        userLocs
+      ).then((res) => {
+        filteredAdvertisements = res;
       });
     }
     //Do not apply filters if there is an error on the input
