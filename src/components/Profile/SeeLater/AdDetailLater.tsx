@@ -100,13 +100,17 @@ function AdDetailLater() {
 
   const storeProd = () => {
     //petición al back con el user
-    if (!user?.adsInSeeLater.includes(id!)) {
-      user?.adsInSeeLater.push(id!);
-      UserHelper.UpdateUserData(user!);
-    } else {
-      const idRemove = user?.adsInSeeLater.indexOf(id!);
-      user?.adsInSeeLater.splice(idRemove, 1);
-      UserHelper.UpdateUserData(user!);
+    if (id) {
+      if (user) {
+        if (!user?.adsInSeeLater.includes(id)) {
+          user?.adsInSeeLater.push(id);
+          UserHelper.UpdateUserData(user);
+        } else {
+          const idRemove = user?.adsInSeeLater.indexOf(id);
+          user?.adsInSeeLater.splice(idRemove, 1);
+          UserHelper.UpdateUserData(user);
+        }
+      }
     }
   };
 
