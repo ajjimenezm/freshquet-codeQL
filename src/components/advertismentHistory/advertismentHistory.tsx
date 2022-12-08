@@ -40,11 +40,7 @@ const AdvertismentHistory = () => {
         },
       })
       .then((res) => {
-        console.log(res);
-        console.log(res.data.userRole);
-        setUserRole(res.data.userRole);
         let config;
-        console.log("USER ROLE " + userRole);
         if (res.data.userRole === "seller") {
           config = {
             method: "get",
@@ -78,6 +74,7 @@ const AdvertismentHistory = () => {
   React.useEffect(() => {
     setAdvertisementsToShow(
       advertisements.map((ad: ICompra) => {
+        console.log(ad);
         return <OrderCard key={ad._id} compra={ad} />;
       })
     );

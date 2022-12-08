@@ -26,8 +26,9 @@ const OrderCard = (props: IPropsOrderCard) => {
   const currentUser = useContext(AuthContext);
   const [requestSent, setRequestSent] = useState(false);
   useEffect(() => {
-    console.log(props.compra);
+    console.log("compra", props.compra);
   }, []);
+
   const endVenta = () => {
     const text = `La compra de ${props.compra.adv_id.name} por ${props.compra.price}€ ha sido finalizada.`;
     const text2 = `Aquí tiene su codigo de confirmación: ${props.compra.confirmation_code}`;
