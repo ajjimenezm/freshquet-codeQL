@@ -6,7 +6,7 @@ export type User = {
   phoneNumber: string;
   email: string;
   profile_picture: string;
-  address: string;
+  direction: string;
   biography: string;
   latitude: number;
   longitude: number;
@@ -22,7 +22,7 @@ export type UserEdit = {
   phoneNumber?: string;
   email?: string;
   profile_picture?: string;
-  address?: string;
+  direction?: string;
   biography?: string;
   latitude?: number;
   longitude?: number;

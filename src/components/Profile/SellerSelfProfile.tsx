@@ -15,6 +15,10 @@ import {
 } from "@mui/material";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ReactComponent as HamburgerIcon } from "../../assets/icons/HamburgerIcon.svg";
+import { ReactComponent as EstadisticasIcon } from "../../assets/icons/estadisticas.svg";
+import EurosAhorrados from "../../assets/illustrations/EurosAhorrados.png";
+import CO2Ahorrado from "../../assets/illustrations/CO2Ahorrado.png";
 
 import { User } from "../../types/User";
 import { ReactComponent as SmallStar } from "../../assets/icons/SmallStar.svg";
@@ -30,7 +34,8 @@ import AdDetailBuyerList from "../advertisements/AdDetailBuyerList";
 import Advertisement from "../../types/Advertisement";
 import AdvertisementManagement from "../../libs/AdvertisementManagement";
 import SellerProducts from "./SellerProducts";
-import Sales from "./SellerSales";
+import AdSellerCard from "./AdSellerCard";
+import AdvertismentHistory from "../advertismentHistory/advertismentHistory";
 
 const createAvatar = (avatar: string, seller: User | undefined) => {
   if (seller && seller?.username && seller?.name) {
@@ -50,19 +55,19 @@ const createAvatar = (avatar: string, seller: User | undefined) => {
   }
 };
 
-const SellerProfile = () => {
+const SellerSelfProfile = () => {
   const navigate = useNavigate();
-  const { seller_id } = useParams<{ seller_id: string }>();
+  const seller_id = localStorage.getItem("userId");
   const [seller, setSeller] = useState<User>();
   const [avatar, setAvatar] = useState<string>();
   const [helpMessage, setHelpMessage] = useState<string>("·");
   const [avgRating, setAvgRating] = useState<number>(-1);
   const [showProductDetail, setShowProductDetail] = React.useState(false);
   const [productToOpen, setProductToOpen] = React.useState(0);
-  const [advertisements, setAdvertisements] = React.useState<Advertisement[]>(
-    []
-  );
-  const [isFavourite, setIsFavourite] = React.useState(false);
+  const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
+  const [estadisticas, setEstadisticas] = React.useState(false);
+  const [advertisementsToShow, setAdvertisementsToShow] =
+    useState<JSX.Element[]>();
 
   //#region tabs
   const [currentTab, setCurrentTab] = useState(0);
@@ -91,27 +96,6 @@ const SellerProfile = () => {
     setOpen(false);
   };
 
-  const checkIsFavourite = async () => {
-    if (seller_id) {
-      const isFavourite = await UserHelper.checkIsFavourite(
-        localStorage.userId,
-        seller_id
-      );
-      setIsFavourite(isFavourite);
-    }
-  };
-
-  const handleFavourite = async () => {
-    if (seller_id) {
-      if (!isFavourite) {
-        await UserHelper.addFavourite(localStorage.userId, seller_id);
-      } else {
-        await UserHelper.removeFavourite(localStorage.userId, seller_id);
-      }
-    }
-    checkIsFavourite();
-  };
-
   const handleBackButton = () => {
     navigate(-1);
   };
@@ -119,7 +103,6 @@ const SellerProfile = () => {
   const prevOpen = useRef(open);
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       anchorRef.current!.focus();
     }
 
@@ -134,10 +117,21 @@ const SellerProfile = () => {
   const handleEditProfile = () => {
     navigate("/editprofile");
   };
+
+  function handleListKeyDownHamburgerMenu(event: React.KeyboardEvent) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === "Escape") {
+      setOpen(false);
+    }
+  }
   //#endregion
 
   useEffect(() => {
     if (!seller) return;
+
+    console.log(seller);
     UserHelper.retrieveProfilePicture(seller.profile_picture).then(
       (res: string) => {
         setAvatar(res);
@@ -157,7 +151,25 @@ const SellerProfile = () => {
         );
       });
     });
+
+    AdvertisementManagement.GetAllAdvertisementsFromSeller(seller._id).then(
+      (res) => {
+        setAdvertisements(res);
+      }
+    );
   }, [seller]);
+
+  useEffect(() => {
+    setAdvertisementsToShow(
+      advertisements.map((ad, index) => {
+        return (
+          <div key={ad._id} className="mb-2">
+            <AdSellerCard key={ad._id} advertisement={ad} />
+          </div>
+        );
+      })
+    );
+  }, [advertisements]);
 
   useEffect(() => {
     if (!seller_id) {
@@ -170,8 +182,12 @@ const SellerProfile = () => {
     UserHelper.getUserById(seller_id as string).then((res: User) => {
       setSeller(res);
     });
-    checkIsFavourite();
   }, []);
+
+  const handleToggleEstadisticas = () => {
+    setEstadisticas(!estadisticas);
+    console.log("estadisticas", estadisticas);
+  };
 
   return (
     <>
@@ -189,57 +205,86 @@ const SellerProfile = () => {
         <div>
           <div>
             <div>
-              <IconButton
-                ref={anchorRef}
-                onClick={handleBackButton}
-                sx={{
-                  position: "fixed",
-                  top: 20,
-                  left: 20,
-                  backgroundColor: "white",
-                  border: "0",
-                  boxShadow: "none",
-                }}
-              >
-                <BackIcon />
-              </IconButton>
-            </div>
-            <div>
               <div>
-                <IconButton
-                  ref={anchorRef}
-                  onClick={handleToggleHamburgerMenu}
-                  sx={{
-                    position: "fixed",
-                    top: 20,
-                    right: 60,
-                    backgroundColor: "white",
-                    border: "0",
-                    boxShadow: "none",
-                  }}
-                >
-                  {!isFavourite && (
-                    <NotFavouriteIcon onClick={handleFavourite} />
-                  )}
-                  {isFavourite && <FavouriteIcon onClick={handleFavourite} />}
-                </IconButton>
+                <div>
+                  <IconButton
+                    ref={anchorRef}
+                    onClick={handleToggleHamburgerMenu}
+                    sx={{
+                      position: "fixed",
+                      top: 20,
+                      right: 20,
+                      backgroundColor: "white",
+                      border: "0",
+                      boxShadow: "none",
+                    }}
+                  >
+                    <HamburgerIcon />
+                  </IconButton>
+                  <Popper open={open} anchorEl={anchorRef.current} transition>
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom-start"
+                              ? "left top"
+                              : "left bottom",
+                        }}
+                      >
+                        <Paper className="mr-2">
+                          <ClickAwayListener
+                            onClickAway={handleCloseHamburgerMenu}
+                          >
+                            <MenuList
+                              autoFocusItem={open}
+                              id="composition-menu"
+                              aria-labelledby="composition-button"
+                              onKeyDown={handleListKeyDownHamburgerMenu}
+                            >
+                              <MenuItem
+                                key="qua01"
+                                onClick={handleEditProfile}
+                                className="font-space-mono text-[14px]"
+                              >
+                                <div className="font-space-mono text-[14px]">
+                                  Editar perfil
+                                </div>
+                              </MenuItem>
+                              <MenuItem
+                                key="qua02"
+                                onClick={handleLogout}
+                                className="font-space-mono text-[14px]"
+                              >
+                                <div className="font-space-mono text-[14px]">
+                                  Cerrar sesión
+                                </div>
+                              </MenuItem>
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </div>
+                <div>
+                  <IconButton
+                    ref={anchorRef}
+                    onClick={handleToggleEstadisticas}
+                    sx={{
+                      position: "fixed",
+                      top: 60,
+                      right: 20,
+                      backgroundColor: "white",
+                      border: "0",
+                      boxShadow: "none",
+                    }}
+                  >
+                    <EstadisticasIcon />
+                  </IconButton>
+                </div>
               </div>
-              <div>
-                <IconButton
-                  ref={anchorRef}
-                  onClick={handleToggleHamburgerMenu}
-                  sx={{
-                    position: "fixed",
-                    top: 21,
-                    right: 20,
-                    backgroundColor: "white",
-                    border: "0",
-                    boxShadow: "none",
-                  }}
-                >
-                  <OpenChatIcon />
-                </IconButton>
-              </div>
+              <div></div>
             </div>
           </div>
           <div className="h-screen w-screen flex-col space-y-10 bg-white">
@@ -299,6 +344,42 @@ const SellerProfile = () => {
                 )}
               </div>
             </div>
+            {estadisticas && (
+              <div>
+                <p className="mb-8 text-center text-[18px] font-bold text-fresh-verde-oscuro">
+                  Tus estadísticas
+                </p>
+                <div className="grid grid-cols-2 justify-items-center">
+                  <div className="flex h-[115px] w-[115px] flex-col items-center justify-center rounded-full bg-fresh-azul-claro">
+                    <img
+                      src={EurosAhorrados}
+                      alt="Euros Ahorrados"
+                      style={{
+                        width: 100,
+                        height: 100,
+                      }}
+                    />
+                    <p className=" -mt-6 mb-2 text-center text-[14px] font-bold text-fresh-verde-oscuro">
+                      {((advertisements.length * 3) / 2).toFixed(0)} €
+                    </p>
+                  </div>
+                  <div className="flex h-[115px] w-[115px] flex-col items-center justify-center rounded-full bg-fresh-azul-claro">
+                    <img
+                      src={CO2Ahorrado}
+                      alt="CO2 Ahorrado"
+                      style={{
+                        width: 100,
+                        height: 100,
+                      }}
+                    />
+                    <p className=" -mt-6 mb-2 text-center text-[14px] font-bold text-fresh-verde-oscuro">
+                      {advertisements.length} kg
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="pr-4 pl-4 pb-16">
               <Tabs
                 value={currentTab}
@@ -327,25 +408,16 @@ const SellerProfile = () => {
                     </span>
                   }
                 />
-                {localStorage.getItem("userId") === seller_id && (
-                  <Tab
-                    label={
-                      <span className="text-[14x] font-outfit font-semibold">
-                        Pedidos
-                      </span>
-                    }
-                  />
-                )}
+                <Tab
+                  label={
+                    <span className="text-[14x] font-outfit font-semibold">
+                      Ventas
+                    </span>
+                  }
+                />
               </Tabs>
               <TabPanel value={currentTab} index={0}>
-                <SellerProducts
-                  seller_id={seller_id as string}
-                  onProductClick={(ads: Advertisement[], index: number) => {
-                    setProductToOpen(index);
-                    setAdvertisements(ads);
-                    setShowProductDetail(true);
-                  }}
-                />
+                <div className=" grid grid-cols-2">{advertisementsToShow}</div>
               </TabPanel>
               <TabPanel value={currentTab} index={1}>
                 <SellerReviews
@@ -354,7 +426,7 @@ const SellerProfile = () => {
                 />
               </TabPanel>
               <TabPanel value={currentTab} index={2}>
-                <Sales seller_id={seller_id} />
+                <AdvertismentHistory />
               </TabPanel>
             </div>
           </div>
@@ -364,7 +436,7 @@ const SellerProfile = () => {
   );
 };
 
-export default SellerProfile;
+export default SellerSelfProfile;
 
 interface TabPanelProps {
   children?: React.ReactNode;

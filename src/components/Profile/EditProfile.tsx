@@ -8,6 +8,7 @@ import ProfilePictureUpload from "./ProfilePictureUpload";
 import UserHelper from "../../libs/UserHelper";
 import { useNavigate } from "react-router-dom";
 import { User, UserEdit } from "../../types/User";
+import LocationManagement from "../../libs/LocationManagement";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -24,7 +25,18 @@ const EditProfile = () => {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (state?.direction) {
+      await LocationManagement.GetCoordinatesFromAddress(state.direction).then(
+        (coordinates) => {
+          setState({
+            ...state,
+            latitude: coordinates.lat,
+            longitude: coordinates.lng,
+          });
+        }
+      );
+    }
     const userAux: User = {
       _id: state?._id ? state._id : (user as User)._id,
       name: state?.name ? state.name : (user as User).name,
@@ -37,7 +49,7 @@ const EditProfile = () => {
       profile_picture: state?.profile_picture
         ? state.profile_picture
         : (user as User).profile_picture,
-      address: state?.address ? state.address : (user as User).address,
+      direction: state?.direction ? state.direction : (user as User).direction,
       biography: state?.biography ? state.biography : (user as User).biography,
       latitude: state?.latitude ? state.latitude : (user as User).latitude,
       longitude: state?.longitude ? state.longitude : (user as User).longitude,
@@ -46,7 +58,7 @@ const EditProfile = () => {
     };
     UserHelper.UpdateUserData(userAux).then(() => {
       alert("Datos actualizados");
-      navigate("/profile");
+      navigate(-1);
     });
   };
 
@@ -81,7 +93,7 @@ const EditProfile = () => {
         phoneNumber: user.phoneNumber,
         email: user.email,
         username: user.username,
-        address: user.address,
+        direction: user.direction,
         biography: user.biography,
       });
 
@@ -147,7 +159,7 @@ const EditProfile = () => {
         name="direction"
         label="Direction"
         id="fullWidth"
-        defaultValue={user?.address}
+        defaultValue={user?.direction}
         size="small"
         onChange={handleChange}
         InputProps={{
@@ -202,11 +214,7 @@ const EditProfile = () => {
         >
           Save
         </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={() => navigate("/profile")}
-        >
+        <Button variant="outlined" color="error" onClick={() => navigate(-1)}>
           Cancel
         </Button>
       </div>

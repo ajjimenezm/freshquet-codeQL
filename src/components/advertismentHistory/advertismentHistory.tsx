@@ -1,16 +1,7 @@
-import Advertisement from '../../types/Advertisement';
-import AdvertisementCard from '../AdvertisementCard';
-import Heading from '../Heading';
-import SubHeading from '../SubHeading';
-import axios from 'axios';
-import React from 'react';
-import AdvertisementCardSkeleton from '../AdvertisementCardSkeleton';
-import AddProduct from '../advertisements/AddProduct';
-import AddIcon from '@mui/icons-material/Add';
-import { Fab, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import AdvHistoryCard from './advHistoryCard';
-import AdvHistoryCardBuyer from './advHistoryCardBuyer';
+import axios from "axios";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import OrderCard from "./OrderCard";
 
 interface ICompra {
   _id: string;
@@ -35,9 +26,9 @@ const AdvertismentHistory = () => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    const user = localStorage.getItem('userToken');
+    const user = localStorage.getItem("userToken");
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, []);
 
@@ -45,7 +36,7 @@ const AdvertismentHistory = () => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}users/type`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       })
       .then((res) => {
@@ -53,16 +44,16 @@ const AdvertismentHistory = () => {
         console.log(res.data.userRole);
         setUserRole(res.data.userRole);
         let config;
-        console.log('USER ROLE ' + userRole);
-        if (res.data.userRole === 'seller') {
+        console.log("USER ROLE " + userRole);
+        if (res.data.userRole === "seller") {
           config = {
-            method: 'get',
+            method: "get",
             url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/all/sell/${res.data.userId}`,
             headers: {},
           };
-        } else if (res.data.userRole === 'buyer') {
+        } else if (res.data.userRole === "buyer") {
           config = {
-            method: 'get',
+            method: "get",
             url: `${process.env.REACT_APP_BACKEND_DEFAULT_ROUTE}compra/all/buy/${res.data.userId}`,
             headers: {},
           };
@@ -70,7 +61,7 @@ const AdvertismentHistory = () => {
         if (config !== undefined) {
           axios(config).then(function (response: any) {
             if (response.status === 200) {
-              console.log('DATA ' + response);
+              console.log("DATA " + response);
               console.log(response);
               setAdvertisements(response.data);
               setDataLoaded(true);
@@ -87,48 +78,14 @@ const AdvertismentHistory = () => {
   React.useEffect(() => {
     setAdvertisementsToShow(
       advertisements.map((ad: ICompra) => {
-        if (userRole === 'seller') {
-          console.log('ad:', ad);
-          0;
-          return (
-            <AdvHistoryCard
-              key={ad._id}
-              compra_id={ad._id}
-              adv_id={ad.adv_id}
-              buyer_id={ad.buyer_id}
-              quantity={ad.quantity}
-              is_ended={ad.is_ended}
-              price={ad.price}
-            />
-          );
-        } else if (userRole === 'buyer') {
-          console.log('ad:', ad);
-          return (
-            <AdvHistoryCardBuyer
-              key={ad._id}
-              compra_id={ad._id}
-              adv_id={ad.adv_id}
-              quantity={ad.quantity}
-              is_ended={ad.is_ended}
-              review_text={ad.review_text}
-            />
-          );
-        } else return <p>No hay nada que mostrar</p>;
+        return <OrderCard key={ad._id} compra={ad} />;
       })
     );
   }, [dataLoaded]);
 
   return (
     <div>
-      {userRole === 'buyer' ? (
-        <Heading text="Tus compras" />
-      ) : (
-        <Heading text="Tus ventas" />
-      )}
-
-      <div className="mb-16 ml-5 mr-5 space-y-3 divide-y-2">
-        {advertisementsToShow}
-      </div>
+      <div className=" space-y-4">{advertisementsToShow}</div>
     </div>
   );
 };

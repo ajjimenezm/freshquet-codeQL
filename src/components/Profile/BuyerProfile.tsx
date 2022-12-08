@@ -15,6 +15,9 @@ import UserHelper from "../../libs/UserHelper";
 import { Compra } from "../../types/Compra";
 import { User } from "../../types/User";
 import OrderCard from "./OrderCard";
+import EurosAhorrados from "../../assets/illustrations/EurosAhorrados.png";
+import CO2Ahorrado from "../../assets/illustrations/CO2Ahorrado.png";
+import { ReactComponent as EstadisticasIcon } from "../../assets/icons/estadisticas.svg";
 
 import { ReactComponent as HamburgerIcon } from "../../assets/icons/HamburgerIcon.svg";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +27,7 @@ const BuyerProfile = () => {
   const [user, setUser] = useState<User>();
   const [avatar, setAvatar] = useState<string>();
   const [ordersToShow, setOrdersToShow] = useState<JSX.Element[]>();
+  const [estadisticas, setEstadisticas] = React.useState(false);
 
   //#region HamburgerMenu
 
@@ -99,6 +103,11 @@ const BuyerProfile = () => {
     });
   }, [user]);
 
+  const handleToggleEstadisticas = () => {
+    setEstadisticas(!estadisticas);
+    console.log("estadisticas", estadisticas);
+  };
+
   const createAvatar = () => {
     if (user?.username && user?.name) {
       return avatar ? (
@@ -151,15 +160,69 @@ const BuyerProfile = () => {
             {user?.name}
           </div>
           <div className="font-space-mono text-[14px]">
-            {user?.address ? user.address : "Dirección no especificada"}
+            {user?.direction ? user.direction : "Dirección no especificada"}
           </div>
         </div>
+        {estadisticas && (
+          <div>
+            <p className="mb-8 text-center text-[18px] font-bold text-fresh-verde-oscuro">
+              Tus estadísticas
+            </p>
+            <div className="grid grid-cols-2 justify-items-center">
+              <div className="flex h-[115px] w-[115px] flex-col items-center justify-center rounded-full bg-fresh-azul-claro">
+                <img
+                  src={EurosAhorrados}
+                  alt="Euros Ahorrados"
+                  style={{
+                    width: 100,
+                    height: 100,
+                  }}
+                />
+                <p className=" -mt-6 mb-2 text-center text-[14px] font-bold text-fresh-verde-oscuro">
+                  {(
+                    (ordersToShow?.length ? ordersToShow.length : 0 * 3) / 2
+                  ).toFixed(0)}{" "}
+                  €
+                </p>
+              </div>
+              <div className="flex h-[115px] w-[115px] flex-col items-center justify-center rounded-full bg-fresh-azul-claro">
+                <img
+                  src={CO2Ahorrado}
+                  alt="CO2 Ahorrado"
+                  style={{
+                    width: 100,
+                    height: 100,
+                  }}
+                />
+                <p className=" -mt-6 mb-2 text-center text-[14px] font-bold text-fresh-verde-oscuro">
+                  {ordersToShow?.length} kg
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="pr-4 pl-4 pb-16">
           <div className="font-outfit text-[18px] font-semibold">
             Mis Pedidos
           </div>
           <div className="mt-4 mb-4 space-y-4">{ordersToShow}</div>
         </div>
+      </div>
+      <div>
+        <IconButton
+          ref={anchorRef}
+          onClick={handleToggleEstadisticas}
+          sx={{
+            position: "fixed",
+            top: 60,
+            right: 20,
+            backgroundColor: "white",
+            border: "0",
+            boxShadow: "none",
+          }}
+        >
+          <EstadisticasIcon />
+        </IconButton>
       </div>
       <div>
         <IconButton

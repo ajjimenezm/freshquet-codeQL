@@ -11,28 +11,28 @@ test.describe.configure({ mode: "serial" });
 
 const picture = fs.readFileSync(path.join(__dirname, "/zanahorias.jpg"));
 
-test("test", async ({ page }) => {
-    const id = Math.floor(Math.random() * 100);
+test("Upload and delete product", async ({ page }) => {
+    const id = Math.floor(Math.random() * 100000);
+    const price = Math.floor(Math.random() * 100);
     await page.goto("http://localhost:3000/");
     await page.goto("http://localhost:3000/login");
-    await page.getByPlaceholder("name@company.com").click();
-    await page.getByPlaceholder("name@company.com").fill("alba@email.com");
-    await page.getByPlaceholder("name@company.com").press("Tab");
-    await page.getByPlaceholder("••••••••").fill("123456789");
+    await page.locator("#username").click();
+    await page.locator("#username").fill("alba@email.com");
+    await page.locator("#username").click();
+    await page.locator("#password").fill("123456789");
     await page.getByRole("button", { name: "Iniciar sesión" }).click();
-    await expect(page).toHaveURL("http://localhost:3000/home");
     await page.locator(".MuiPaper-root > div > div:nth-child(2)").click();
     await expect(page).toHaveURL("http://localhost:3000/newproduct");
     const [fileChooser] = await Promise.all([
         page.waitForEvent("filechooser"),
         page.getByRole("button", { name: "+" }).click(),
     ]);
-    await page.getByPlaceholder("Nombre del producto").click();
-    await page.getByPlaceholder("Nombre del producto").fill("Zanahoria" + id);
-    await page.getByPlaceholder("-").click();
-    await page.getByPlaceholder("-").fill("2");
-    await page.getByPlaceholder("Descripción").click();
-    await page.getByPlaceholder("Descripción").fill("Zanahoria rica");
+    await page.locator("#name").click();
+    await page.locator("#name").fill("Zanahoria" + id);
+    await page.locator("#quantity-field").click();
+    await page.locator("#quantity-field").fill(price.toString());
+    await page.locator("#description").click();
+    await page.locator("#description").fill("Zanahoria rica");
     await fileChooser.setFiles({
         name: "zanahorias.jpg",
         mimeType: "image/jpeg",
@@ -40,24 +40,15 @@ test("test", async ({ page }) => {
     });
 
     await page.getByRole("button", { name: "Subir" }).click();
-    await expect(page).toHaveURL("http://localhost:3000/home");
+    await page.waitForLoadState("networkidle");
     await page.locator(".MuiPaper-root > div > div:nth-child(3)").click();
-    await expect(page).toHaveURL(
-        "http://localhost:3000/seller/637dd4d672ca6c26516c25ed"
-    );
-    await page.getByText("Zanahoria" + id).click();
     await page.waitForLoadState("networkidle");
-    await page.getByRole("button", { name: "Editar" }).click();
+    await page.locator("#Zanahoria" + id).click();
     await page.waitForLoadState("networkidle");
-    expect(await page.locator('textarea[name="name"]').inputValue()).toBe(
-        "Zanahoria" + id
+    expect(await page.locator("#name").inputValue()).toBe("Zanahoria" + id);
+    expect(await page.locator("#quantity-field").inputValue()).toBe(
+        price.toString()
     );
-    expect(
-        await page.locator('textarea[name="pricePerKilogram"]').inputValue()
-    ).toBe("2");
-    expect(
-        await page.locator('textarea[name="description"]').inputValue()
-    ).toBe("Zanahoria rica");
     await page.locator("#delete").click();
     await page.waitForLoadState("networkidle");
 });

@@ -34,7 +34,12 @@ function stringAvatar(name: string) {
 const ChatCard = (props: ChatCardProps) => {
   const [user, setUser] = React.useState<User>();
   const [imageProfile, setImageProfile] = React.useState<string>("");
-  const date = props.date.toDate();
+  let date;
+  try {
+    date = props.date.toDate();
+  } catch {
+    date = new Date();
+  }
 
   React.useEffect(() => {
     UserHelper.getUserByUsername(props.userInfo.displayName).then((res) => {

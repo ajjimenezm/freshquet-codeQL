@@ -22,4 +22,4 @@ export type Compra = {
   review_text: string;
 };
 
-export type Review = { buyer: User; score: number; comment: string };
+export type Review = { buyer_id: string; review: number; review_text: string };
