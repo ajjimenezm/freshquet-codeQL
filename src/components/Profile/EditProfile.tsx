@@ -8,6 +8,7 @@ import ProfilePictureUpload from "./ProfilePictureUpload";
 import UserHelper from "../../libs/UserHelper";
 import { useNavigate } from "react-router-dom";
 import { User, UserEdit } from "../../types/User";
+import LocationManagement from "../../libs/LocationManagement";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -24,7 +25,18 @@ const EditProfile = () => {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (state?.direction) {
+      await LocationManagement.GetCoordinatesFromAddress(state.direction).then(
+        (coordinates) => {
+          setState({
+            ...state,
+            latitude: coordinates.lat,
+            longitude: coordinates.lng,
+          });
+        }
+      );
+    }
     const userAux: User = {
       _id: state?._id ? state._id : (user as User)._id,
       name: state?.name ? state.name : (user as User).name,

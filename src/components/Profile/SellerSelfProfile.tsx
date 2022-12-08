@@ -16,6 +16,9 @@ import {
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReactComponent as HamburgerIcon } from "../../assets/icons/HamburgerIcon.svg";
+import { ReactComponent as EstadisticasIcon } from "../../assets/icons/estadisticas.svg";
+import EurosAhorrados from "../../assets/illustrations/EurosAhorrados.png";
+import CO2Ahorrado from "../../assets/illustrations/CO2Ahorrado.png";
 
 import { User } from "../../types/User";
 import { ReactComponent as SmallStar } from "../../assets/icons/SmallStar.svg";
@@ -62,6 +65,7 @@ const SellerSelfProfile = () => {
   const [showProductDetail, setShowProductDetail] = React.useState(false);
   const [productToOpen, setProductToOpen] = React.useState(0);
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
+  const [estadisticas, setEstadisticas] = React.useState(false);
   const [advertisementsToShow, setAdvertisementsToShow] =
     useState<JSX.Element[]>();
 
@@ -180,6 +184,11 @@ const SellerSelfProfile = () => {
     });
   }, []);
 
+  const handleToggleEstadisticas = () => {
+    setEstadisticas(!estadisticas);
+    console.log("estadisticas", estadisticas);
+  };
+
   return (
     <>
       {showProductDetail && (
@@ -242,7 +251,6 @@ const SellerSelfProfile = () => {
                                   Editar perfil
                                 </div>
                               </MenuItem>
-                              {/* <MenuItem onClick={handleCloseHamburgerMenu}>Mis estadísticas</MenuItem> */}
                               <MenuItem
                                 key="qua02"
                                 onClick={handleLogout}
@@ -258,6 +266,22 @@ const SellerSelfProfile = () => {
                       </Grow>
                     )}
                   </Popper>
+                </div>
+                <div>
+                  <IconButton
+                    ref={anchorRef}
+                    onClick={handleToggleEstadisticas}
+                    sx={{
+                      position: "fixed",
+                      top: 60,
+                      right: 20,
+                      backgroundColor: "white",
+                      border: "0",
+                      boxShadow: "none",
+                    }}
+                  >
+                    <EstadisticasIcon />
+                  </IconButton>
                 </div>
               </div>
               <div></div>
@@ -320,6 +344,42 @@ const SellerSelfProfile = () => {
                 )}
               </div>
             </div>
+            {estadisticas && (
+              <div>
+                <p className="mb-8 text-center text-[18px] font-bold text-fresh-verde-oscuro">
+                  Tus estadísticas
+                </p>
+                <div className="grid grid-cols-2 justify-items-center">
+                  <div className="flex h-[115px] w-[115px] flex-col items-center justify-center rounded-full bg-fresh-azul-claro">
+                    <img
+                      src={EurosAhorrados}
+                      alt="Euros Ahorrados"
+                      style={{
+                        width: 100,
+                        height: 100,
+                      }}
+                    />
+                    <p className=" -mt-6 mb-2 text-center text-[14px] font-bold text-fresh-verde-oscuro">
+                      {((advertisements.length * 3) / 2).toFixed(0)} €
+                    </p>
+                  </div>
+                  <div className="flex h-[115px] w-[115px] flex-col items-center justify-center rounded-full bg-fresh-azul-claro">
+                    <img
+                      src={CO2Ahorrado}
+                      alt="CO2 Ahorrado"
+                      style={{
+                        width: 100,
+                        height: 100,
+                      }}
+                    />
+                    <p className=" -mt-6 mb-2 text-center text-[14px] font-bold text-fresh-verde-oscuro">
+                      {advertisements.length} kg
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="pr-4 pl-4 pb-16">
               <Tabs
                 value={currentTab}
