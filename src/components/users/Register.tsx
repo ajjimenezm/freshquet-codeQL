@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-import Photo from "./logoFreshquet.jpeg";
+import Photo from "./logoFreshquet.png";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -140,7 +140,7 @@ const Register = () => {
     return (
         <section className="items-center bg-gray-50">
             <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 lg:py-0">
-                <img className="mb-4 h-20 w-20" src={Photo} alt="" />
+                <img className="mb-4 h-10 w-auto" src={Photo} alt="Freshquet" />
                 <div className="w-full rounded-lg bg-white shadow dark:border sm:max-w-md md:mt-0 xl:p-0 ">
                     <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
@@ -264,7 +264,7 @@ const Register = () => {
                                 </div>
                             )}
                             <button
-                                className="focus:ring-primary-300 w-full rounded-lg bg-emerald-300 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-200 focus:outline-none focus:ring-4 "
+                                className="focus:ring-primary-300 w-full rounded-lg bg-fresh-verde px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-300 focus:outline-none focus:ring-4 "
                                 onClick={registerProcess}
                             >
                                 Regístrate
