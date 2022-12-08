@@ -100,7 +100,7 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
                 setUser(res);
             }
         );
-    }, []);
+    }, [user]);
 
     function onDismiss() {
         setOpen(false);
