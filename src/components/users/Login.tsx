@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
-import Photo from "./logoFreshquet.jpeg";
+import Photo from "./logoFreshquet.png";
 
 const Login = () => {
     const [state, setState] = useState({
@@ -77,9 +77,9 @@ const Login = () => {
     };
 
     return (
-        <section className="items-center bg-gray-50" onKeyDown={handleKeyDown}>
+        <section className="items-center" onKeyDown={handleKeyDown}>
             <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-                <img className="mb-4 h-20 w-20" src={Photo} alt="" />
+                <img className="mb-4 h-10 w-auto mt-20" src={Photo} alt="Freshquet" />
                 <div className="w-full rounded-lg bg-white shadow dark:border sm:max-w-md md:mt-0 xl:p-0 ">
                     <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
@@ -116,7 +116,7 @@ const Login = () => {
                             </div>
                             <div className="flex items-center justify-between"></div>
                             <button
-                                className="focus:ring-primary-300 w-full rounded-lg bg-emerald-300 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-200 focus:outline-none focus:ring-4 "
+                                className="focus:ring-primary-300 w-full rounded-lg bg-fresh-verde px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-300 focus:outline-none focus:ring-4 "
                                 onClick={loginProcess}
                             >
                                 Iniciar sesión
@@ -125,7 +125,7 @@ const Login = () => {
                                 ¿Aún no tienes cuenta?{" "}
                                 <a
                                     href="#"
-                                    className="font-medium text-emerald-300 hover:underline "
+                                    className="font-medium text-fresh-verde hover:underline "
                                     onClick={navigateRegister}
                                 >
                                     ¡Regístrate!
