@@ -105,14 +105,16 @@ function AdDetailBuyer(props: AdDetailBuyerProps) {
   };
 
   const storeProd = () => {
-    //petición al back con el user
-    if (!user?.adsInSeeLater.includes(props.productId)) {
-      user?.adsInSeeLater.push(props.productId);
-      UserHelper.UpdateUserData(user!);
-    } else {
-      const idRemove = user?.adsInSeeLater.indexOf(props.productId);
-      user?.adsInSeeLater.splice(idRemove, 1);
-      UserHelper.UpdateUserData(user!);
+    if (user) {
+      //petición al back con el user
+      if (!user?.adsInSeeLater.includes(props.productId)) {
+        user?.adsInSeeLater.push(props.productId);
+        UserHelper.UpdateUserData(user);
+      } else {
+        const idRemove = user?.adsInSeeLater.indexOf(props.productId);
+        user?.adsInSeeLater.splice(idRemove, 1);
+        UserHelper.UpdateUserData(user);
+      }
     }
   };
 
