@@ -92,6 +92,7 @@ const Login = () => {
                                 </label>
                                 <input
                                     type="text"
+                                    id="username"
                                     name="username"
                                     className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm "
                                     placeholder="name@company.com"
@@ -106,6 +107,7 @@ const Login = () => {
                                 <input
                                     type="password"
                                     name="password"
+                                    id="password"
                                     placeholder="••••••••"
                                     className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm"
                                     value={state.password}

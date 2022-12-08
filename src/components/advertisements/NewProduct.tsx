@@ -107,7 +107,7 @@ export default function NewProducts() {
                     )
                         .then(() => {
                             if (res.status == 201) {
-                                navigate("/home");
+                                navigate("/sellerSelfProfile");
                             }
                         })
                         .catch((error) => {
@@ -139,7 +139,7 @@ export default function NewProducts() {
                 />
                 <div className="mb-5 mt-6 grid w-11/12 place-items-center">
                     <input
-                        id="fullWidth"
+                        id="name"
                         name="name"
                         placeholder="Nombre del producto"
                         type="text"
@@ -153,6 +153,7 @@ export default function NewProducts() {
                     <div className="col-start-1 col-end-4">
                         <select
                             className="w-full rounded-md border border-solid border-fresh-morado-claro bg-white px-3 py-2 text-base"
+                            id="category"
                             onChange={(selectedOption) => {
                                 if (selectedOption != null) {
                                     let cat: Category;
@@ -219,7 +220,7 @@ export default function NewProducts() {
                 </div>
                 <div className="mb-5 w-11/12">
                     <textarea
-                        id="fullWidth"
+                        id="description"
                         name="description"
                         placeholder="Descripción"
                         rows={4}
