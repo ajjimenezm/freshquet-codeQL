@@ -1,23 +1,18 @@
 import { Skeleton } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import AdvertisementManagement from "../../../libs/AdvertisementManagement";
 import Advertisement from "../../../types/Advertisement";
 
 interface NearbyAdCardProps {
     ad_id: string;
+    onClick: () => void;
 }
 
 const AdCards = (props: NearbyAdCardProps) => {
-    const navigate = useNavigate();
     const [advertisement, setAd] = useState<Advertisement>();
     const [imageLoaded, setImageLoaded] = useState(false);
     const [image, setImage] = useState<string>("");
     const [seller, setSeller] = useState<string>("");
-
-    const navigateFunction = () => {
-        navigate(`/seeLater/detail/${advertisement?._id}`);
-    };
 
     useEffect(() => {
         AdvertisementManagement.GetAdvertisementById(props.ad_id).then(
@@ -51,8 +46,7 @@ const AdCards = (props: NearbyAdCardProps) => {
             {advertisement && (
                 <div
                     className="text-semibold flex h-[125px] flex-shrink-0 overflow-hidden rounded-xl border-[1px] border-black bg-[white]"
-                    //onClick={navigateFunction.bind(null, advertisement?._id)}
-                    onClick={navigateFunction}
+                    onClick={props.onClick}
                 >
                     <div className=" w-7/12">
                         <div className="flex flex-col items-start space-y-2 border-b-[1px] border-dashed border-black pl-4 pt-2 pb-4 text-left">
