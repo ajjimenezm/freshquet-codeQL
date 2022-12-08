@@ -87,12 +87,12 @@ const BuyerProfile = () => {
         i++;
         ordersToShowAux.push(
           <OrderCard
-            key={order.adv_id + order.buyer_id + i}
+            key={order.buyer_id + i}
             date={"0 MES 0000"}
             is_ended={order.is_ended}
             price={order.price}
             quantity={order.quantity}
-            productName={order.adv_id.name}
+            productName={order.name}
             sellerUsername={order.seller_id.username}
             sellerAddress={order.seller_id.direction}
             orderID={order._id}

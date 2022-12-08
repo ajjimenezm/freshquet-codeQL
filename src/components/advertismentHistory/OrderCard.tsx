@@ -18,6 +18,7 @@ interface ICompra {
   is_ended: boolean;
   price: number;
   seller_id: string;
+  name: string;
   confirmation_code: string;
 }
 
@@ -70,7 +71,7 @@ const OrderCard = (props: IPropsOrderCard) => {
       <Divider variant="middle" sx={{ borderStyle: "dashed" }} />
       <div className="ml-6 mr-6 grid grid-cols-4 justify-between space-x-6">
         <div className="col-span-2 font-space-mono text-[14px] font-bold">
-          {props.compra.adv_id.name}
+          {props.compra.name}
         </div>
         <div className="font-space-mono text-[14px] font-bold">
           {props.compra.quantity} kg

@@ -13,6 +13,7 @@ interface ICompra {
   seller_id: string;
   confirmation_code: string;
   review_text: string;
+  name: string;
 }
 
 const AdvertismentHistory = () => {

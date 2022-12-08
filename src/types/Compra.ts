@@ -17,6 +17,8 @@ export type Compra = {
 
   price: number;
 
+  name: string;
+
   review: number;
 
   review_text: string;
