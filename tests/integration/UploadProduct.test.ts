@@ -11,7 +11,7 @@ test.describe.configure({ mode: "serial" });
 
 const picture = fs.readFileSync(path.join(__dirname, "/zanahorias.jpg"));
 
-test("test", async ({ page }) => {
+test("Upload and delete product", async ({ page }) => {
     const id = Math.floor(Math.random() * 100000);
     const price = Math.floor(Math.random() * 100);
     await page.goto("http://localhost:3000/");
