@@ -46,7 +46,6 @@ function Input() {
         [data.chatId + ".date"]: serverTimestamp(),
       });
     }
-    setText("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
