@@ -1,12 +1,12 @@
-import { Avatar } from "@mui/material";
-import Tomates from "../../assets/illustrations/Tomates.jpg";
-import AvatarPhoto from "../../assets/illustrations/Avatar.jpg";
-import { User } from "../../types/User";
-import { useEffect, useState } from "react";
-import UserHelper from "../../libs/UserHelper";
-import { Skeleton } from "@mui/material";
-import AdvertisementManagement from "../../libs/AdvertisementManagement";
-import { useNavigate } from "react-router-dom";
+import { Avatar } from '@mui/material';
+import Tomates from '../../assets/illustrations/Tomates.jpg';
+import AvatarPhoto from '../../assets/illustrations/Avatar.jpg';
+import { User } from '../../types/User';
+import { useEffect, useState } from 'react';
+import UserHelper from '../../libs/UserHelper';
+import { Skeleton } from '@mui/material';
+import AdvertisementManagement from '../../libs/AdvertisementManagement';
+import { useNavigate } from 'react-router-dom';
 
 interface SellerCardProps {
   seller: User;
@@ -15,23 +15,23 @@ interface SellerCardProps {
 function stringAvatar(name: string) {
   return {
     sx: {
-      "border-width": 1,
-      "border-color": "#976D9C",
-      bgcolor: "#976D9C",
+      'border-width': 1,
+      'border-color': '#976D9C',
+      bgcolor: '#976D9C',
       width: 48,
       height: 48,
       fontSize: 20,
-      fontWeight: "bold",
+      fontWeight: 'bold',
     },
-    children: `${name.split(" ")[0][0]}`,
+    children: `${name.split(' ')[0][0]}`,
   };
 }
 
 const SellerCard = (props: SellerCardProps) => {
   const navigate = useNavigate();
-  const [imageProfile, setImageProfile] = useState<string>("");
-  const [imageLeft, setImageLeft] = useState<string>("");
-  const [imageRight, setImageRight] = useState<string>("");
+  const [imageProfile, setImageProfile] = useState<string>('');
+  const [imageLeft, setImageLeft] = useState<string>('');
+  const [imageRight, setImageRight] = useState<string>('');
 
   const navigateFunction = (id: string) => {
     navigate(`/seller/${id}`);
@@ -47,12 +47,14 @@ const SellerCard = (props: SellerCardProps) => {
     AdvertisementManagement.GetAllAdvertisementsFromSeller(
       props.seller._id
     ).then((res) => {
-      AdvertisementManagement.GetImageAdvertisment(res[0]._id).then((res) => {
-        setImageLeft(res);
-      });
-      AdvertisementManagement.GetImageAdvertisment(res[1]._id).then((res) => {
-        setImageRight(res);
-      });
+      if (res[0])
+        AdvertisementManagement.GetImageAdvertisment(res[0]._id).then((res) => {
+          setImageLeft(res);
+        });
+      if (res[1])
+        AdvertisementManagement.GetImageAdvertisment(res[1]._id).then((res) => {
+          setImageRight(res);
+        });
     });
   }, []);
 
@@ -63,8 +65,8 @@ const SellerCard = (props: SellerCardProps) => {
         sx={{
           width: 48,
           height: 48,
-          "border-width": 1,
-          "border-color": "#976D9C",
+          'border-width': 1,
+          'border-color': '#976D9C',
         }}
         alt={dataUser.username}
       />
@@ -84,25 +86,25 @@ const SellerCard = (props: SellerCardProps) => {
       </div>
       <div className="flex h-[80px]">
         {imageLeft ? (
-          <img src={imageLeft} alt={"test"} className="w-1/2 object-cover" />
+          <img src={imageLeft} alt={'test'} className="w-1/2 object-cover" />
         ) : (
           <Skeleton
             variant="rectangular"
             animation={false}
-            sx={{ width: 112, height: 112, bgcolor: "#976D9C" }}
+            sx={{ width: 112, height: 112, bgcolor: '#976D9C' }}
           />
         )}
         {imageRight ? (
           <img
             src={imageRight}
-            alt={"test"}
+            alt={'test'}
             className="w-1/2 bg-cover object-cover"
           />
         ) : (
           <Skeleton
             variant="rectangular"
             animation={false}
-            sx={{ width: 112, height: 112, bgcolor: "#976D9C" }}
+            sx={{ width: 112, height: 112, bgcolor: '#976D9C' }}
           />
         )}
       </div>
