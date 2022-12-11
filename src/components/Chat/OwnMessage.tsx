@@ -8,7 +8,7 @@ function OwnMessage({ message }: any) {
   }, [message]);
 
   return (
-    <div className="OwnMessage mb-2 ml-4 mr-4 mt-2 flex justify-end ">
+    <div ref={ref} className="OwnMessage mb-2 ml-4 mr-4 mt-2 flex justify-end ">
       <div className="OwnMessageContent h-auto w-auto justify-center rounded-xl bg-fresh-verde-oscuro py-1 px-3 ">
         <p className="my-1 text-sm text-white">{message.text}</p>
       </div>
