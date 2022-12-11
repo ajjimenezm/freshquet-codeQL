@@ -20,6 +20,7 @@
         "leaflet": "^1.9.2",
         "postcss-custom-properties-fallback": "^1.0.2",
         "proptypes": "^1.1.0",
+        "pwa-asset-generator": "^6.2.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-leaflet": "^4.1.0",
