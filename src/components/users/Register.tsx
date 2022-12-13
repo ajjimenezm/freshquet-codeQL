@@ -21,7 +21,7 @@ const Register = () => {
         email: "",
         username: "",
         password: "",
-        userType: "",
+        userType: "buyer",
         repeat_password: "",
         direction: "",
         biography: "New to freshquet :)",
@@ -231,27 +231,6 @@ const Register = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <Box className=" mb-2 block text-sm font-medium text-gray-900">
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">
-                                        Tipo de usuario
-                                    </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        name="userType"
-                                        value={state.userType}
-                                        label="Tipo de usuario"
-                                        onChange={handleChange}
-                                    >
-                                        <MenuItem value="buyer">
-                                            Comprador
-                                        </MenuItem>
-                                        <MenuItem value="seller">
-                                            Vendedor
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Box>
                             {state.userType === "seller" && (
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-gray-900 ">
