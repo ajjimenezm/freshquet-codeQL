@@ -8,19 +8,19 @@ import {
   Paper,
   Popper,
   Skeleton,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import AdvertisementManagement from "../../libs/AdvertisementManagement";
-import UserHelper from "../../libs/UserHelper";
-import { Compra } from "../../types/Compra";
-import { User } from "../../types/User";
-import OrderCard from "./OrderCard";
-import EurosAhorrados from "../../assets/illustrations/EurosAhorrados.png";
-import CO2Ahorrado from "../../assets/illustrations/CO2Ahorrado.png";
-import { ReactComponent as EstadisticasIcon } from "../../assets/icons/estadisticas.svg";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import AdvertisementManagement from '../../libs/AdvertisementManagement';
+import UserHelper from '../../libs/UserHelper';
+import { Compra } from '../../types/Compra';
+import { User } from '../../types/User';
+import OrderCard from './OrderCard';
+import EurosAhorrados from '../../assets/illustrations/EurosAhorrados.png';
+import CO2Ahorrado from '../../assets/illustrations/CO2Ahorrado.png';
+import { ReactComponent as EstadisticasIcon } from '../../assets/icons/estadisticas.svg';
 
-import { ReactComponent as HamburgerIcon } from "../../assets/icons/HamburgerIcon.svg";
-import { useNavigate } from "react-router-dom";
+import { ReactComponent as HamburgerIcon } from '../../assets/icons/HamburgerIcon.svg';
+import { useNavigate } from 'react-router-dom';
 
 const BuyerProfile = () => {
   const navigate = useNavigate();
@@ -50,10 +50,10 @@ const BuyerProfile = () => {
   };
 
   function handleListKeyDownHamburgerMenu(event: React.KeyboardEvent) {
-    if (event.key === "Tab") {
+    if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
-    } else if (event.key === "Escape") {
+    } else if (event.key === 'Escape') {
       setOpen(false);
     }
   }
@@ -88,7 +88,7 @@ const BuyerProfile = () => {
         ordersToShowAux.push(
           <OrderCard
             key={order.buyer_id + i}
-            date={"0 MES 0000"}
+            date={'0 MES 0000'}
             is_ended={order.is_ended}
             price={order.price}
             quantity={order.quantity}
@@ -96,6 +96,7 @@ const BuyerProfile = () => {
             sellerUsername={order.seller_id.username}
             sellerAddress={order.seller_id.direction}
             orderID={order._id}
+            adID={order.adv_id}
           />
         );
       });
@@ -105,7 +106,7 @@ const BuyerProfile = () => {
 
   const handleToggleEstadisticas = () => {
     setEstadisticas(!estadisticas);
-    console.log("estadisticas", estadisticas);
+    console.log('estadisticas', estadisticas);
   };
 
   const createAvatar = () => {
@@ -125,7 +126,7 @@ const BuyerProfile = () => {
           variant="circular"
           width={75}
           height={75}
-          animation={"wave"}
+          animation={'wave'}
         />
       );
     }
@@ -139,15 +140,15 @@ const BuyerProfile = () => {
 
   const handleLogout = () => {
     UserHelper.Logout();
-    navigate("/login");
+    navigate('/login');
   };
 
   const handleEditProfile = () => {
-    navigate("/editprofile");
+    navigate('/editprofile');
   };
 
   const handleSeeLater = () => {
-    navigate("/seeLater");
+    navigate('/seeLater');
   };
 
   return (
@@ -160,7 +161,7 @@ const BuyerProfile = () => {
             {user?.name}
           </div>
           <div className="font-space-mono text-[14px]">
-            {user?.direction ? user.direction : "Dirección no especificada"}
+            {user?.direction ? user.direction : 'Dirección no especificada'}
           </div>
         </div>
         {estadisticas && (
@@ -181,7 +182,7 @@ const BuyerProfile = () => {
                 <p className=" -mt-6 mb-2 text-center text-[14px] font-bold text-fresh-verde-oscuro">
                   {(
                     (ordersToShow?.length ? ordersToShow.length : 0 * 3) / 2
-                  ).toFixed(0)}{" "}
+                  ).toFixed(0)}{' '}
                   €
                 </p>
               </div>
@@ -213,12 +214,12 @@ const BuyerProfile = () => {
           ref={anchorRef}
           onClick={handleToggleEstadisticas}
           sx={{
-            position: "fixed",
+            position: 'fixed',
             top: 60,
             right: 20,
-            backgroundColor: "white",
-            border: "0",
-            boxShadow: "none",
+            backgroundColor: 'white',
+            border: '0',
+            boxShadow: 'none',
           }}
         >
           <EstadisticasIcon />
@@ -229,12 +230,12 @@ const BuyerProfile = () => {
           ref={anchorRef}
           onClick={handleToggleHamburgerMenu}
           sx={{
-            position: "fixed",
+            position: 'fixed',
             top: 20,
             right: 20,
-            backgroundColor: "white",
-            border: "0",
-            boxShadow: "none",
+            backgroundColor: 'white',
+            border: '0',
+            boxShadow: 'none',
           }}
         >
           <HamburgerIcon />
@@ -245,7 +246,7 @@ const BuyerProfile = () => {
               {...TransitionProps}
               style={{
                 transformOrigin:
-                  placement === "bottom-start" ? "left top" : "left bottom",
+                  placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
               <Paper className="mr-2">

@@ -12,25 +12,25 @@ import {
   Tab,
   Tabs,
   Typography,
-} from "@mui/material";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+} from '@mui/material';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { User } from "../../types/User";
-import { ReactComponent as SmallStar } from "../../assets/icons/SmallStar.svg";
-import { ReactComponent as BackIcon } from "../../assets/icons/BackArrow.svg";
-import { ReactComponent as FavouriteIcon } from "../../assets/icons/FavouriteIcon.svg";
-import { ReactComponent as NotFavouriteIcon } from "../../assets/icons/NotFavouriteIcon.svg";
-import { ReactComponent as OpenChatIcon } from "../../assets/icons/OpenChatIcon.svg";
+import { User } from '../../types/User';
+import { ReactComponent as SmallStar } from '../../assets/icons/SmallStar.svg';
+import { ReactComponent as BackIcon } from '../../assets/icons/BackArrow.svg';
+import { ReactComponent as FavouriteIcon } from '../../assets/icons/FavouriteIcon.svg';
+import { ReactComponent as NotFavouriteIcon } from '../../assets/icons/NotFavouriteIcon.svg';
+import { ReactComponent as OpenChatIcon } from '../../assets/icons/OpenChatIcon.svg';
 
-import UserHelper from "../../libs/UserHelper";
-import SellerReviews from "./SellerReviews";
-import React from "react";
-import AdDetailBuyerList from "../advertisements/AdDetailBuyerList";
-import Advertisement from "../../types/Advertisement";
-import AdvertisementManagement from "../../libs/AdvertisementManagement";
-import SellerProducts from "./SellerProducts";
-import Sales from "./SellerSales";
+import UserHelper from '../../libs/UserHelper';
+import SellerReviews from './SellerReviews';
+import React from 'react';
+import AdDetailBuyerList from '../advertisements/AdDetailBuyerList';
+import Advertisement from '../../types/Advertisement';
+import AdvertisementManagement from '../../libs/AdvertisementManagement';
+import SellerProducts from './SellerProducts';
+import Sales from './SellerSales';
 
 const createAvatar = (avatar: string, seller: User | undefined) => {
   if (seller && seller?.username && seller?.name) {
@@ -45,7 +45,7 @@ const createAvatar = (avatar: string, seller: User | undefined) => {
     );
   } else {
     return (
-      <Skeleton variant="circular" width={75} height={75} animation={"wave"} />
+      <Skeleton variant="circular" width={75} height={75} animation={'wave'} />
     );
   }
 };
@@ -55,7 +55,7 @@ const SellerProfile = () => {
   const { seller_id } = useParams<{ seller_id: string }>();
   const [seller, setSeller] = useState<User>();
   const [avatar, setAvatar] = useState<string>();
-  const [helpMessage, setHelpMessage] = useState<string>("·");
+  const [helpMessage, setHelpMessage] = useState<string>('·');
   const [avgRating, setAvgRating] = useState<number>(-1);
   const [showProductDetail, setShowProductDetail] = React.useState(false);
   const [productToOpen, setProductToOpen] = React.useState(0);
@@ -128,11 +128,11 @@ const SellerProfile = () => {
 
   const handleLogout = () => {
     UserHelper.Logout();
-    navigate("/login");
+    navigate('/login');
   };
 
   const handleEditProfile = () => {
-    navigate("/editprofile");
+    navigate('/editprofile');
   };
   //#endregion
 
@@ -152,7 +152,9 @@ const SellerProfile = () => {
         setHelpMessage(
           // eslint-disable-next-line no-useless-escape
           `${noSells} ventas · ${
-            avgRating === -1 || isNaN(avgRating) ? "Sin reviews" : avgRating
+            avgRating === -1 || isNaN(avgRating)
+              ? 'Sin reviews'
+              : avgRating.toFixed(2)
           }`
         );
       });
@@ -162,7 +164,7 @@ const SellerProfile = () => {
   useEffect(() => {
     if (!seller_id) {
       alert(
-        "Error al cargar el perfil del vendedor. Vuelve a intentarlo más tarde."
+        'Error al cargar el perfil del vendedor. Vuelve a intentarlo más tarde.'
       );
       navigate(-1);
       return;
@@ -193,12 +195,12 @@ const SellerProfile = () => {
                 ref={anchorRef}
                 onClick={handleBackButton}
                 sx={{
-                  position: "fixed",
+                  position: 'fixed',
                   top: 20,
                   left: 20,
-                  backgroundColor: "white",
-                  border: "0",
-                  boxShadow: "none",
+                  backgroundColor: 'white',
+                  border: '0',
+                  boxShadow: 'none',
                 }}
               >
                 <BackIcon />
@@ -210,12 +212,12 @@ const SellerProfile = () => {
                   ref={anchorRef}
                   onClick={handleToggleHamburgerMenu}
                   sx={{
-                    position: "fixed",
+                    position: 'fixed',
                     top: 20,
                     right: 60,
-                    backgroundColor: "white",
-                    border: "0",
-                    boxShadow: "none",
+                    backgroundColor: 'white',
+                    border: '0',
+                    boxShadow: 'none',
                   }}
                 >
                   {!isFavourite && (
@@ -229,12 +231,12 @@ const SellerProfile = () => {
                   ref={anchorRef}
                   onClick={handleToggleHamburgerMenu}
                   sx={{
-                    position: "fixed",
+                    position: 'fixed',
                     top: 21,
                     right: 20,
-                    backgroundColor: "white",
-                    border: "0",
-                    boxShadow: "none",
+                    backgroundColor: 'white',
+                    border: '0',
+                    boxShadow: 'none',
                   }}
                 >
                   <OpenChatIcon />
@@ -244,7 +246,7 @@ const SellerProfile = () => {
           </div>
           <div className="h-screen w-screen flex-col space-y-10 bg-white">
             <div className="flex w-full flex-col items-center justify-center space-y-1 pr-4 pl-4 pt-16">
-              {createAvatar(avatar ? avatar : "", seller ? seller : undefined)}
+              {createAvatar(avatar ? avatar : '', seller ? seller : undefined)}
               <div className="font-outfit text-[18px] font-semibold text-fresh-morado">
                 {seller ? (
                   seller?.name
@@ -264,7 +266,7 @@ const SellerProfile = () => {
                   seller?.direction ? (
                     seller.direction
                   ) : (
-                    "Dirección no especificada"
+                    'Dirección no especificada'
                   )
                 ) : (
                   <Skeleton
@@ -278,10 +280,10 @@ const SellerProfile = () => {
                 )}
               </div>
               <div className="font-space-mono text-[12px]">
-                {seller && helpMessage !== "·" ? (
+                {seller && helpMessage !== '·' ? (
                   <div className="flex flex-row items-center">
                     {helpMessage}
-                    {!helpMessage.includes("Sin reviews") ? (
+                    {!helpMessage.includes('Sin reviews') ? (
                       <SmallStar className="ml-[2px] h-3 w-3 fill-yellow-300 stroke-gray-500" />
                     ) : (
                       <></>
@@ -307,9 +309,9 @@ const SellerProfile = () => {
                 indicatorColor="secondary"
                 variant="fullWidth"
                 sx={{
-                  fontFamily: "Outfit",
-                  fontSize: "14px",
-                  fontWeight: "semibold",
+                  fontFamily: 'Outfit',
+                  fontSize: '14px',
+                  fontWeight: 'semibold',
                 }}
                 centered
               >
@@ -327,7 +329,7 @@ const SellerProfile = () => {
                     </span>
                   }
                 />
-                {localStorage.getItem("userId") === seller_id && (
+                {localStorage.getItem('userId') === seller_id && (
                   <Tab
                     label={
                       <span className="text-[14x] font-outfit font-semibold">

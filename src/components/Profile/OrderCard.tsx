@@ -1,8 +1,11 @@
-import { Button, Divider, Link } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Divider, Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import AdvertisementManagement from '../../libs/AdvertisementManagement';
+import Navigation from '../../libs/Navigation';
+import UserHelper from '../../libs/UserHelper';
 
 interface IPropsOrderCard {
-  orderID?: string;
+  orderID: string;
   productName: string;
   sellerUsername: string;
   sellerAddress: string;
@@ -10,13 +13,25 @@ interface IPropsOrderCard {
   price: number;
   is_ended: boolean;
   date: string;
+  adID: string;
 }
 
 const OrderCard = (props: IPropsOrderCard) => {
   const navigate = useNavigate();
+  const existsAd = props.adID !== null;
+
   const navigateToReview = () => {
     navigate(`/review/${props.orderID}`);
   };
+  const navigateToSeller = (sellerusername: string): void => {
+    UserHelper.getUserByUsername(sellerusername).then((user) => {
+      navigate(`/seller/${user._id}`);
+    });
+  };
+  const navigateToAddress = (address: string): void => {
+    Navigation.OpenGoogleMapsAddress(address);
+  };
+
   return (
     <div className="flex-col space-y-1 rounded-fresh border-[0.8px] border-black pl-2 pr-2 pt-4 pb-4">
       <div className="ml-6 mr-6 flex justify-between">
@@ -24,10 +39,10 @@ const OrderCard = (props: IPropsOrderCard) => {
           {props.date}
         </div>
         <div className="font-space-mono text-[10px] font-normal">
-          {props.is_ended ? "FINALIZADA" : "EN MARCHA"}
+          {props.is_ended ? 'FINALIZADA' : 'EN MARCHA'}
         </div>
       </div>
-      <Divider variant="middle" sx={{ borderStyle: "dashed" }} />
+      <Divider variant="middle" sx={{ borderStyle: 'dashed' }} />
       <div className="ml-6 mr-6 flex justify-between">
         <div className="font-space-mono text-[14px] font-bold">
           {props.productName}
@@ -39,19 +54,25 @@ const OrderCard = (props: IPropsOrderCard) => {
           {props.price} €
         </div>
       </div>
-      <Divider variant="middle" sx={{ borderStyle: "dashed" }} />
+      <Divider variant="middle" sx={{ borderStyle: 'dashed' }} />
       <div className="ml-6 mr-6 font-space-mono text-[14px] font-normal">
-        Gracias por comprar con{" "}
-        <Link component="button" onClick={() => navigateToSeller()}>
+        Gracias por comprar con{' '}
+        <Link
+          component="button"
+          onClick={() => navigateToSeller(props.sellerUsername)}
+        >
           @{props.sellerUsername}
         </Link>
       </div>
       {!props.is_ended ? (
         <div>
-          <Divider variant="middle" sx={{ borderStyle: "dashed" }} />
+          <Divider variant="middle" sx={{ borderStyle: 'dashed' }} />
           <div className="mr-6 ml-6 font-space-mono text-[12px] font-normal">
-            Recogida en{" "}
-            <Link component="button" onClick={() => navigateToAddress()}>
+            Recogida en{' '}
+            <Link
+              component="button"
+              onClick={() => navigateToAddress(props.sellerAddress)}
+            >
               {props.sellerAddress}
             </Link>
           </div>
@@ -59,9 +80,9 @@ const OrderCard = (props: IPropsOrderCard) => {
       ) : (
         <></>
       )}
-      {props.is_ended && (
+      {props.is_ended && existsAd && (
         <div>
-          <Divider variant="middle" sx={{ borderStyle: "dashed" }} />
+          <Divider variant="middle" sx={{ borderStyle: 'dashed' }} />
           <div className="mr-6 ml-6 mt-4 text-center font-space-mono text-[12px] font-normal">
             <button
               onClick={navigateToReview}
@@ -77,10 +98,3 @@ const OrderCard = (props: IPropsOrderCard) => {
 };
 
 export default OrderCard;
-
-function navigateToSeller(): void {
-  console.log("Navigate to seller");
-}
-function navigateToAddress(): void {
-  console.log("Navigate to address");
-}

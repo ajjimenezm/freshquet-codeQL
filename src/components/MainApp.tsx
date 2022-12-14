@@ -21,41 +21,47 @@ import AdDetailLater from "./Profile/SeeLater/AdDetailLater";
 import SellerSelfProfile from "./Profile/SellerSelfProfile";
 
 function MainApp() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const user = localStorage.getItem("userToken");
-    if (!user) {
-      navigate("/login");
-    } else {
-      const role = localStorage.getItem("userRole");
-      if (role == "seller") navigate("/sellerSelfProfile");
-      else navigate("/home");
-    }
-  }, []);
+    useEffect(() => {
+        const user = localStorage.getItem("userToken");
+        if (!user) {
+            navigate("/login");
+        } else {
+            const role = localStorage.getItem("userRole");
+            if (role == "seller") navigate("/sellerSelfProfile");
+            else navigate("/home");
+        }
+    }, []);
 
-  return (
-    <>
-      <Routes>
-        <Route path="home" element={<Home />} />
-        <Route path="map" element={<Map />} />
-        <Route path="search" element={<Search />} />
-        <Route path="chat" element={<Chat />} />
-        <Route path="chatmenu" element={<ChatMenu />} />
-        <Route path="profile" element={<BuyerProfile />} />
-        <Route path="newproduct" element={<NewProduct />} />
-        <Route path="editprofile" element={<EditProfile />} />
-        <Route path="seeLater" element={<SeesLater />} />
-        <Route path="seller/:seller_id" element={<SellerProfile />} />
-        <Route path="sellerSelfProfile" element={<SellerSelfProfile />} />
-        <Route path="products/edit/:id" element={<EditAdDetail />} />
-        <Route path="advertisementHistory" element={<AdvertismentHistory />} />
-        <Route path="review/:purchaseId" element={<PlaceReview />} />
-        <Route path="nearbyProducts" element={<NearbyProducts />} />
-      </Routes>
-      <BottomNav navigateFunction={navigate} />
-    </>
-  );
+    return (
+        <>
+            <Routes>
+                <Route path="home" element={<Home />} />
+                <Route path="map" element={<Map />} />
+                <Route path="search" element={<Search />} />
+                <Route path="chat" element={<Chat />} />
+                <Route path="chatmenu" element={<ChatMenu />} />
+                <Route path="profile" element={<BuyerProfile />} />
+                <Route path="newproduct" element={<NewProduct />} />
+                <Route path="editprofile" element={<EditProfile />} />
+                <Route path="seeLater" element={<SeesLater />} />
+                <Route path="seller/:seller_id" element={<SellerProfile />} />
+                <Route
+                    path="sellerSelfProfile"
+                    element={<SellerSelfProfile />}
+                />
+                <Route path="products/edit/:id" element={<EditAdDetail />} />
+                <Route
+                    path="advertisementHistory"
+                    element={<AdvertismentHistory />}
+                />
+                <Route path="review/:purchaseId" element={<PlaceReview />} />
+                <Route path="nearbyProducts" element={<NearbyProducts />} />
+            </Routes>
+            <BottomNav navigateFunction={navigate} />
+        </>
+    );
 }
 
 export default MainApp;

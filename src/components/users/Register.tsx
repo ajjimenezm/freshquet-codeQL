@@ -84,7 +84,6 @@ const Register = () => {
             );
         } else {
             sendRequest();
-
         }
     };
 
@@ -103,6 +102,11 @@ const Register = () => {
                             "userToken",
                             res.data.access_token
                         );
+                        if (res.data.userRole.toLowerCase() === "buyer") {
+                            localStorage.setItem("userRole", "buyer");
+                        } else {
+                            localStorage.setItem("userRole", "seller");
+                        }
                         localStorage.setItem("userId", res.data.userId);
                         navigate("/home");
                     }
