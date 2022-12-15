@@ -40,7 +40,7 @@ const NearbyProducts = () => {
         userLocs.latitude,
         userLocs.longitude
       ).then((res) => {
-        setAddress(`${res[1]}, ${res[2]}`);
+        setAddress(`${res[0]}, ${res[1]}`);
       });
 
       AdvertisementManagement.filterByDistance(
@@ -80,19 +80,23 @@ const NearbyProducts = () => {
         />
       )}
       {!showProductDetail && (
-        <div className=" absolute z-50 h-screen w-screen bg-[#F7DBAD]">
-          <div className="flex items-center space-x-8 p-8 align-middle">
-            {
-              <BackArrow
-                onClick={() => {
-                  navigate("/home");
-                }}
-              />
-            }
-            <p className=" font-[18px] font-space-mono font-bold">{address}</p>
-          </div>
+        <div className="z-40 h-screen bg-[#F7DBAD]">
+          <div className=" absolute z-50 min-h-screen w-screen bg-[#F7DBAD]">
+            <div className="fixed flex w-screen items-center space-x-8 bg-[#F7DBAD] p-8 align-middle">
+              {
+                <BackArrow
+                  onClick={() => {
+                    navigate("/home");
+                  }}
+                />
+              }
+              <p className=" font-[18px] font-space-mono font-bold">
+                {address}
+              </p>
+            </div>
 
-          <div className=" m-4 space-y-4">{advertisementsToShow}</div>
+            <div className=" m-4 mt-24 space-y-4">{advertisementsToShow}</div>
+          </div>
         </div>
       )}
     </>
